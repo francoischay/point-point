@@ -105,12 +105,9 @@ export default class EditPlayer extends React.Component {
       score: 0,
       log: []
     };
+
     store.set('players', newPlayers);
     
     this.props.navigation.goBack();
-  }
-
-  _onCancelPress = () => {
-    this.props.navigation.goBack()
   }
 }
