@@ -36,7 +36,6 @@ export default class EditPlayer extends React.Component {
       rightButtonAction: this._onAddPress
     });
 
-    console.log()
     const data = this.props.navigation.state.params;
     this.setState({
         id: data.id,
@@ -99,18 +98,14 @@ export default class EditPlayer extends React.Component {
     let store = this.props.screenProps.store;
 
     let newPlayers = JSON.parse(JSON.stringify(this.props.screenProps.store.get("players")));  
-    newPlayers[Object.keys(newPlayers).length] = {
-      id: Object.keys(newPlayers).length,
+    newPlayers[this.state.id] = {
+      id: this.state.id,
       icon: this.state.playerIcon,
       name: this.state.playerName,
       score: 0,
       log: []
     };
     store.set('players', newPlayers);
-
-    let newOrder = store.get("order");
-    newOrder.push((newPlayers.length - 1)+"")
-    store.set('order', newOrder)
     
     this.props.navigation.goBack();
   }
