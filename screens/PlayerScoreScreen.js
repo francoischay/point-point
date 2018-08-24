@@ -5,7 +5,6 @@ import {
     View,
     StyleSheet
 } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
 
 export default class PlayerScoreScreen extends React.Component {

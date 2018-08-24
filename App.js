@@ -38,8 +38,7 @@ export default class App extends React.Component {
           log: []
         }
       ],
-      order: ['0', '1', '2'],
-      gameStatus: "players"
+      order: ['0', '1', '2']
     };
 
     this.store = new Podda();
@@ -50,11 +49,6 @@ export default class App extends React.Component {
     });
 
     this.store.set("order", this.state.order);
-
-    this.store.set("gameStatus", this.state.gameStatus)
-    this.stopStatusWatch = this.store.watch('gameStatus', (_status) => {
-      this.setState({gameStatus: _status})
-    });    
   }
 
   render() {

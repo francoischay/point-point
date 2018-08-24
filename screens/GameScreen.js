@@ -16,19 +16,19 @@ export default class PlayersScreen extends React.Component {
     const { params = {} } = navigation.state
 
     return {
-      title: "Joueurs",
+      title: "Jeu",
       headerRight: (
         <Button
-          onPress={() => { params.startGame() }}
-          title="Jouer !"
+          onPress={() => { params.stopGame() }}
+          title={ "Terminer !" }
         />
       )
     }
   };
 
   componentDidMount() {
-    this.props.navigation.setParams({ 
-      startGame: this._startGame.bind(this)
+    this.props.navigation.setParams({
+      stopGame: this._stopGame.bind(this)
     });
   }
 
@@ -43,63 +43,37 @@ export default class PlayersScreen extends React.Component {
   _renderList = () => {
     const players = this.props.screenProps.store.get("players");
     const order = this.props.screenProps.store.get("order");
+    const gamePlayers = []
 
-    return <SortableList
-      ref="SortableList"
-      style = {styles.playersList}
-      contentContainerStyle ={styles.contentContainer}
-      data = { players }
-      order = { order }
-      renderRow = { this._renderRow }
-      renderFooter = { this._renderFooter }
-      onChangeOrder = { this._onChangeOrder }
-      onReleaseRow = { this._onReleaseRow }
-      onPressRow = { this._onPressRow }
+    for (let i = 0; i < order.length; i++) {
+        for (let j = 0; j < players.length; j++) {
+            const player = players[j];
+            if(player.id == order[i]) gamePlayers.push(player)
+        }
+    }
+
+    return <FlatList
+        style = {styles.gameList}
+        contentContainerStyle ={styles.contentContainer}
+        data = { gamePlayers }
+        renderItem = {({item}) => this._renderItem(item)}
     />
   }
 
-  _renderRow = (_data) => {
-    return <Player data={ _data.data } active={_data.active} />
+  _renderItem = (_data) => {
+    return <ScorePlayer 
+      data={ _data } 
+      onPress={ () =>  { this._onScoreRowPress(_data) }}
+    />
   }
 
-  _renderFooter = () => {
-    return (<View style={{marginTop: 24}}>
-      <Button
-        title="Ajouter un joueur"
-        onPress={this._onAddButtonPress}
-      />
-    </View>)
-  }
-
-  _onReleaseRow = () => {
-    this._updateOrderFromList();
-  }
-
-  _onPressRow = (_playerId) => {
-    const players = this.props.screenProps.store.get("players");
-    this.props.navigation.navigate("EditPlayer", players[_playerId]);
-  }
-
-  _onChangeOrder = (_order) => {
-    this.props.screenProps.store.set("order", this.refs.SortableList.state.order)
-  }
-
-  _updateOrderFromList = () => {
-    if(!this.refs.SortableList) return;
-    this.props.screenProps.store.set("order", this.refs.SortableList.state.order)
-  }
-
-  _startGame = () => {
-    console.log("start !")
-    this.props.navigation.replace("Game")
+  _stopGame = () => {
+    console.log("stop !")
+    this.props.navigation.replace("Players")
   }
 
   _onScoreRowPress = (_data) => {
     this.props.navigation.navigate("PlayerScore", _data)
-  }
-
-  _onAddButtonPress = (_event) => {
-    this.props.navigation.navigate("AddPlayer")
   }
 }
 
