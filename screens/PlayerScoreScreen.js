@@ -31,16 +31,25 @@ export default class PlayerScoreScreen extends React.Component {
     componentDidMount() {
         const data = this.props.navigation.state.params;
         const players = this.props.screenProps.store.get("players");
+        const order = this.props.screenProps.store.get("order");
+        const gamePlayers = []
         let nextIndex;
-
-        for (let i = 0; i < players.length; i++) {
-            const player = players[i];
-            if(player.id === this.props.navigation.state.params.id){
-                nextIndex = (players[i + 1]) ? i+1 : 0;
+    
+        for (let i = 0; i < order.length; i++) {
+            for (let j = 0; j < players.length; j++) {
+                const player = players[j];
+                if(player.id == order[i]) gamePlayers.push(player)
             }
         }
 
-        this.nextPlayer = players[nextIndex];
+        for (let i = 0; i < gamePlayers.length; i++) {
+            const player = gamePlayers[i];
+            if(player.id === this.props.navigation.state.params.id){
+                nextIndex = (gamePlayers[i + 1]) ? i+1 : 0;
+            }
+        }
+
+        this.nextPlayer = gamePlayers[nextIndex];
 
         this.setState({
             score: data.score,
