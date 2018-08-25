@@ -34,7 +34,7 @@ export default class App extends React.Component {
           id: 2,
           icon: '😂',
           name: 'Nom 3',
-          score: 0,
+          score: 100,
           log: []
         }
       ],
