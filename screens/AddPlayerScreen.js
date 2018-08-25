@@ -13,6 +13,7 @@ export default class AddPlayer extends React.Component {
     let action = params.rightButtonAction ? params.rightButtonAction : () => {}
     
     return {
+      title: 'Nouveau joueur',
       headerRight: (
         <Button
           onPress={() => { action() }}
@@ -42,7 +43,7 @@ export default class AddPlayer extends React.Component {
     return (
       <View style={{ 
         flex: 1, 
-        backgroundColor: '#CCC'
+        backgroundColor: '#FFF'
       }}>
           <View style={{
             alignItems: 'center',
@@ -63,7 +64,8 @@ export default class AddPlayer extends React.Component {
           <TextInput
             style={{
               marginBottom: 24,
-              fontSize: 48
+              fontSize: 48,
+              textAlign: 'center'
             }}
             placeholder='Nom'
             value={ this.state.newPlayerName }

@@ -16,7 +16,7 @@ export default class PlayersScreen extends React.Component {
     const { params = {} } = navigation.state
 
     return {
-      title: "Jeu",
+      title: "Score",
       headerRight: (
         <Button
           onPress={() => { params.stopGame() }}

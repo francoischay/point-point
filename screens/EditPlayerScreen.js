@@ -49,7 +49,7 @@ export default class EditPlayer extends React.Component {
     return (
       <View style={{ 
         flex: 1, 
-        backgroundColor: '#CCC'
+        backgroundColor: '#FFF'
       }}>
           <View style={{
             alignItems: 'center',
