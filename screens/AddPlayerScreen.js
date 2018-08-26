@@ -6,6 +6,7 @@ import {
   Text,
   View
 } from 'react-native';
+import ReactNativeComponentTree from 'ReactNativeComponentTree';
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
 
@@ -31,7 +32,7 @@ export default class AddPlayer extends React.Component {
     
     this.state = {
       newPlayerIcon: '😀',
-      newPlayerName: 'toto'
+      newPlayerName: ''
     }
   }
 
@@ -76,16 +77,14 @@ export default class AddPlayer extends React.Component {
             placeholder='Nom'
             value={ this.state.newPlayerName }
             onChangeText={ this._onPlayerNameChange }
+            ref="playerNameInput"
           />
           <FlatList
             data={ previousNames }
             renderItem={({item}) => {
               return <Button 
                 style={{padding: 12}}
-                onPress={(_event) => {
-                  console.log(_event)
-                  console.log(_event.currentTarget)
-                }}
+                onPress={this._onItemPressed.bind(this, item)}
                 title={item}
               />
             }}
@@ -94,6 +93,11 @@ export default class AddPlayer extends React.Component {
       </View>
     );
   }
+
+  _onItemPressed(item) {
+    console.log(item)
+    this.setState({newPlayerName: item})
+  }  
 
   _onPlayerIconChange = (_playerIcon) => {
     this.setState({
@@ -126,14 +130,14 @@ export default class AddPlayer extends React.Component {
     newOrder.push((newPlayers.length - 1)+"")
     store.set('order', newOrder)
 
-//  newPlayers sont les joueurs de cette partie
-//  on veut tous les joueurs ayant jamais joué
-// il faut ajouter les joueurs de cette partie à ceux déjà existant
-// cette partie : newPlayers
-// déjà existant : AsyncStorage.getItem("previousName")
+    const existingNames= this.props.screenProps.store.get("previousNames")
     let playersToSave = Array.from(newPlayers, x => x.name);
-    playersToSave = playersToSave.toString()
-    AsyncStorage.setItem("previousNames", playersToSave)
+    playersToSave = playersToSave.concat(existingNames);
+    playersToSave = Array.from(new Set(playersToSave));
+    playersToSave.sort();
+    const playersToSaveString = playersToSave.toString();
+    this.props.screenProps.store.set("previousNames", playersToSave)
+    AsyncStorage.setItem("previousNames", playersToSaveString)
     
     this.props.navigation.goBack();
   }
