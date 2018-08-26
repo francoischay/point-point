@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AsyncStorage, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import Navigator from './navigation/Navigator';
 import Podda from 'podda';
@@ -16,7 +16,7 @@ export default class App extends React.Component {
 
     this.state = { 
       players: [
-        {
+        /*{
           id: 0,
           icon: '😀',
           name: 'Nom 1',
@@ -36,9 +36,9 @@ export default class App extends React.Component {
           name: 'Nom 3',
           score: 100,
           log: []
-        }
+        }*/
       ],
-      order: ['0', '1', '2']
+      order: [/*'0', '1', '2'*/]
     };
 
     this.store = new Podda();
@@ -49,6 +49,24 @@ export default class App extends React.Component {
     });
 
     this.store.set("order", this.state.order);
+
+    this.retrievePlayers().then((_players)=>{
+      this.store.set("previousNames", _players)
+    }).catch((_error)=>{
+      console.log(_error)
+    })
+  }
+
+  retrievePlayers = async () => {
+    try {
+      const retrievedPlayers = await AsyncStorage.getItem('previousNames');
+      retrievedPlayers= retrievedPlayers.split(",");
+      
+      return retrievedPlayers;
+    } catch (_error) {
+      console.log(_error.message);
+    }
+    return;
   }
 
   render() {

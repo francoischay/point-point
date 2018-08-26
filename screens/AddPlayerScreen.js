@@ -1,6 +1,9 @@
 import React from 'react';
 import {
+  AsyncStorage,
   Button,
+  FlatList,
+  Text,
   View
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
@@ -33,13 +36,16 @@ export default class AddPlayer extends React.Component {
   }
 
   componentDidMount() {
-    console.log("mount")
     this.props.navigation.setParams({ 
       rightButtonAction: this._onAddPress
     });
   }
 
   render() {
+    const previousNames = this.props.screenProps.store.get("previousNames");
+    console.log(this.props.screenProps.store)
+    console.log(previousNames)
+
     return (
       <View style={{ 
         flex: 1, 
@@ -70,6 +76,20 @@ export default class AddPlayer extends React.Component {
             placeholder='Nom'
             value={ this.state.newPlayerName }
             onChangeText={ this._onPlayerNameChange }
+          />
+          <FlatList
+            data={ previousNames }
+            renderItem={({item}) => {
+              return <Button 
+                style={{padding: 12}}
+                onPress={(_event) => {
+                  console.log(_event)
+                  console.log(_event.currentTarget)
+                }}
+                title={item}
+              />
+            }}
+            horizontal
           />
       </View>
     );
@@ -105,6 +125,15 @@ export default class AddPlayer extends React.Component {
     let newOrder = store.get("order");
     newOrder.push((newPlayers.length - 1)+"")
     store.set('order', newOrder)
+
+//  newPlayers sont les joueurs de cette partie
+//  on veut tous les joueurs ayant jamais joué
+// il faut ajouter les joueurs de cette partie à ceux déjà existant
+// cette partie : newPlayers
+// déjà existant : AsyncStorage.getItem("previousName")
+    let playersToSave = Array.from(newPlayers, x => x.name);
+    playersToSave = playersToSave.toString()
+    AsyncStorage.setItem("previousNames", playersToSave)
     
     this.props.navigation.goBack();
   }
