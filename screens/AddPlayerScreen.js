@@ -132,12 +132,10 @@ export default class AddPlayer extends React.Component {
 
     const existingNames= this.props.screenProps.store.get("previousNames")
     let playersToSave = Array.from(newPlayers, x => x.name);
-    playersToSave = playersToSave.concat(existingNames);
-    playersToSave = Array.from(new Set(playersToSave));
+    playersToSave = existingNames? playersToSave.concat(existingNames) : playersToSave;
+    playersToSave = Array.from(new Set(playersToSave)); // remove duplicates
     playersToSave.sort();
-    const playersToSaveString = playersToSave.toString();
     this.props.screenProps.store.set("previousNames", playersToSave)
-    AsyncStorage.setItem("previousNames", playersToSaveString)
     
     this.props.navigation.goBack();
   }

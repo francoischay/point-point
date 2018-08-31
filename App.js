@@ -52,9 +52,8 @@ export default class App extends React.Component {
 
     this.retrievePlayers().then((_players)=>{
       this.store.set("previousNames", _players)
-    }).catch((_error)=>{
-      console.log(_error)
     })
+    
     this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersToSave) => {
       const playersToSaveString = _playersToSave.toString();
       AsyncStorage.setItem("previousNames", playersToSaveString)
@@ -67,13 +66,16 @@ export default class App extends React.Component {
       retrievedPlayers= retrievedPlayers.split(",");
       
       return retrievedPlayers;
-    } catch (_error) {
-      console.log(_error.message);
+    } 
+    catch (_error) {
+      console.log("No existing players");
     }
     return;
   }
 
   render() {
+    AsyncStorage.clear();
+
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
