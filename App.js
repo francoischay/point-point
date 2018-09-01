@@ -16,7 +16,7 @@ export default class App extends React.Component {
 
     this.state = { 
       players: [
-        /*{
+        {
           id: 0,
           icon: '😀',
           name: 'Nom 1',
@@ -36,9 +36,9 @@ export default class App extends React.Component {
           name: 'Nom 3',
           score: 100,
           log: []
-        }*/
+        }
       ],
-      order: [/*'0', '1', '2'*/]
+      order: ['0', '1', '2']
     };
 
     this.store = new Podda();

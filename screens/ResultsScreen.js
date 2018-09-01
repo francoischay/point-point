@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
-import ScorePlayer from '../components/ScorePlayer';
+import PlayerWithScore from '../components/PlayerWithScore';
 
 export default class ResultsScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -46,7 +46,7 @@ export default class ResultsScreen extends React.Component {
   }
 
   _renderItem = (_data) => {
-    return <ScorePlayer 
+    return <PlayerWithScore 
       data={ _data } 
     />
   }

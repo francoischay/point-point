@@ -27,5 +27,13 @@ export default Navigator = createStackNavigator(
     Results: {
       screen: ResultsScreen
     }
+  },
+  {
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#0D2B3F',
+      },
+      headerTintColor: '#fff',
+    }
   }
 );

@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Platform
 } from 'react-native';
-import ScorePlayer from '../components/ScorePlayer';
+import PlayerWithScore from '../components/PlayerWithScore';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -51,15 +51,15 @@ export default class PlayersScreen extends React.Component {
     }
 
     return <FlatList
-        style = {styles.gameList}
-        contentContainerStyle ={styles.contentContainer}
-        data = { gamePlayers }
-        renderItem = {({item}) => this._renderItem(item)}
+      style = {styles.gameList}
+      contentContainerStyle ={styles.contentContainer}
+      data = { gamePlayers }
+      renderItem = {({item}) => this._renderItem(item)}
     />
   }
 
   _renderItem = (_data) => {
-    return <ScorePlayer 
+    return <PlayerWithScore 
       data={ _data } 
       onPress={ () =>  { this._onScoreRowPress(_data) }}
     />
@@ -76,38 +76,13 @@ export default class PlayersScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-
-    ...Platform.select({
-      ios: {
-        paddingTop: 20,
-      },
-    }),
-  },
-
-  title: {
-    fontSize: 20,
-    paddingVertical: 20,
-    color: '#999999',
-  },
-
-  playersList: {
-    flex: 1
-  },
-
   gameList: {
+    paddingTop: 30,
     backgroundColor: 'black',
     flex: 1
   },
 
   contentContainer: {
-    width: window.width,
-    paddingTop: 30,
-
     ...Platform.select({
       ios: {
         paddingHorizontal: 30,
@@ -117,43 +92,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
       }
     })
-  },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 16,
-    height: 80,
-    flex: 1,
-    borderRadius: 4,
-
-    ...Platform.select({
-      ios: {
-        width: window.width - 30 * 2,
-        shadowColor: 'rgba(0,0,0,0.2)',
-        shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
-        shadowRadius: 2,
-      },
-
-      android: {
-        width: window.width - 30 * 2,
-        elevation: 0,
-        marginHorizontal: 30,
-      },
-    })
-  },
-
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 30,
-    borderRadius: 25,
-  },
-
-  text: {
-    fontSize: 24,
-    color: '#222222',
-  },
+  }
 });

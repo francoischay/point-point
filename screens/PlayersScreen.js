@@ -1,16 +1,13 @@
 import React from 'react';
 import {
-  AsyncStorage,
   Button,
-  FlatList,
-  Text,
   View,
   StyleSheet,
   Platform
 } from 'react-native';
 import Player from '../components/Player';
 import SortableList from '../node_modules/react-native-sortable-list/src/SortableList';
-import ScorePlayer from '../components/ScorePlayer';
+import { Colors } from '../styles/Base';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -35,7 +32,9 @@ export default class PlayersScreen extends React.Component {
 
   render() {
     return (
-      <View style = {{ flex: 1 }}>
+      <View style = {{ flex: 1,
+        backgroundColor: Colors.BACKGROUND, 
+      }}>
         { this._renderList() }
       </View>
     );
@@ -105,31 +104,8 @@ export default class PlayersScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-
-    ...Platform.select({
-      ios: {
-        paddingTop: 20,
-      },
-    }),
-  },
-
-  title: {
-    fontSize: 20,
-    paddingVertical: 20,
-    color: '#999999',
-  },
 
   playersList: {
-    flex: 1
-  },
-
-  gameList: {
-    backgroundColor: 'black',
     flex: 1
   },
 
@@ -146,43 +122,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 0,
       }
     })
-  },
-
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 16,
-    height: 80,
-    flex: 1,
-    borderRadius: 4,
-
-    ...Platform.select({
-      ios: {
-        width: window.width - 30 * 2,
-        shadowColor: 'rgba(0,0,0,0.2)',
-        shadowOpacity: 1,
-        shadowOffset: {height: 2, width: 2},
-        shadowRadius: 2,
-      },
-
-      android: {
-        width: window.width - 30 * 2,
-        elevation: 0,
-        marginHorizontal: 30,
-      },
-    })
-  },
-
-  image: {
-    width: 50,
-    height: 50,
-    marginRight: 30,
-    borderRadius: 25,
-  },
-
-  text: {
-    fontSize: 24,
-    color: '#222222',
-  },
+  }
 });
