@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 
 export const Colors = {
     BACKGROUND : '#FAFAFA',
-    DARK_GREY: '#0D2B3F'
+    DARK_GREY: '#0D2B3F',
 }
 
 export const Base = StyleSheet.create({
@@ -30,5 +30,9 @@ export const Base = StyleSheet.create({
         shadowRadius: 10,
 
         elevation: 0
+    },
+    HEADING_2: {
+        fontSize: 36,
+        fontWeight: 'bold'
     }
 })

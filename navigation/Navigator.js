@@ -30,10 +30,10 @@ export default Navigator = createStackNavigator(
   },
   {
     navigationOptions: {
-      headerStyle: {
+/*      headerStyle: {
         backgroundColor: '#0D2B3F',
       },
-      headerTintColor: '#fff',
+      headerTintColor: '#fff',*/
     }
   }
 );

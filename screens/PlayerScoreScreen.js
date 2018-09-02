@@ -6,11 +6,11 @@ import {
     StyleSheet
 } from 'react-native';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
+import { Base, Colors } from '../styles/Base';
 
 export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: navigation.getParam('title', 'Joueur'),
             headerRight: navigation.getParam('rightButton')
         };
     };
@@ -57,7 +57,6 @@ export default class PlayerScoreScreen extends React.Component {
         })
 
         this.props.navigation.setParams({ 
-            title: data.name,
             rightButton: this._getRightHeaderButton()
         });
 
@@ -67,24 +66,42 @@ export default class PlayerScoreScreen extends React.Component {
     render() {
         return (
             <View style = {{ flex: 1 }}>
-                <Text>Score actuel : {this.state.scoreToDisplay}</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    padding: 24
+                }}>
+                    <Text style={Base.HEADING_2}>
+                        {this.props.navigation.state.params.name}
+                    </Text>
+                    <Text style={Base.HEADING_2}>
+                        {this.state.scoreToDisplay}
+                    </Text>
+                </View>
                 <TextInput 
                     style={styles.input}
                     ref='scoreInput'
-                    placeholder={this.state.amount}
+                    placeholder='0'
                     onChangeText={(_amount) => this.setState({'amount' : _amount})}
                     value={this.state.amount}
                     keyboardType='numeric'
                     clearTextOnFocus={true}
+                    textAlign={'center'}
                 />
-                <Button 
-                    title='Ajouter'
-                    onPress={this._onPressAdd}
-                />
-                <Button 
-                    title='Retirer'
-                    onPress={this._onPressRemove}
-                />
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    padding: 24
+                }}>
+                    <Button 
+                        title='Retirer'
+                        onPress={this._onPressRemove}
+                    />
+                    <Button 
+                        title='Ajouter'
+                        onPress={this._onPressAdd}
+                    />
+                </View>
             </View>
         );
     }
@@ -120,7 +137,9 @@ export default class PlayerScoreScreen extends React.Component {
     _updateScoreDisplay = (_diff) => {
         const step = this.state.counterStep++;
         const newScore = this.state.score + parseInt(_diff / this.nbSteps * step);
-        this.setState({scoreToDisplay: newScore})
+        this.setState({
+            scoreToDisplay: newScore
+        })
         
         if(parseInt(step) === parseInt(this.nbSteps)){
             clearInterval(this.tickInterval);
@@ -155,6 +174,8 @@ export default class PlayerScoreScreen extends React.Component {
 
 const styles = StyleSheet.create({
     input: {
-        fontSize: 96
+        fontSize: 144,
+        padding: 24,
+        fontWeight: 'bold'
     }
 })
