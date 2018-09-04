@@ -141,7 +141,14 @@ export default class PlayerScoreScreen extends React.Component {
     _updateScoreDisplay = (_diff) => {
         const step = this.state.counterStep++;
         const newScore = this.state.score + parseInt(_diff / this.nbSteps * step);
-        const newAmount = this.state.amount - parseInt(_diff / this.nbSteps * step);
+
+        let newAmount;
+        if(_diff > 0){
+            newAmount = this.state.amount - parseInt(_diff / this.nbSteps * step);
+        }
+        else{
+            newAmount = parseInt(this.state.amount) + parseInt(_diff / this.nbSteps * step);
+        }
         
         this.setState({
             scoreToDisplay: newScore,
