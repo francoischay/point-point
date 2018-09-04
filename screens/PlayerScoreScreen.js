@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Button,
+    KeyboardAvoidingView,
     Text,
     View,
     StyleSheet
@@ -24,7 +25,8 @@ export default class PlayerScoreScreen extends React.Component {
         this.state = {
             score: 0,
             scoreToDisplay: 0,
-            amount: ''
+            amount: '',
+            amountToDisplay: ''
         }
     }
 
@@ -65,11 +67,13 @@ export default class PlayerScoreScreen extends React.Component {
 
     render() {
         return (
-            <View style = {{ flex: 1 }}>
+            <View style={{flex: 1}}>
                 <View style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    padding: 24
+                    paddingLeft: 12,
+                    paddingRight: 12,
+                    paddingTop: 12
                 }}>
                     <Text style={Base.HEADING_2}>
                         {this.props.navigation.state.params.name}
@@ -82,16 +86,17 @@ export default class PlayerScoreScreen extends React.Component {
                     style={styles.input}
                     ref='scoreInput'
                     placeholder='0'
-                    onChangeText={(_amount) => this.setState({'amount' : _amount})}
-                    value={this.state.amount}
+                    onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
+                    value={this.state.amountToDisplay}
                     keyboardType='numeric'
                     clearTextOnFocus={true}
                     textAlign={'center'}
                 />
                 <View style={{
                     flexDirection: 'row',
-                    justifyContent: 'space-evenly',
-                    padding: 24
+                    justifyContent: 'space-between',
+                    paddingLeft: 12,
+                    paddingRight: 12,
                 }}>
                     <Button 
                         title='Retirer'
@@ -115,7 +120,6 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _onPressAdd = () => {
-        console.log(this.refs.scoreInput.props.value)
         const newScore = parseInt(this.state.score) + parseInt(this.refs.scoreInput.props.value);
         this._changeScore(newScore);
     }
@@ -137,8 +141,11 @@ export default class PlayerScoreScreen extends React.Component {
     _updateScoreDisplay = (_diff) => {
         const step = this.state.counterStep++;
         const newScore = this.state.score + parseInt(_diff / this.nbSteps * step);
+        const newAmount = this.state.amount - parseInt(_diff / this.nbSteps * step);
+        
         this.setState({
-            scoreToDisplay: newScore
+            scoreToDisplay: newScore,
+            amountToDisplay: newAmount.toString()
         })
         
         if(parseInt(step) === parseInt(this.nbSteps)){
@@ -174,7 +181,7 @@ export default class PlayerScoreScreen extends React.Component {
 
 const styles = StyleSheet.create({
     input: {
-        fontSize: 144,
+        fontSize: 96,
         padding: 24,
         fontWeight: 'bold'
     }
