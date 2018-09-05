@@ -44,8 +44,6 @@ export default class AddPlayer extends React.Component {
 
   render() {
     const previousNames = this.props.screenProps.store.get("previousNames");
-    console.log(this.props.screenProps.store)
-    console.log(previousNames)
 
     return (
       <View style={{ 
@@ -95,7 +93,6 @@ export default class AddPlayer extends React.Component {
   }
 
   _onItemPressed(item) {
-    console.log(item)
     this.setState({newPlayerName: item})
   }  
 

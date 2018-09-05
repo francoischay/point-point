@@ -74,7 +74,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    AsyncStorage.clear();
+    //AsyncStorage.clear();
 
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (

@@ -33,7 +33,7 @@ export default class EditPlayer extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ 
-      rightButtonAction: this._onAddPress
+      rightButtonAction: this._onSavePress
     });
 
     const data = this.props.navigation.state.params;
@@ -49,7 +49,9 @@ export default class EditPlayer extends React.Component {
     return (
       <View style={{ 
         flex: 1, 
-        backgroundColor: '#FFF'
+        backgroundColor: '#FFF',
+        flexDirection: 'column',
+        justifyContent: 'space-around'
       }}>
           <View style={{
             alignItems: 'center',
@@ -66,15 +68,19 @@ export default class EditPlayer extends React.Component {
               onChangeText={ this._onPlayerIconChange }
               selectTextOnFocus
             />
+            <TextInput
+              style={{
+                marginBottom: 24,
+                fontSize: 48
+              }}
+              placeholder='Nom'
+              value={ this.state.playerName }
+              onChangeText={ this._onPlayerNameChange }
+            />
           </View>
-          <TextInput
-            style={{
-              marginBottom: 24,
-              fontSize: 48
-            }}
-            placeholder='Nom'
-            value={ this.state.playerName }
-            onChangeText={ this._onPlayerNameChange }
+          <Button
+            title="Retirer ce joueur"
+            onPress={ this._onRemovePlayerPress }
           />
       </View>
     );
@@ -92,7 +98,7 @@ export default class EditPlayer extends React.Component {
     })
   }
 
-  _onAddPress = () => {
+  _onSavePress = () => {
     if(this.state.playerName.length === 0) return;
 
     let store = this.props.screenProps.store;
@@ -108,6 +114,30 @@ export default class EditPlayer extends React.Component {
 
     store.set('players', newPlayers);
     
+    this.props.navigation.goBack();
+  }
+
+  _onRemovePlayerPress = () => {
+    const store = this.props.screenProps.store;
+
+    let newPlayers = JSON.parse(JSON.stringify(this.props.screenProps.store.get("players")));
+    newPlayers.splice(this.state.id, 1);
+    for (let i = 0; i < newPlayers.length; i++) {
+      newPlayers[i].id = i
+    }
+
+    let newOrder = [];
+    for (let i = 0; i < newPlayers.length; i++) {
+      newOrder.push(newPlayers[i].id)
+    }
+
+    store.update(function() {
+      return {
+        order: newOrder,
+        players: newPlayers
+      };
+    });
+
     this.props.navigation.goBack();
   }
 }
