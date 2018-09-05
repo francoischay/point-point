@@ -57,6 +57,7 @@ export default class App extends React.Component {
     this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersToSave) => {
       const playersToSaveString = _playersToSave.toString();
       AsyncStorage.setItem("previousNames", playersToSaveString)
+      this.setState({"previousNames": _playersToSave})
     })
   }
 

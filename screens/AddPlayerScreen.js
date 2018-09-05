@@ -1,14 +1,12 @@
 import React from 'react';
 import {
-  AsyncStorage,
   Button,
   FlatList,
-  Text,
   View
 } from 'react-native';
-import ReactNativeComponentTree from 'ReactNativeComponentTree';
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
+import PreviousName from '../components/PreviousName';
 
 export default class AddPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -80,10 +78,10 @@ export default class AddPlayer extends React.Component {
           <FlatList
             data={ previousNames }
             renderItem={({item}) => {
-              return <Button 
-                style={{padding: 12}}
+              return <PreviousName
                 onPress={this._onItemPressed.bind(this, item)}
                 title={item}
+                store={this.props.screenProps.store}
               />
             }}
             horizontal
