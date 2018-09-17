@@ -5,14 +5,19 @@ import Emojis from '../constants/Emojis';
 export default class PPAvatarInput extends React.Component {
   constructor(props){
     super(props)
+    console.log(props)
     this.state = {
       isActive: false,
       emojiSize: 72,
-      currentEmoji: (props.value) ? props.value : {index: 1}
+      currentEmoji: (props.value) ? props.value : {
+        index: 0,
+        item: Emojis[0]
+      }
     }
   }
 
   render() {
+    console.log(this.state.currentEmoji)
     return (
         <FlatList 
           style = {{

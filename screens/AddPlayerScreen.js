@@ -7,6 +7,7 @@ import {
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
 import PreviousName from '../components/PreviousName';
+import Emojis from '../constants/Emojis';
 
 export default class AddPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -29,7 +30,7 @@ export default class AddPlayer extends React.Component {
     super(props);
     
     this.state = {
-      newPlayerIcon: {index: 1},
+      newPlayerIcon: null,
       newPlayerName: ''
     }
   }

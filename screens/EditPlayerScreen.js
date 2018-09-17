@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
+import Emojis from '../constants/Emojis';
 
 export default class EditPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -25,9 +26,13 @@ export default class EditPlayer extends React.Component {
   constructor(props) {
     super(props);
     
+    const data = this.props.navigation.state.params;
+    console.log(data.icon)
     this.state = {
-      playerIcon: {index: 1},
-      playerName: 'toto'
+        id: data.id,
+        playerIcon: data.icon,
+        playerName: data.name,
+        score: data.score
     }
   }
 
@@ -35,17 +40,11 @@ export default class EditPlayer extends React.Component {
     this.props.navigation.setParams({ 
       rightButtonAction: this._onSavePress
     });
-
-    const data = this.props.navigation.state.params;
-    this.setState({
-        id: data.id,
-        playerIcon: data.icon,
-        playerName: data.name,
-        score: data.score
-    })
   }
 
   render() {
+    console.log("render")
+    console.log(this.state)
     return (
       <View style={{ 
         flex: 1, 
