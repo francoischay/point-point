@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
-import Emojis from '../constants/Emojis';
 
 export default class EditPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -27,7 +26,7 @@ export default class EditPlayer extends React.Component {
     super(props);
     
     const data = this.props.navigation.state.params;
-    console.log(data.icon)
+    
     this.state = {
         id: data.id,
         playerIcon: data.icon,
@@ -43,8 +42,6 @@ export default class EditPlayer extends React.Component {
   }
 
   render() {
-    console.log("render")
-    console.log(this.state)
     return (
       <View style={{ 
         flex: 1, 

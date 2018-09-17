@@ -5,7 +5,7 @@ import Emojis from '../constants/Emojis';
 export default class PPAvatarInput extends React.Component {
   constructor(props){
     super(props)
-    console.log(props)
+    
     this.state = {
       isActive: false,
       emojiSize: 72,
@@ -17,7 +17,6 @@ export default class PPAvatarInput extends React.Component {
   }
 
   render() {
-    console.log(this.state.currentEmoji)
     return (
         <FlatList 
           style = {{
@@ -25,7 +24,8 @@ export default class PPAvatarInput extends React.Component {
             marginBottom: 24
           }}
           contentContainerStyle = {{
-            paddingLeft: Dimensions.get('window').width/2 - this.state.emojiSize / 2
+            paddingLeft: Dimensions.get('window').width/2 - this.state.emojiSize / 2,
+            paddingRight: Dimensions.get('window').width/2 - this.state.emojiSize / 2,
           }}
           data = { Emojis }
           initialScrollIndex={this.state.currentEmoji.index}
@@ -73,6 +73,8 @@ export default class PPAvatarInput extends React.Component {
   );
 
   _onViewableItemsChanged = ({viewableItems}) => {
+    if(viewableItems.length === 0) return;
+
     this.setState({
       currentEmoji: viewableItems[0]
     })
