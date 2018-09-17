@@ -29,7 +29,7 @@ export default class AddPlayer extends React.Component {
     super(props);
     
     this.state = {
-      newPlayerIcon: '😀',
+      newPlayerIcon: {index: 1},
       newPlayerName: ''
     }
   }
@@ -54,21 +54,15 @@ export default class AddPlayer extends React.Component {
           }}>
             <PPAvatarInput 
               value={ this.state.newPlayerIcon }
-              style={{
-                height: 96,
-                width: 96,
-                fontSize: 60,
-                marginBottom: 12
-              }}
-              onChangeText={ this._onPlayerIconChange }
-              selectTextOnFocus
+              onChangeAvatar={ this._onPlayerIconChange }
             />
           </View>
           <TextInput
             style={{
               marginBottom: 24,
               fontSize: 48,
-              textAlign: 'center'
+              textAlign: 'center',
+              fontWeight: 'bold'
             }}
             placeholder='Nom'
             value={ this.state.newPlayerName }

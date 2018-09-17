@@ -23,7 +23,7 @@ export default class PlayerWithScore extends React.Component {
               justifyContent: 'space-between'
           }}>
             <Text style={Base.TEXT}>
-              {data.icon} {data.name}
+              {data.icon.item} {data.name}
             </Text>
             <Text style={Base.TEXT}>
                 {data.score}

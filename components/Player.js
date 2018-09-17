@@ -65,7 +65,7 @@ export default class Row extends React.Component {
         Base.ROW
       ]}>
         <Text style={Base.TEXT}>
-          {data.icon} {data.name}
+          {data.icon.item} {data.name}
         </Text>
       </Animated.View>
     );

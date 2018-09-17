@@ -26,7 +26,7 @@ export default class EditPlayer extends React.Component {
     super(props);
     
     this.state = {
-      playerIcon: '😀',
+      playerIcon: {index: 1},
       playerName: 'toto'
     }
   }
@@ -59,19 +59,13 @@ export default class EditPlayer extends React.Component {
           }}>
             <PPAvatarInput 
               value={ this.state.playerIcon }
-              style={{
-                height: 96,
-                width: 96,
-                fontSize: 60,
-                marginBottom: 12
-              }}
-              onChangeText={ this._onPlayerIconChange }
-              selectTextOnFocus
+              onChangeAvatar={ this._onPlayerIconChange }
             />
             <TextInput
               style={{
                 marginBottom: 24,
-                fontSize: 48
+                fontSize: 48,
+                fontWeight: 'bold'
               }}
               placeholder='Nom'
               value={ this.state.playerName }
