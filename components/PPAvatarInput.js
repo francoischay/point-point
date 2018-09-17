@@ -1,6 +1,8 @@
 import React from 'react';
 import { Dimensions, FlatList, Text, View } from 'react-native';
 import Emojis from '../constants/Emojis';
+import { Base } from '../styles/Base';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default class PPAvatarInput extends React.Component {
   constructor(props){
@@ -17,15 +19,13 @@ export default class PPAvatarInput extends React.Component {
   }
 
   render() {
+    console.log(styles.listContainer)
     return (
         <FlatList 
-          style = {{
-            marginTop: 24,
-            marginBottom: 24
-          }}
+          style = {styles.list}
           contentContainerStyle = {{
-            paddingLeft: Dimensions.get('window').width/2 - this.state.emojiSize / 2,
-            paddingRight: Dimensions.get('window').width/2 - this.state.emojiSize / 2,
+            paddingLeft: Dimensions.get('window').width/2 - styles.$emojiSize / 2,
+            paddingRight: Dimensions.get('window').width/2 - styles.$emojiSize / 2,
           }}
           data = { Emojis }
           initialScrollIndex={this.state.currentEmoji.index}
@@ -43,24 +43,19 @@ export default class PPAvatarInput extends React.Component {
 
   _renderItem = (_data) => {
     const _scale = (this.state.currentEmoji.item === _data) ? 1 : 0.4;
+    console.log(styles.$emojiSize)
 
     return (
       <View
-        style={{
-          backgroundColor: 'white',
-          width: this.state.emojiSize,
-          height: this.state.emojiSize,
-          borderRadius: 50,
-          borderWidth: 0,
+        style={[styles.emojiContainer, {
           transform: [{ scale: _scale}]
-        }}
+        }]}
         onPress={this._onPress}
       >
         <Text style={{
           fontSize: 48,
           textAlign: 'center',
-          paddingLeft: 4,
-          paddingTop: 6
+          paddingLeft: 4
         }}>
           {_data}
         </Text>
@@ -69,7 +64,7 @@ export default class PPAvatarInput extends React.Component {
   }
 
   _getItemLayout = (data, index) => (
-    {length: this.state.emojiSize, offset: this.state.emojiSize * index, index}
+    {length: styles.$emojiSize, offset: styles.$emojiSize * index, index}
   );
 
   _onViewableItemsChanged = ({viewableItems}) => {
@@ -85,3 +80,16 @@ export default class PPAvatarInput extends React.Component {
     console.log(_data)
   }
 }
+
+const styles = EStyleSheet.create({
+  $emojiSize: '6rem',
+  list: {
+    marginTop: '2rem',
+    marginBottom: '2rem'
+  },
+  emojiContainer: {
+    backgroundColor: 'white',
+    width: '$emojiSize',
+    height: '$emojiSize'
+  },
+});

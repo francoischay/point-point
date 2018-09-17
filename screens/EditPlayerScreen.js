@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
+import { Base } from '../styles/Base';
 
 export default class EditPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -58,11 +59,7 @@ export default class EditPlayer extends React.Component {
               onChangeAvatar={ this._onPlayerIconChange }
             />
             <TextInput
-              style={{
-                marginBottom: 24,
-                fontSize: 48,
-                fontWeight: 'bold'
-              }}
+              style={Base.NAME_INPUT}
               placeholder='Nom'
               value={ this.state.playerName }
               onChangeText={ this._onPlayerNameChange }

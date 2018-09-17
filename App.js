@@ -1,8 +1,10 @@
 import React from 'react';
-import { AsyncStorage, Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AsyncStorage, Dimensions, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import Navigator from './navigation/Navigator';
 import Podda from 'podda';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Emojis from './constants/Emojis';
 
 console.disableYellowBox = true;
 
@@ -13,16 +15,23 @@ export default class App extends React.Component {
 
   constructor(){
     super();
+    console.log(Dimensions.get('window').width)
+    EStyleSheet.build({
+      $rem: Dimensions.get('window').width > 375 ? 18 : 12
+    });
 
     this.state = { 
       players: [
-        /*{
+        {
           id: 0,
-          icon: '😀',
+          icon: {
+            index: 0,
+            item: Emojis[0]
+          },
           name: 'Nom 1',
           score: 0,
           log: []
-        },
+        }/*,
         {
           id: 1,
           icon: '😂',
@@ -38,7 +47,7 @@ export default class App extends React.Component {
           log: []
         }*/
       ],
-      order: [/*'0', '1', '2'*/]
+      order: ['0', /*'1', '2'*/]
     };
 
     this.store = new Podda();

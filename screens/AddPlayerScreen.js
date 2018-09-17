@@ -8,6 +8,7 @@ import PPAvatarInput from '../components/PPAvatarInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
 import PreviousName from '../components/PreviousName';
 import Emojis from '../constants/Emojis';
+import { Base } from '../styles/Base';
 
 export default class AddPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -59,12 +60,7 @@ export default class AddPlayer extends React.Component {
             />
           </View>
           <TextInput
-            style={{
-              marginBottom: 24,
-              fontSize: 48,
-              textAlign: 'center',
-              fontWeight: 'bold'
-            }}
+            style={Base.NAME_INPUT}
             placeholder='Nom'
             value={ this.state.newPlayerName }
             onChangeText={ this._onPlayerNameChange }
