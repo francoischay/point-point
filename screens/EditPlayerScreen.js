@@ -55,8 +55,8 @@ export default class EditPlayer extends React.Component {
             width: '100%'
           }}>
             <PPAvatarInput 
+              ref="IconInput"
               value={ this.state.playerIcon }
-              onChangeAvatar={ this._onPlayerIconChange }
             />
             <TextInput
               style={Base.NAME_INPUT}
@@ -73,12 +73,6 @@ export default class EditPlayer extends React.Component {
     );
   }
 
-  _onPlayerIconChange = (_playerIcon) => {
-    this.setState({
-      playerIcon : _playerIcon
-    })
-  }
-
   _onPlayerNameChange = (_playerName) => {
     this.setState({
       playerName : _playerName
@@ -87,13 +81,12 @@ export default class EditPlayer extends React.Component {
 
   _onSavePress = () => {
     if(this.state.playerName.length === 0) return;
-
     let store = this.props.screenProps.store;
 
     let newPlayers = JSON.parse(JSON.stringify(this.props.screenProps.store.get("players")));  
     newPlayers[this.state.id] = {
       id: this.state.id,
-      icon: this.state.playerIcon,
+      icon: this.refs.IconInput.state.currentEmoji,
       name: this.state.playerName,
       score: 0,
       log: []

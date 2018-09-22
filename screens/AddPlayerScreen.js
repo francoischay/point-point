@@ -55,8 +55,8 @@ export default class AddPlayer extends React.Component {
             width: '100%'
           }}>
             <PPAvatarInput 
+              ref="IconInput"
               value={ this.state.newPlayerIcon }
-              onChangeAvatar={ this._onPlayerIconChange }
             />
           </View>
           <TextInput
@@ -83,12 +83,6 @@ export default class AddPlayer extends React.Component {
 
   _onItemPressed(item) {
     this.setState({newPlayerName: item})
-  }  
-
-  _onPlayerIconChange = (_playerIcon) => {
-    this.setState({
-      newPlayerIcon : _playerIcon
-    })
   }
 
   _onPlayerNameChange = (_playerName) => {
@@ -105,7 +99,7 @@ export default class AddPlayer extends React.Component {
     let newPlayers = JSON.parse(JSON.stringify(this.props.screenProps.store.get("players")));  
     newPlayers[Object.keys(newPlayers).length] = {
       id: Object.keys(newPlayers).length,
-      icon: this.state.newPlayerIcon,
+      icon: this.refs.IconInput.state.currentEmoji,
       name: this.state.newPlayerName,
       score: 0,
       log: []

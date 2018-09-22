@@ -19,7 +19,6 @@ export default class PPAvatarInput extends React.Component {
   }
 
   render() {
-    console.log(styles.listContainer)
     return (
         <FlatList 
           style = {styles.list}
@@ -31,6 +30,7 @@ export default class PPAvatarInput extends React.Component {
           initialScrollIndex={this.state.currentEmoji.index}
           renderItem = {({item}) => this._renderItem(item)}
           getItemLayout={this._getItemLayout}
+          keyExtractor= {(item, index) => index+""}
           onViewableItemsChanged={ this._onViewableItemsChanged }
           snapToInterval={this.state.emojiSize}
           snapToAlignment="center"
@@ -43,7 +43,6 @@ export default class PPAvatarInput extends React.Component {
 
   _renderItem = (_data) => {
     const _scale = (this.state.currentEmoji.item === _data) ? 1 : 0.4;
-    console.log(styles.$emojiSize)
 
     return (
       <View
@@ -73,7 +72,6 @@ export default class PPAvatarInput extends React.Component {
     this.setState({
       currentEmoji: viewableItems[0]
     })
-    this.props.onChangeAvatar(this.state.currentEmoji)
   }
 
   _onPress = (_data) => {
