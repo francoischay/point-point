@@ -1,13 +1,10 @@
 import React from 'react';
-import {
-  Button,
-  View,
-  StyleSheet,
-  Platform
-} from 'react-native';
+import {View} from 'react-native';
+import PPButton from '../components/PPButton';
 import Player from '../components/Player';
 import SortableList from '../node_modules/react-native-sortable-list/src/SortableList';
 import { Colors } from '../styles/Base';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -16,7 +13,7 @@ export default class PlayersScreen extends React.Component {
     return {
       title: "Joueurs",
       headerRight: (
-        <Button
+        <PPButton
           onPress={() => { params.startGame() }}
           title="Jouer !"
         />
@@ -64,7 +61,7 @@ export default class PlayersScreen extends React.Component {
 
   _renderFooter = () => {
     return (<View style={{marginTop: 24}}>
-      <Button
+      <PPButton
         title="Ajouter un joueur"
         onPress={this._onAddButtonPress}
       />
@@ -103,24 +100,12 @@ export default class PlayersScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-
+const styles = EStyleSheet.create({
   playersList: {
     flex: 1
   },
-
   contentContainer: {
-    width: window.width,
-    paddingTop: 30,
-
-    ...Platform.select({
-      ios: {
-        paddingHorizontal: 30,
-      },
-
-      android: {
-        paddingHorizontal: 0,
-      }
-    })
+    width: '100%',
+    padding: '2rem'
   }
 });

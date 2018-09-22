@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-    Button,
-    KeyboardAvoidingView,
     Text,
     View,
     StyleSheet
 } from 'react-native';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
-import { Base, Colors } from '../styles/Base';
+import { Base } from '../styles/Base';
+import PPButton from '../components/PPButton'
 
 export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -91,6 +90,7 @@ export default class PlayerScoreScreen extends React.Component {
                     keyboardType='numeric'
                     clearTextOnFocus={true}
                     textAlign={'center'}
+                    underlineColorAndroid='transparent'
                 />
                 <View style={{
                     flexDirection: 'row',
@@ -98,11 +98,11 @@ export default class PlayerScoreScreen extends React.Component {
                     paddingLeft: 12,
                     paddingRight: 12,
                 }}>
-                    <Button 
+                    <PPButton 
                         title='Retirer'
                         onPress={this._onPressRemove}
                     />
-                    <Button 
+                    <PPButton 
                         title='Ajouter'
                         onPress={this._onPressAdd}
                     />
@@ -112,7 +112,7 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _getRightHeaderButton = () => {
-        return <Button title={ this.nextPlayer.name } onPress={ this._gotoNextPlayer } />
+        return <PPButton title={ this.nextPlayer.name } onPress={ this._gotoNextPlayer } />
     }
 
     _gotoNextPlayer = () => {

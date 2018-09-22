@@ -24,7 +24,7 @@ export default class PPAvatarInput extends React.Component {
           style = {styles.list}
           contentContainerStyle = {{
             paddingLeft: Dimensions.get('window').width/2 - styles.$emojiSize / 2,
-            paddingRight: Dimensions.get('window').width/2 - styles.$emojiSize / 2,
+            paddingRight: Dimensions.get('window').width/2 - styles.$emojiSize / 2
           }}
           data = { Emojis }
           initialScrollIndex={this.state.currentEmoji.index}
@@ -32,7 +32,7 @@ export default class PPAvatarInput extends React.Component {
           getItemLayout={this._getItemLayout}
           keyExtractor= {(item, index) => index+""}
           onViewableItemsChanged={ this._onViewableItemsChanged }
-          snapToInterval={this.state.emojiSize}
+          snapToInterval={styles.$emojiSize}
           snapToAlignment="center"
           showsHorizontalScrollIndicator = {false}
           pagingEnabled={false}
@@ -51,11 +51,7 @@ export default class PPAvatarInput extends React.Component {
         }]}
         onPress={this._onPress}
       >
-        <Text style={{
-          fontSize: 48,
-          textAlign: 'center',
-          paddingLeft: 4
-        }}>
+        <Text style={styles.emoji}>
           {_data}
         </Text>
       </View>
@@ -70,6 +66,7 @@ export default class PPAvatarInput extends React.Component {
     if(viewableItems.length === 0) return;
 
     this.setState({
+      viewableItems: viewableItems,
       currentEmoji: viewableItems[0]
     })
   }
@@ -90,4 +87,8 @@ const styles = EStyleSheet.create({
     width: '$emojiSize',
     height: '$emojiSize'
   },
+  emoji: {
+    fontSize: '4rem',
+    textAlign: 'center'
+  }
 });

@@ -1,13 +1,11 @@
 import React from 'react';
 import {
-  Button,
   FlatList,
-  Text,
-  View,
-  StyleSheet,
-  Platform
+  View
 } from 'react-native';
 import PlayerWithScore from '../components/PlayerWithScore';
+import PPButton from '../components/PPButton';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -16,7 +14,7 @@ export default class PlayersScreen extends React.Component {
     return {
       title: "Score",
       headerRight: (
-        <Button
+        <PPButton
           onPress={() => { params.stopGame() }}
           title={ "Terminer !" }
         />
@@ -75,22 +73,13 @@ export default class PlayersScreen extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   gameList: {
-    paddingTop: 30,
-    backgroundColor: 'black',
+    backgroundColor: '#0E7D6E',
     flex: 1
   },
 
   contentContainer: {
-    ...Platform.select({
-      ios: {
-        paddingHorizontal: 30,
-      },
-
-      android: {
-        paddingHorizontal: 0,
-      }
-    })
+    padding: '2rem'
   }
 });

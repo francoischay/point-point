@@ -4,7 +4,9 @@ import {
   FlatList,
   View
 } from 'react-native';
+import PPButton from '../components/PPButton';
 import PPAvatarInput from '../components/PPAvatarInput';
+import PPTextInput from '../components/PPTextInput';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
 import PreviousName from '../components/PreviousName';
 import Emojis from '../constants/Emojis';
@@ -19,7 +21,7 @@ export default class AddPlayer extends React.Component {
     return {
       title: 'Nouveau joueur',
       headerRight: (
-        <Button
+        <PPButton
           onPress={() => { action() }}
           title="Ajouter"
         />
@@ -59,7 +61,7 @@ export default class AddPlayer extends React.Component {
               value={ this.state.newPlayerIcon }
             />
           </View>
-          <TextInput
+          <PPTextInput
             style={Base.NAME_INPUT}
             placeholder='Nom'
             value={ this.state.newPlayerName }

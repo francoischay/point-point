@@ -4,7 +4,8 @@ import {
   View
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
-import { TextInput } from '../node_modules/react-native-gesture-handler';
+import PPButton from '../components/PPButton';
+import PPTextInput from '../components/PPTextInput';
 import { Base } from '../styles/Base';
 
 export default class EditPlayer extends React.Component {
@@ -15,7 +16,7 @@ export default class EditPlayer extends React.Component {
     
     return {
       headerRight: (
-        <Button
+        <PPButton
           onPress={() => { action() }}
           title="Sauver"
         />
@@ -46,9 +47,7 @@ export default class EditPlayer extends React.Component {
     return (
       <View style={{ 
         flex: 1, 
-        backgroundColor: '#FFF',
-        flexDirection: 'column',
-        justifyContent: 'space-around'
+        backgroundColor: '#FFF'
       }}>
           <View style={{
             alignItems: 'center',
@@ -58,14 +57,14 @@ export default class EditPlayer extends React.Component {
               ref="IconInput"
               value={ this.state.playerIcon }
             />
-            <TextInput
+            <PPTextInput
               style={Base.NAME_INPUT}
               placeholder='Nom'
               value={ this.state.playerName }
               onChangeText={ this._onPlayerNameChange }
             />
           </View>
-          <Button
+          <PPButton
             title="Retirer ce joueur"
             onPress={ this._onRemovePlayerPress }
           />
