@@ -65,6 +65,7 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     render() {
+        console.log(this.props.navigation.state.params)
         return (
             <View style={{flex: 1}}>
                 <View style={{
@@ -75,6 +76,7 @@ export default class PlayerScoreScreen extends React.Component {
                     paddingTop: 12
                 }}>
                     <Text style={Base.HEADING_2}>
+                        {this.props.navigation.state.params.icon.item}
                         {this.props.navigation.state.params.name}
                     </Text>
                     <Text style={Base.HEADING_2}>
