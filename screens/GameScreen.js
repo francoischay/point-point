@@ -3,22 +3,18 @@ import {
   FlatList,
   View
 } from 'react-native';
+import { Header } from 'react-navigation'
 import PlayerWithScore from '../components/PlayerWithScore';
-import PPButton from '../components/PPButton';
+import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import ScoresModal from './ScoreModal';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
-    const { params = {} } = navigation.state
 
     return {
       title: "Score",
-      headerRight: (
-        <PPButton
-          onPress={() => { params.stopGame() }}
-          title={ "Terminer !" }
-        />
-      )
+      header: null
     }
   };
 
@@ -30,8 +26,19 @@ export default class PlayersScreen extends React.Component {
 
   render() {
     return (
-      <View style = {{ flex: 1 }}>
+      <View style = {{ 
+        backgroundColor: '#0E7D6E',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}>
         { this._renderList() }
+        { this._renderFooter() }
+        <ScoresModal 
+          ref='ScoresModal'
+          store={ this.props.screenProps.store }
+          onPress = { this._stopGame }
+        />
       </View>
     );
   }
@@ -63,9 +70,20 @@ export default class PlayersScreen extends React.Component {
     />
   }
 
+  _renderFooter = () => {
+    return <PPHoveringButton
+      onPress={ this._showScores }
+      title={ "Faire un point points" }
+    />
+  }
+
+  _showScores = () => {
+    this.refs.ScoresModal.show();
+  }
+
   _stopGame = () => {
     console.log("stop !")
-    this.props.navigation.replace("Results")
+    this.props.navigation.replace("Players")
   }
 
   _onScoreRowPress = (_data) => {
@@ -75,11 +93,11 @@ export default class PlayersScreen extends React.Component {
 
 const styles = EStyleSheet.create({
   gameList: {
-    backgroundColor: '#0E7D6E',
     flex: 1
   },
 
   contentContainer: {
-    padding: '2rem'
+    padding: '2rem',
+    paddingTop: Header.HEIGHT
   }
 });

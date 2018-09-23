@@ -1,15 +1,12 @@
 import React from 'react';
 import {
-  Button,
   FlatList,
   View
 } from 'react-native';
 import PPButton from '../components/PPButton';
 import PPAvatarInput from '../components/PPAvatarInput';
 import PPTextInput from '../components/PPTextInput';
-import { TextInput } from '../node_modules/react-native-gesture-handler';
 import PreviousName from '../components/PreviousName';
-import Emojis from '../constants/Emojis';
 import { Base } from '../styles/Base';
 
 export default class AddPlayer extends React.Component {

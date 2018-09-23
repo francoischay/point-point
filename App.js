@@ -31,23 +31,29 @@ export default class App extends React.Component {
           name: 'Nom 1',
           score: 0,
           log: []
-        }/*,
+        },
         {
           id: 1,
-          icon: '😂',
+          icon: {
+            index: 10,
+            item: Emojis[10]
+          },
           name: 'Nom 2',
-          score: 0,
+          score: 200,
           log: []
         },
         {
           id: 2,
-          icon: '😂',
+          icon: {
+            index: 20,
+            item: Emojis[20]
+          },
           name: 'Nom 3',
           score: 100,
           log: []
-        }*/
+        }
       ],
-      order: ['0', /*'1', '2'*/]
+      order: ['0', '1', '2']
     };
 
     this.store = new Podda();

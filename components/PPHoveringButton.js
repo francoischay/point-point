@@ -51,7 +51,7 @@ const invariant = require('fbjs/lib/invariant');
  *
  */
 
-class PPButton extends React.Component<{
+class PPHoveringButton extends React.Component<{
   title: string,
   onPress: () => any,
   color?: ?string,
@@ -146,10 +146,17 @@ class PPButton extends React.Component<{
 const styles = EStyleSheet.create({
   button: {
     elevation: 4,
-    paddingHorizontal: '1rem'
+    paddingHorizontal: '1rem',
+    backgroundColor: '#007AFF',
+    borderRadius: 6,
+    margin: '1.5rem',
+    shadowColor: 'rgb(0,0,0)',
+    shadowOpacity: 0.2,
+    shadowOffset: {height: 7, width: 0},
+    shadowRadius: 7,
   },
   text: {
-    color: '#007AFF',
+    color: 'white',
     textAlign: 'center',
     padding: '0.75rem',
     fontSize:  '1.25rem',
@@ -172,4 +179,4 @@ const styles = EStyleSheet.create({
   }),
 });
 
-module.exports = PPButton;
+module.exports = PPHoveringButton;

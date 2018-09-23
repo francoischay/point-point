@@ -5,15 +5,14 @@ import GameScreen from '../screens/GameScreen';
 import AddPlayerScreen from '../screens/AddPlayerScreen';
 import EditPlayerScreen from '../screens/EditPlayerScreen';
 import PlayerScoreScreen from '../screens/PlayerScoreScreen';
-import ResultsScreen from '../screens/ResultsScreen';
 
 export default Navigator = createStackNavigator(
   {
-    Players: {
-      screen: PlayersScreen
-    },
     Game: {
       screen: GameScreen
+    },
+    Players: {
+      screen: PlayersScreen
     },
     AddPlayer: {
       screen: AddPlayerScreen,
@@ -24,9 +23,6 @@ export default Navigator = createStackNavigator(
     PlayerScore: {
       screen: PlayerScoreScreen
     },
-    Results: {
-      screen: ResultsScreen
-    }
   },
   {
     navigationOptions: {

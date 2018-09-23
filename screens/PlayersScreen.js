@@ -1,6 +1,7 @@
 import React from 'react';
 import {View} from 'react-native';
 import PPButton from '../components/PPButton';
+import PPHoveringButton from '../components/PPHoveringButton';
 import Player from '../components/Player';
 import SortableList from '../node_modules/react-native-sortable-list/src/SortableList';
 import { Colors } from '../styles/Base';
@@ -14,8 +15,8 @@ export default class PlayersScreen extends React.Component {
       title: "Joueurs",
       headerRight: (
         <PPButton
-          onPress={() => { params.startGame() }}
-          title="Jouer !"
+          onPress={() => { params.gotoAddPlayer() }}
+          title="Ajouter un joueur"
         />
       )
     }
@@ -23,7 +24,7 @@ export default class PlayersScreen extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ 
-      startGame: this._startGame.bind(this)
+      gotoAddPlayer: this._onAddButtonPress.bind(this)
     });
   }
 
@@ -33,6 +34,7 @@ export default class PlayersScreen extends React.Component {
         backgroundColor: Colors.BACKGROUND, 
       }}>
         { this._renderList() }
+        { this._renderFooter() }
       </View>
     );
   }
@@ -48,7 +50,6 @@ export default class PlayersScreen extends React.Component {
       data = { players }
       order = { order }
       renderRow = { this._renderRow }
-      renderFooter = { this._renderFooter }
       onChangeOrder = { this._onChangeOrder }
       onReleaseRow = { this._onReleaseRow }
       onPressRow = { this._onPressRow }
@@ -61,9 +62,9 @@ export default class PlayersScreen extends React.Component {
 
   _renderFooter = () => {
     return (<View style={{marginTop: 24}}>
-      <PPButton
-        title="Ajouter un joueur"
-        onPress={this._onAddButtonPress}
+      <PPHoveringButton
+        title="C'est parti !"
+        onPress={this._startGame}
       />
     </View>)
   }
