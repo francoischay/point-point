@@ -5,13 +5,16 @@ import { Dimensions,
   TouchableOpacity 
 } from 'react-native';
 import { Base } from '../styles/Base';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 export default class PlayerWithScore extends React.Component {
 
   render() {
     const {data} = this.props;
-    
+    const medals = ['🥇','🥈','🥉'];
+    const medal = medals[data.position]
+
     return (
         <TouchableOpacity 
             style={Base.ROW}
@@ -22,6 +25,10 @@ export default class PlayerWithScore extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-between'
           }}>
+            { 
+              this.props.highlight == true &&
+                <Text style={ styles.medal }> { medal }</Text>
+            }
             <Text style={Base.TEXT}>
               {data.icon.item} {data.name}
             </Text>
@@ -33,3 +40,12 @@ export default class PlayerWithScore extends React.Component {
     );
   }
 }
+
+const styles = EStyleSheet.create({
+  medal: {
+    position: 'absolute',
+    fontSize: '1.5rem',
+    top: '1.25rem',
+    left: '-0.35rem'
+  }
+})

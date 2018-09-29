@@ -61,6 +61,10 @@ export default class ScoresModal extends React.Component {
         if (_player1.score < _player2.score) return 1;
     })
 
+    results[0].position = 0;
+    results[1].position = 1;
+    results[2].position = 2;
+
     return <FlatList
         contentContainerStyle ={styles.contentContainer}
         data = { results }
@@ -70,7 +74,8 @@ export default class ScoresModal extends React.Component {
 
   _renderItem = (_data) => {
     return <PlayerWithScore 
-      data={ _data } 
+      data={ _data }
+      highlight
     />
   }
 
