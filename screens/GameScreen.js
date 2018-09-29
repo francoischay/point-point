@@ -8,6 +8,7 @@ import PlayerWithScore from '../components/PlayerWithScore';
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ScoresModal from './ScoreModal';
+import { Colors } from '../styles/Base';
 
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -27,7 +28,7 @@ export default class PlayersScreen extends React.Component {
   render() {
     return (
       <View style = {{ 
-        backgroundColor: '#0E7D6E',
+        backgroundColor: Colors.GREEN,
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -97,7 +98,7 @@ const styles = EStyleSheet.create({
   },
 
   contentContainer: {
-    padding: '2rem',
+    padding: '1.5rem',
     paddingTop: Header.HEIGHT
   }
 });

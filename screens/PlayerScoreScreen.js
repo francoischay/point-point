@@ -1,16 +1,29 @@
 import React from 'react';
-import {
+import {Button,
+    Image,
     Text,
     View,
+    TouchableOpacity,
     StyleSheet
 } from 'react-native';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
-import { Base } from '../styles/Base';
+import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
+import PPHoveringButton from '../components/PPHoveringButton'
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+const defaultBackImage = require('../assets/images/back-icon.png');
 
 export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
+            headerStyle: {
+              backgroundColor: '#FFF',
+              elevation: 0, // remove shadow on Android
+              shadowOpacity: 0, // remove shadow on iOS
+              borderBottomWidth: 0,    
+            },
+            headerLeft: navigation.getParam('leftButton'),
             headerRight: navigation.getParam('rightButton')
         };
     };
@@ -58,6 +71,7 @@ export default class PlayerScoreScreen extends React.Component {
         })
 
         this.props.navigation.setParams({ 
+            leftButton: this._getLeftHeaderButton(),
             rightButton: this._getRightHeaderButton()
         });
 
@@ -65,16 +79,14 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     render() {
-        console.log(this.props.navigation.state.params)
         return (
-            <View style={{flex: 1}}>
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingLeft: 12,
-                    paddingRight: 12,
-                    paddingTop: 12
-                }}>
+            <View style={{
+                backgroundColor: Colors.GREEN,
+                flex: 1
+            }}>
+                <View style={
+                    styles.nameContainer
+                }>
                     <Text style={Base.HEADING_2}>
                         {this.props.navigation.state.params.icon.item}
                         {this.props.navigation.state.params.name}
@@ -100,11 +112,11 @@ export default class PlayerScoreScreen extends React.Component {
                     paddingLeft: 12,
                     paddingRight: 12,
                 }}>
-                    <PPButton 
+                    <PPHoveringButton 
                         title='Retirer'
                         onPress={this._onPressRemove}
                     />
-                    <PPButton 
+                    <PPHoveringButton 
                         title='Ajouter'
                         onPress={this._onPressAdd}
                     />
@@ -113,8 +125,45 @@ export default class PlayerScoreScreen extends React.Component {
         );
     }
 
+    _getLeftHeaderButton = () => {
+        console.log(this.props.navigation)
+        return (
+            <TouchableOpacity 
+                onPress={ this._goBack } 
+                style={ styles.headerButtonContainer }
+            >
+                <Image
+                    style={ styles.icon }
+                    source={ defaultBackImage }
+                />
+                <Text
+                    style={ styles.headerButtonText }
+                >
+                    Score
+                </Text>
+            </TouchableOpacity>)
+    }
+
     _getRightHeaderButton = () => {
-        return <PPButton title={ this.nextPlayer.name } onPress={ this._gotoNextPlayer } />
+        return (
+        <TouchableOpacity 
+            onPress={ this._gotoNextPlayer } 
+            style={ styles.headerButtonContainer }
+        >
+            <Text
+                style={ styles.headerButtonText }
+            >
+                { this.nextPlayer.name }
+            </Text>
+            <Image
+                style={ styles.iconBack }
+                source={ defaultBackImage }
+            />
+        </TouchableOpacity>)
+    }
+
+    _goBack = () => {
+        this.props.navigation.goBack()
     }
 
     _gotoNextPlayer = () => {
@@ -188,10 +237,42 @@ export default class PlayerScoreScreen extends React.Component {
     }
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
     input: {
-        fontSize: 96,
-        padding: 24,
+        color: 'white',
+        fontSize: '8rem',
+        padding: '2rem',
         fontWeight: 'bold'
-    }
+    },
+    nameContainer: {
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: '1.5rem'
+    },
+    headerButtonContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    headerButtonText: {
+        color: '#007AFF',
+        fontSize: '1.25rem'
+    },
+    icon: {
+        height: 21,
+        width: 12,
+        marginLeft: '1.5rem',
+        marginRight: 6,
+        marginVertical: 12,
+        resizeMode: 'contain'
+    },
+    iconBack: {
+        height: 21,
+        width: 12,
+        marginLeft: 6,
+        marginRight: '1.5rem',
+        marginVertical: 12,
+        resizeMode: 'contain',
+        transform: [{ scaleX: -1 }],
+    },
 })

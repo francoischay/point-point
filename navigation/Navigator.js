@@ -8,11 +8,11 @@ import PlayerScoreScreen from '../screens/PlayerScoreScreen';
 
 export default Navigator = createStackNavigator(
   {
-    Game: {
-      screen: GameScreen
-    },
     Players: {
       screen: PlayersScreen
+    },
+    Game: {
+      screen: GameScreen
     },
     AddPlayer: {
       screen: AddPlayerScreen,
@@ -26,6 +26,7 @@ export default Navigator = createStackNavigator(
   },
   {
     navigationOptions: {
+      initialRouteName: 'Game'
 /*      headerStyle: {
         backgroundColor: '#0D2B3F',
       },

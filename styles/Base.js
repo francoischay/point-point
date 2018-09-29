@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 export const Colors = {
     BACKGROUND : '#FAFAFA',
     DARK_GREY: '#0D2B3F',
+    GREEN: '#0E7D6E'
 }
 
 export const Base = EStyleSheet.create({
@@ -26,6 +27,9 @@ export const Base = EStyleSheet.create({
         shadowRadius: 10,
 
         elevation: 0
+    },
+    'ROW:last-child': {
+        borderRadius: 12
     },
     HEADING_2: {
         fontSize: 36,

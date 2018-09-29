@@ -5,6 +5,7 @@ import {
   Dimensions,
   Easing,
   FlatList,
+  Share,
   View
 } from 'react-native';
 import PlayerWithScore from '../components/PlayerWithScore';
@@ -31,7 +32,7 @@ export default class ScoresModal extends React.Component {
     return (
       <View style = {[styles.modalContainer, isVisible]}>
         <Animated.View style= {[styles.background, {opacity: bgAnim}]} />
-        <View>
+        <View style={{marginTop: 24}}>
           <Button
             title="Commencer une nouvelle partie"
             onPress={ this.props.onPress }
@@ -40,7 +41,7 @@ export default class ScoresModal extends React.Component {
             { this._renderList() }
             <Button
               title="Partager"
-              onPress={ () => {} }
+              onPress={ this._onSharePress }
             />
           </Animated.View>
         </View>
@@ -70,6 +71,16 @@ export default class ScoresModal extends React.Component {
     return <PlayerWithScore 
       data={ _data } 
     />
+  }
+
+  _onSharePress = () => {
+    Share.share({
+      title: "Title",
+      subject: "Subject",
+      dialogTitle: "Dialog Title",
+      message: "Message",
+      url: "http://www.google.com"
+    })
   }
 
   show = () => {
@@ -140,7 +151,7 @@ const styles = EStyleSheet.create({
 
   modal: {
     backgroundColor: 'white',
-    marginHorizontal: '10%',
+    marginHorizontal: '1.5rem',
     borderRadius: '1rem',
     overflow: 'hidden',
   },

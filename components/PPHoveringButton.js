@@ -147,7 +147,7 @@ const styles = EStyleSheet.create({
   button: {
     elevation: 4,
     paddingHorizontal: '1rem',
-    backgroundColor: '#007AFF',
+    backgroundColor: 'white',
     borderRadius: 6,
     margin: '1.5rem',
     shadowColor: 'rgb(0,0,0)',
@@ -156,11 +156,12 @@ const styles = EStyleSheet.create({
     shadowRadius: 7,
   },
   text: {
-    color: 'white',
+    color: '#007AFF',
     textAlign: 'center',
     padding: '0.75rem',
-    fontSize:  '1.25rem',
-    fontWeight: '400'
+    paddingVertical: '1.25rem',
+    fontSize:  '1.5rem',
+    fontWeight: '500'
   },
   buttonDisabled: Platform.select({
     ios: {},

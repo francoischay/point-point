@@ -1,5 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View,TouchableOpacity, Text, Image} from 'react-native';
 import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
 import Player from '../components/Player';
@@ -7,24 +7,18 @@ import SortableList from '../node_modules/react-native-sortable-list/src/Sortabl
 import { Colors } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
+const defaultBackImage = require('../assets/images/back-icon.png');
+
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
-    const { params = {} } = navigation.state
-
     return {
-      title: "Joueurs",
-      headerRight: (
-        <PPButton
-          onPress={() => { params.gotoAddPlayer() }}
-          title="Ajouter un joueur"
-        />
-      )
+      headerRight: navigation.getParam('rightButton')
     }
   };
 
   componentDidMount() {
     this.props.navigation.setParams({ 
-      gotoAddPlayer: this._onAddButtonPress.bind(this)
+      rightButton: this._getRightHeaderButton()
     });
   }
 
@@ -37,6 +31,24 @@ export default class PlayersScreen extends React.Component {
         { this._renderFooter() }
       </View>
     );
+  }
+
+  _getRightHeaderButton = () => {
+      return (
+      <TouchableOpacity 
+          onPress={ this._onAddButtonPress } 
+          style={ styles.headerButtonContainer }
+      >
+          <Text
+              style={ styles.headerButtonText }
+          >
+            Ajouter un joueur
+          </Text>
+          <Image
+              style={ styles.icon }
+              source={ defaultBackImage }
+          />
+      </TouchableOpacity>)
   }
 
   _renderList = () => {
@@ -107,6 +119,23 @@ const styles = EStyleSheet.create({
   },
   contentContainer: {
     width: '100%',
-    padding: '2rem'
+    padding: '1.5rem'
+  },
+  headerButtonContainer: {
+      alignItems: 'center',
+      flexDirection: 'row',
+  },
+  headerButtonText: {
+      color: '#007AFF',
+      fontSize: '1.25rem'
+  },
+  icon: {
+      height: 21,
+      width: 12,
+      marginLeft: 9,
+      marginRight: '1.5rem',
+      marginVertical: 12,
+      resizeMode: 'contain',
+      transform: [{ scaleX: -1 }]
   }
 });

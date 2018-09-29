@@ -28,7 +28,7 @@ export default class App extends React.Component {
             index: 0,
             item: Emojis[0]
           },
-          name: 'Nom 1',
+          name: 'Daniel',
           score: 0,
           log: []
         },
@@ -38,7 +38,7 @@ export default class App extends React.Component {
             index: 10,
             item: Emojis[10]
           },
-          name: 'Nom 2',
+          name: 'Lucienne',
           score: 200,
           log: []
         },
@@ -48,7 +48,7 @@ export default class App extends React.Component {
             index: 20,
             item: Emojis[20]
           },
-          name: 'Nom 3',
+          name: 'Jacqueline',
           score: 100,
           log: []
         }
