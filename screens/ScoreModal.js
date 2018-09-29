@@ -9,6 +9,7 @@ import {
   View
 } from 'react-native';
 import PlayerWithScore from '../components/PlayerWithScore';
+import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -39,7 +40,7 @@ export default class ScoresModal extends React.Component {
           />
           <Animated.View style= {[styles.modal, {marginTop: listAnim}]}>
             { this._renderList() }
-            <Button
+            <PPButton
               title="Partager"
               onPress={ this._onSharePress }
             />

@@ -44,10 +44,6 @@ export default class PlayersScreen extends React.Component {
           >
             Ajouter un joueur
           </Text>
-          <Image
-              style={ styles.icon }
-              source={ defaultBackImage }
-          />
       </TouchableOpacity>)
   }
 
@@ -127,7 +123,8 @@ const styles = EStyleSheet.create({
   },
   headerButtonText: {
       color: '#007AFF',
-      fontSize: '1.25rem'
+      fontSize: '1.25rem',
+      marginRight: '1.5rem'
   },
   icon: {
       height: 21,

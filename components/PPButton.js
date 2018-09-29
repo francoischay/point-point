@@ -152,8 +152,9 @@ const styles = EStyleSheet.create({
     color: '#007AFF',
     textAlign: 'center',
     padding: '0.75rem',
+    paddingVertical: '1.25rem',
     fontSize:  '1.5rem',
-    fontWeight: '400'
+    fontWeight: '500'
   },
   buttonDisabled: Platform.select({
     ios: {},

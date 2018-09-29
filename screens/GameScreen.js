@@ -3,7 +3,6 @@ import {
   FlatList,
   View
 } from 'react-native';
-import { Header } from 'react-navigation'
 import PlayerWithScore from '../components/PlayerWithScore';
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -27,12 +26,7 @@ export default class PlayersScreen extends React.Component {
 
   render() {
     return (
-      <View style = {{ 
-        backgroundColor: Colors.GREEN,
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-      }}>
+      <View style = { styles.pageContainer }>
         { this._renderList() }
         { this._renderFooter() }
         <ScoresModal 
@@ -96,9 +90,19 @@ const styles = EStyleSheet.create({
   gameList: {
     flex: 1
   },
-
+  pageContainer: { 
+    backgroundColor: Colors.GREEN,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   contentContainer: {
     padding: '1.5rem',
-    paddingTop: Header.HEIGHT
+    '@media ios': {
+      paddingTop: '64 + 1.5rem',
+    },
+    '@media android': {
+      paddingTop: '56 + 1.5rem',
+    }
   }
 });
