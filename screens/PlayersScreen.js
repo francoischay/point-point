@@ -4,7 +4,7 @@ import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
 import Player from '../components/Player';
 import SortableList from '../node_modules/react-native-sortable-list/src/SortableList';
-import { Colors } from '../styles/Base';
+import { Colors, Base } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 const defaultBackImage = require('../assets/images/back-icon.png');
@@ -12,7 +12,9 @@ const defaultBackImage = require('../assets/images/back-icon.png');
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
-      headerRight: navigation.getParam('rightButton')
+      title: 'Joueurs',
+      headerRight: navigation.getParam('rightButton'),
+      header: null
     }
   };
 
@@ -57,6 +59,7 @@ export default class PlayersScreen extends React.Component {
       contentContainerStyle ={styles.contentContainer}
       data = { players }
       order = { order }
+      renderHeader = { this._renderHeader }
       renderRow = { this._renderRow }
       onChangeOrder = { this._onChangeOrder }
       onReleaseRow = { this._onReleaseRow }
@@ -68,8 +71,25 @@ export default class PlayersScreen extends React.Component {
     return <Player data={ _data.data } active={_data.active} />
   }
 
+  _renderHeader = () => {
+    return (<View
+      style={styles.headerContainer}
+    >
+      <Text
+        style={ Base.HEADING_2 }
+      >
+        Joueurs
+      </Text>
+      { this._getRightHeaderButton() }
+    </View>)
+  }
+
   _renderFooter = () => {
-    return (<View style={{marginTop: 24}}>
+    return (<View style={{
+      bottom: 18,
+      position: 'absolute',
+      width: '100%'
+    }}>
       <PPHoveringButton
         title="C'est parti !"
         onPress={this._startGame}
@@ -96,30 +116,36 @@ export default class PlayersScreen extends React.Component {
   }
 
   _startGame = () => {
-    console.log("start !")
     this.props.navigation.replace("Game")
   }
-
-  _onScoreRowPress = (_data) => {
-    this.props.navigation.navigate("PlayerScore", _data)
-  }
-
+  
   _onAddButtonPress = (_event) => {
     this.props.navigation.navigate("AddPlayer")
   }
 }
 
 const styles = EStyleSheet.create({
+  headerContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: '3rem',
+    paddingBottom: '1.5rem',
+    shadowColor: 'rgba(0,0,0,0.1)',
+    shadowOpacity: 0.2,
+    shadowOffset: {height: 3, width: 0},
+    shadowRadius: 10,
+  },
   playersList: {
-    flex: 1
+    flex: 1,
   },
   contentContainer: {
     width: '100%',
-    padding: '1.5rem'
+    paddingHorizontal: '1.5rem',
+    marginTop: '1rem'
   },
   headerButtonContainer: {
-      alignItems: 'center',
-      flexDirection: 'row',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
   headerButtonText: {
       color: '#007AFF',

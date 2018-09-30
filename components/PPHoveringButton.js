@@ -11,6 +11,7 @@
 'use strict';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Colors } from '../styles/Base';
 
 const ColorPropType = require('ColorPropType');
 const Platform = require('Platform');
@@ -59,6 +60,7 @@ class PPHoveringButton extends React.Component<{
   accessibilityLabel?: ?string,
   disabled?: ?boolean,
   testID?: ?string,
+  style?: ?object
 }> {
   static propTypes = {
     /**
@@ -89,6 +91,7 @@ class PPHoveringButton extends React.Component<{
      * Used to locate this view in end-to-end tests.
      */
     testID: PropTypes.string,
+    style: PropTypes.object
   };
 
   render() {
@@ -100,15 +103,15 @@ class PPHoveringButton extends React.Component<{
       hasTVPreferredFocus,
       disabled,
       testID,
+      style
     } = this.props;
     const buttonStyles = [styles.button];
     const textStyles = [styles.text];
     if (color) {
-      if (Platform.OS === 'ios') {
-        textStyles.push({color: color});
-      } else {
-        buttonStyles.push({backgroundColor: color});
-      }
+      textStyles.push({color: color});
+    }
+    if(style) {
+      buttonStyles.push(style)
     }
     const accessibilityStates = [];
     if (disabled) {
@@ -147,7 +150,7 @@ const styles = EStyleSheet.create({
   button: {
     elevation: 4,
     paddingHorizontal: '1rem',
-    backgroundColor: 'white',
+    backgroundColor: Colors.GREEN,
     borderRadius: 6,
     margin: '1.5rem',
     shadowColor: 'rgb(0,0,0)',
@@ -156,7 +159,7 @@ const styles = EStyleSheet.create({
     shadowRadius: 7,
   },
   text: {
-    color: '#007AFF',
+    color: '#FFF',
     textAlign: 'center',
     padding: '0.75rem',
     paddingVertical: '1.25rem',

@@ -69,6 +69,8 @@ export default class PlayersScreen extends React.Component {
     return <PPHoveringButton
       onPress={ this._showScores }
       title={ "Faire un point points" }
+      style={{backgroundColor: 'white'}}
+      color={Colors.GREEN}
     />
   }
 

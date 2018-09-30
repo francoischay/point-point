@@ -12,6 +12,7 @@ import PlayerWithScore from '../components/PlayerWithScore';
 import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Colors } from '../styles/Base';
 
 export default class ScoresModal extends React.Component {
 
@@ -49,6 +50,8 @@ export default class ScoresModal extends React.Component {
         <PPHoveringButton
             title="Retour au jeu"
             onPress={()=>{this.hide()}}
+            style={{backgroundColor: 'white'}}
+            color={Colors.GREEN}
         />
       </View>
     );

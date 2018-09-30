@@ -3,7 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 export const Colors = {
     BACKGROUND : '#FAFAFA',
     DARK_GREY: '#0D2B3F',
-    GREEN: '#0E7D6E'
+    GREEN: '#22AA99'
 }
 
 export const Base = EStyleSheet.create({
@@ -16,10 +16,12 @@ export const Base = EStyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-start',
         backgroundColor: '#fff',
-        marginBottom: 1,
+        borderWidth: 0,
+        borderColor: '#D4EEEB',
         flex: 1,
-        padding: '1rem',
+        padding: '1.5rem',
         width: window.width - 30 * 2,
+        marginTop: -1,
 
         shadowColor: 'rgba(0,0,0,0.1)',
         shadowOpacity: 0.2,
@@ -32,7 +34,7 @@ export const Base = EStyleSheet.create({
         borderRadius: 12
     },
     HEADING_2: {
-        fontSize: 36,
+        fontSize: '2rem',
         fontWeight: 'bold'
     },
     EMOJI: {
@@ -41,7 +43,6 @@ export const Base = EStyleSheet.create({
     NAME_INPUT: {
         fontSize: '4rem',
         fontWeight: 'bold',
-        marginBottom: 24,
         textAlign: 'center'
     }
 })

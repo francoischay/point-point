@@ -18,7 +18,7 @@ export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
             headerStyle: {
-              backgroundColor: '#FFF',
+              backgroundColor: '#22AA99',
               elevation: 0, // remove shadow on Android
               shadowOpacity: 0, // remove shadow on iOS
               borderBottomWidth: 0,    
@@ -84,42 +84,44 @@ export default class PlayerScoreScreen extends React.Component {
                 backgroundColor: Colors.GREEN,
                 flex: 1
             }}>
-                <View style={
-                    styles.nameContainer
-                }>
-                    <Text style={Base.HEADING_2}>
-                        {this.props.navigation.state.params.icon.item}
-                        {this.props.navigation.state.params.name}
-                    </Text>
-                    <Text style={Base.HEADING_2}>
-                        {this.state.scoreToDisplay}
-                    </Text>
-                </View>
-                <TextInput 
-                    style={styles.input}
-                    ref='scoreInput'
-                    placeholder='0'
-                    onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
-                    value={this.state.amountToDisplay}
-                    keyboardType='numeric'
-                    clearTextOnFocus={true}
-                    textAlign={'center'}
-                    underlineColorAndroid='transparent'
-                />
-                <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    paddingLeft: 12,
-                    paddingRight: 12,
-                }}>
-                    <PPHoveringButton 
-                        title='Retirer'
-                        onPress={this._onPressRemove}
+                <View
+                    style={styles.card}
+                >
+                    <View style={
+                        styles.nameContainer
+                    }>
+                        <Text style={Base.HEADING_2}>
+                            {this.props.navigation.state.params.icon.item}
+                            {this.props.navigation.state.params.name}
+                        </Text>
+                        <Text style={Base.HEADING_2}>
+                            {this.state.scoreToDisplay}
+                        </Text>
+                    </View>
+                    <TextInput 
+                        style={styles.input}
+                        ref='scoreInput'
+                        placeholder='0'
+                        onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
+                        value={this.state.amountToDisplay}
+                        keyboardType='numeric'
+                        clearTextOnFocus={true}
+                        textAlign={'center'}
+                        underlineColorAndroid='transparent'
                     />
-                    <PPHoveringButton 
-                        title='Ajouter'
-                        onPress={this._onPressAdd}
-                    />
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around'
+                    }}>
+                        <PPButton 
+                            title='Retirer'
+                            onPress={this._onPressRemove}
+                        />
+                        <PPButton 
+                            title='Ajouter'
+                            onPress={this._onPressAdd}
+                        />
+                    </View>
                 </View>
             </View>
         );
@@ -238,17 +240,20 @@ export default class PlayerScoreScreen extends React.Component {
 }
 
 const styles = EStyleSheet.create({
+    card: {
+        backgroundColor: 'white',
+        margin: 24,
+        borderRadius: 12,
+        padding: 18
+    },
     input: {
-        color: 'white',
-        fontSize: '8rem',
-        padding: '2rem',
-        fontWeight: 'bold'
+        fontSize: '5rem',
+        fontWeight: 'bold',
+        marginVertical: '3rem'
     },
     nameContainer: {
-        backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: '1.5rem'
     },
     headerButtonContainer: {
         alignItems: 'center',

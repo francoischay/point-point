@@ -1,26 +1,24 @@
 import React from 'react';
 import {
   Button,
-  View
+  View,
+  TouchableOpacity,
+  Image,
+  Text
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
 import PPButton from '../components/PPButton';
+import PPHoveringButton from '../components/PPHoveringButton';
 import PPTextInput from '../components/PPTextInput';
-import { Base } from '../styles/Base';
+import { Base, Colors } from '../styles/Base';
+import EStyleSheet from 'react-native-extended-stylesheet';
+
+const defaultBackImage = require('../assets/images/back-icon.png');
 
 export default class EditPlayer extends React.Component {
   static navigationOptions = ({navigation}) => {
-    const { params = {} } = navigation.state
-    
-    let action = params.rightButtonAction ? params.rightButtonAction : () => {}
-    
     return {
-      headerRight: (
-        <PPButton
-          onPress={() => { action() }}
-          title="Sauver"
-        />
-      ),
+      header: null
     }
   }
 
@@ -37,26 +35,23 @@ export default class EditPlayer extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.props.navigation.setParams({ 
-      rightButtonAction: this._onSavePress
-    });
-  }
-
   render() {
     return (
-      <View style={{ 
-        flex: 1, 
-        backgroundColor: '#FFF'
-      }}>
+      <View style={ styles.pageContainer }>
+          { this._renderHeader() }
           <View style={{
-            alignItems: 'center',
-            width: '100%'
+            width: '100%',
+            flex:1,
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            justifyContent: 'flex-start',
           }}>
-            <PPAvatarInput 
-              ref="IconInput"
-              value={ this.state.playerIcon }
-            />
+            <View>
+              <PPAvatarInput 
+                ref="IconInput"
+                value={ this.state.playerIcon }
+              />
+            </View>
             <PPTextInput
               style={Base.NAME_INPUT}
               placeholder='Nom'
@@ -70,6 +65,43 @@ export default class EditPlayer extends React.Component {
           />
       </View>
     );
+  }
+
+  _renderHeader = () => {
+    return (<View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+      }}
+    >
+      { this._renderLeftHeaderButton() }
+      <PPHoveringButton
+        onPress={ this._onSavePress }
+        title="Sauver"
+      />
+    </View>)
+  }
+
+  _renderLeftHeaderButton = () => {
+      return (
+          <TouchableOpacity 
+              onPress={ this._goBack } 
+              style={ styles.headerButtonContainer }
+          >
+              <Image
+                  style={ styles.icon }
+                  source={ defaultBackImage }
+              />
+              <Text
+                  style={ styles.headerButtonText }
+              >
+                  Joueurs
+              </Text>
+          </TouchableOpacity>)
+  }
+
+  _goBack = () => {
+      this.props.navigation.goBack()
   }
 
   _onPlayerNameChange = (_playerName) => {
@@ -120,3 +152,37 @@ export default class EditPlayer extends React.Component {
     this.props.navigation.goBack();
   }
 }
+
+const styles = EStyleSheet.create({
+    pageContainer:{
+      flex: 1, 
+      justifyContent: 'space-between',
+      backgroundColor: Colors.BACKGROUND,
+      paddingBottom: '1.5rem'
+    },
+    headerButtonContainer: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
+    headerButtonText: {
+        color: '#007AFF',
+        fontSize: '1.25rem'
+    },
+    icon: {
+        height: 21,
+        width: 12,
+        marginLeft: '1.5rem',
+        marginRight: 6,
+        marginVertical: 12,
+        resizeMode: 'contain'
+    },
+    iconBack: {
+        height: 21,
+        width: 12,
+        marginLeft: 6,
+        marginRight: '1.5rem',
+        marginVertical: 12,
+        resizeMode: 'contain',
+        transform: [{ scaleX: -1 }],
+    },
+})

@@ -21,7 +21,6 @@ export default class PPAvatarInput extends React.Component {
   render() {
     return (
         <FlatList 
-          style = {styles.list}
           contentContainerStyle = {{
             paddingLeft: Dimensions.get('window').width/2 - styles.$emojiSize / 2,
             paddingRight: Dimensions.get('window').width/2 - styles.$emojiSize / 2
@@ -78,12 +77,7 @@ export default class PPAvatarInput extends React.Component {
 
 const styles = EStyleSheet.create({
   $emojiSize: '6rem',
-  list: {
-    marginTop: '2rem',
-    marginBottom: '2rem'
-  },
   emojiContainer: {
-    backgroundColor: 'white',
     width: '$emojiSize',
     height: '$emojiSize'
   },

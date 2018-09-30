@@ -4,6 +4,7 @@ import {
     TouchableOpacity, 
     Text 
 } from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default class PreviousName extends React.Component {
     constructor(props) {
@@ -29,25 +30,19 @@ export default class PreviousName extends React.Component {
                 style={{
                     padding: 12,
                     marginLeft: 12,
-                    flexDirection: 'row'
+                    flexDirection: 'row',
                 }}
                 onPress={this.props.onPress}
                 onLongPress={this._onLongPress}
             >
-                <Text style={{
-                    fontSize: 18,
-                    color: '#007AFF'
-                }}>
+                <Text style={styles.nameButton}>
                     {this.props.title}
                 </Text>
                 <TouchableOpacity 
                     style={removeButtonStyle}
                     onPress={this._onDeletePress}
                 >
-                    <Text style={{
-                        color: 'red',
-                        fontSize: 12
-                    }}>
+                    <Text style={styles.deleteNameButton}>
                         Supprimer
                     </Text>
                 </TouchableOpacity>
@@ -77,3 +72,14 @@ export default class PreviousName extends React.Component {
           }
     }
 }
+
+const styles = EStyleSheet.create({
+    nameButton: {
+        fontSize: '1.25rem',
+        color: '#007AFF'
+    },
+    deleteNameButton: {
+        color: 'red',
+        fontSize: '1rem'
+    }
+})
