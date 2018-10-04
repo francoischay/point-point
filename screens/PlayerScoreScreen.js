@@ -4,6 +4,7 @@ import {Button,
     Text,
     View,
     TouchableOpacity,
+    ScrollView,
     StyleSheet
 } from 'react-native';
 import { TextInput } from '../node_modules/react-native-gesture-handler';
@@ -80,7 +81,7 @@ export default class PlayerScoreScreen extends React.Component {
 
     render() {
         return (
-            <View style={{
+            <ScrollView style={{
                 backgroundColor: Colors.GREEN,
                 flex: 1
             }}>
@@ -123,7 +124,7 @@ export default class PlayerScoreScreen extends React.Component {
                         />
                     </View>
                 </View>
-            </View>
+            </ScrollView>
         );
     }
 

@@ -22,20 +22,21 @@ export default class ScoresModal extends React.Component {
     const windowHeight = Dimensions.get('window').height
 
     this.state = {
-     bgAnim: new Animated.Value(0),
-     listAnim: new Animated.Value(windowHeight),
+      visible: false,
+      bgAnim: new Animated.Value(0),
+      listAnim: new Animated.Value(windowHeight),
     }
   }
 
   render() {
     let { bgAnim, listAnim } = this.state;
-    const isVisible = this.state.visible ? {display: 'flex'} : {display: 'none'}  
+    const isVisible = this.state.visible ? {top: 0} : {top: Dimensions.get('window').height}  
 
     return (
       <View style = {[styles.modalContainer, isVisible]}>
         <Animated.View style= {[styles.background, {opacity: bgAnim}]} />
         <View style={{marginTop: 24}}>
-          <Button
+          <PPButton
             title="Commencer une nouvelle partie"
             onPress={ this.props.onPress }
           />
@@ -48,10 +49,10 @@ export default class ScoresModal extends React.Component {
           </Animated.View>
         </View>
         <PPHoveringButton
-            title="Retour au jeu"
-            onPress={()=>{this.hide()}}
-            style={{backgroundColor: 'white'}}
-            color={Colors.GREEN}
+          title="Retour au jeu"
+          onPress={()=>{this.hide()}}
+          style={{backgroundColor: 'white'}}
+          color={Colors.GREEN}
         />
       </View>
     );
