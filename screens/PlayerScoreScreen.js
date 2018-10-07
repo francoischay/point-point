@@ -68,29 +68,25 @@ export default class PlayerScoreScreen extends React.Component {
 
         this.setState({
             playerId: this.props.navigation.state.params.id,
-            score: data.score,
             scoreToDisplay: data.score
         })
         this.log = data.log
 
         this.props.navigation.setParams({ 
-            leftButton: this._getLeftHeaderButton(),
-            rightButton: this._getRightHeaderButton()
+            leftButton: this._renderLeftHeaderButton(),
+            rightButton: this._renderRightHeaderButton()
         });
 
         this.refs.scoreInput.focus();
     }
 
     componentDidUpdate = () => {
-        console.log('UPDATE')
         const player = this.props.screenProps.store.get("players")[this.state.playerId];
-
         this.log = player.log
     }
 
     render() {
         const data = this.props.navigation.state.params;
-        console.log(data)
 
         return (
             <ScrollView style={{
@@ -139,13 +135,13 @@ export default class PlayerScoreScreen extends React.Component {
                 <FlatList
                     style={styles.logList}
                     data={this.log}
-                    renderItem = {({item}) => this._renderItem(item)}
+                    renderItem = {({item}) => this._renderLogItem(item)}
                 />
             </ScrollView>
         );
     }
 
-    _renderItem = (_data) => {
+    _renderLogItem = (_data) => {
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between'
@@ -154,7 +150,7 @@ export default class PlayerScoreScreen extends React.Component {
         </View>
     }
 
-    _getLeftHeaderButton = () => {
+    _renderLeftHeaderButton = () => {
         return (
             <TouchableOpacity 
                 onPress={ this._goBack } 
@@ -172,7 +168,7 @@ export default class PlayerScoreScreen extends React.Component {
             </TouchableOpacity>)
     }
 
-    _getRightHeaderButton = () => {
+    _renderRightHeaderButton = () => {
         return (
         <TouchableOpacity 
             onPress={ this._gotoNextPlayer } 
@@ -199,34 +195,32 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _onPressAdd = () => {
-        const newScore = parseInt(this.state.score) + parseInt(this.refs.scoreInput.props.value);
-        this._changeScore(newScore);
+        const points = parseInt(this.refs.scoreInput.props.value);
+        this._changeScore(points);
     }
 
     _onPressRemove = () => {
-        const newScore = parseInt(this.state.score) - parseInt(this.refs.scoreInput.props.value);
-        this._changeScore(newScore);
+        const points = -parseInt(this.refs.scoreInput.props.value);
+        this._changeScore(points);
     }
 
-    _changeScore = (_newScore) => {
-        const diff = _newScore - this.state.score;
-
+    _changeScore = (_points) => {
         this.setState({
             counterStep: 0
         })
-        this.tickInterval = setInterval(() => {this._updateScoreDisplay(diff)}, this.delay / this.nbSteps)
+        this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points)}, this.delay / this.nbSteps)
     }
 
-    _updateScoreDisplay = (_diff) => {
+    _updateScoreDisplay = (_points) => {
         const step = this.state.counterStep++;
-        const newScore = this.state.score + parseInt(_diff / this.nbSteps * step);
+        const newScore = this._getTotalFromLog() + parseInt(_points / this.nbSteps * step);
 
         let newAmount;
-        if(_diff > 0){
-            newAmount = this.state.amount - parseInt(_diff / this.nbSteps * step);
+        if(_points > 0){
+            newAmount = this.state.amount - parseInt(_points / this.nbSteps * step);
         }
         else{
-            newAmount = parseInt(this.state.amount) + parseInt(_diff / this.nbSteps * step);
+            newAmount = parseInt(this.state.amount) + parseInt(_points / this.nbSteps * step);
         }
         
         this.setState({
@@ -236,12 +230,12 @@ export default class PlayerScoreScreen extends React.Component {
         
         if(parseInt(step) === parseInt(this.nbSteps)){
             clearInterval(this.tickInterval);
-            this._setScore(_diff, newScore);
+            this._saveScore(_points, newScore);
             //this._gotoNextPlayer();
         } 
     }
 
-    _setScore = (_diff, _score) => {
+    _saveScore = (_points, _score) => {
         const input = this.refs.scoreInput
         const players = this.props.screenProps.store.get("players");
         let newPlayers = [];
@@ -253,12 +247,12 @@ export default class PlayerScoreScreen extends React.Component {
                 newPlayer.score = _score;
                 newPlayer.log.unshift({
                     timestamp: new Date(),
-                    points: _diff
+                    points: _points
                 })
             } 
             newPlayers.push(newPlayer);
         }
-        console.log(newPlayers)
+        
         this.props.screenProps.store.set("players", newPlayers)
 
         this.setState({
@@ -266,6 +260,14 @@ export default class PlayerScoreScreen extends React.Component {
             'amount': '0'
         })
         input.clear();
+    }
+
+    _getTotalFromLog = () => {
+        let total = 0;
+        for (let i = 0; i < this.log.length; i++) {
+            total += this.log[i].points
+        }
+        return total;
     }
 }
 
