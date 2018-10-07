@@ -1,20 +1,20 @@
 import React from 'react';
-import {Button,
+import {
     Image,
     Text,
     View,
     TouchableOpacity,
-    ScrollView,
-    StyleSheet
+    ScrollView
 } from 'react-native';
 import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
-import PPHoveringButton from '../components/PPHoveringButton'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 const defaultBackImage = require('../assets/images/back-icon.png');
 
+@connectActionSheet
 export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -144,14 +144,22 @@ export default class PlayerScoreScreen extends React.Component {
     _renderLogItem = (_data) => {
         let time = new Date();
         time.setTime(_data.timestamp)
+        
+        const hours = ("0" + time.getHours()).slice(-2)
+        const minutes = ("0" + time.getMinutes()).slice(-2)
+        const seconds = ("0" + time.getSeconds()).slice(-2)
+        const timeToDisplay = hours+":"+minutes+":"+seconds;
 
-        return <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-        }}>
-            <Text style={styles.logListItem}>{time.getHours()}:{time.getMinutes()}:{time.getSeconds()}</Text> 
-            <Text style={styles.logListItem}>{_data.points}</Text> 
-        </View>
+        return <TouchableOpacity 
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+            }}
+            onPress={this._onLogItemPress.bind(this, _data)}
+        >
+            <Text style={styles.logListItem}>{ timeToDisplay }</Text> 
+            <Text style={styles.logListItem}>{ _data.points }</Text> 
+        </TouchableOpacity>
     }
 
     _renderLeftHeaderButton = () => {
@@ -208,14 +216,35 @@ export default class PlayerScoreScreen extends React.Component {
         this._changeScore(points);
     }
 
-    _changeScore = (_points) => {
+    _onLogItemPress = (_data) => {
+        let options = ['Supprimer cette entrée', 'Annuler', ''];
+        let destructiveButtonIndex = 0;
+        let cancelButtonIndex = 2;
+        this.props.showActionSheetWithOptions(
+        {
+            options,
+            destructiveButtonIndex,
+            cancelButtonIndex,
+            title: 'Supprimer cette entrée ?',
+            message: 'Le score sera recaculé'
+        },
+        buttonIndex => {
+            if (buttonIndex === 0){
+                const index = this.log.findIndex(x => x.timestamp==_data.timestamp);
+                this._removeLogEntry(index);
+            }
+        }
+        );
+    }
+
+    _changeScore = (_points, _doLog = true) => {
         this.setState({
             counterStep: 0
         })
-        this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points)}, this.delay / this.nbSteps)
+        this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points, _doLog)}, this.delay / this.nbSteps)
     }
 
-    _updateScoreDisplay = (_points) => {
+    _updateScoreDisplay = (_points, _doLog) => {
         const step = this.state.counterStep++;
         const newScore = this._getTotalFromLog() + parseInt(_points / this.nbSteps * step);
 
@@ -234,12 +263,12 @@ export default class PlayerScoreScreen extends React.Component {
         
         if(parseInt(step) === parseInt(this.nbSteps)){
             clearInterval(this.tickInterval);
-            this._saveScore(_points, newScore);
+            this._saveScore(_points, newScore, _doLog);
             //this._gotoNextPlayer();
         } 
     }
 
-    _saveScore = (_points, _score) => {
+    _saveScore = (_points, _score, _doLog = true) => {
         const input = this.refs.scoreInput
         const players = this.props.screenProps.store.get("players");
         let newPlayers = [];
@@ -249,10 +278,12 @@ export default class PlayerScoreScreen extends React.Component {
             let newPlayer = JSON.parse(JSON.stringify(element));
             if(element.id === this.props.navigation.state.params.id){
                 newPlayer.score = _score;
-                newPlayer.log.unshift({
-                    timestamp: Date.now(),
-                    points: _points
-                })
+                if(_doLog){
+                    newPlayer.log.unshift({
+                        timestamp: Date.now(),
+                        points: _points
+                    })
+                }
             } 
             newPlayers.push(newPlayer);
         }
@@ -264,6 +295,24 @@ export default class PlayerScoreScreen extends React.Component {
             'amount': '0'
         })
         input.clear();
+    }
+
+    _removeLogEntry = (_index) => {
+        const pointsToRemove = this.log[_index].points * -1;
+        this.log.splice(_index, 1)
+
+        const store = this.props.screenProps.store;
+        const players = store.get("players");
+        let newPlayers = players.slice(); //copy
+        const player = newPlayers[this.state.playerId];
+        player.log = this.log;
+        player.score = player.score + pointsToRemove;
+        store.set("players", newPlayers)
+        
+        this.setState({
+            score: player.score,
+            scoreToDisplay: player.score,
+        })
     }
 
     _getTotalFromLog = () => {
@@ -321,6 +370,6 @@ const styles = EStyleSheet.create({
     },
     logListItem: {
         fontSize: '1rem',
-        paddingVertical: '0.5rem'
+        paddingVertical: '0.75rem'
     }
 })

@@ -5,6 +5,7 @@ import Navigator from './navigation/Navigator';
 import Podda from 'podda';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Emojis from './constants/Emojis';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 console.disableYellowBox = true;
 
@@ -102,10 +103,12 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <Navigator screenProps={{ store: this.store }} />
-        </View>
+        <ActionSheetProvider>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <Navigator screenProps={{ store: this.store }} />
+          </View>
+        </ActionSheetProvider>
       );
     }
   }
