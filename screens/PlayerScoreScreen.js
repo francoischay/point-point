@@ -142,10 +142,14 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _renderLogItem = (_data) => {
+        let time = new Date();
+        time.setTime(_data.timestamp)
+
         return <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between'
         }}>
+            <Text style={styles.logListItem}>{time.getHours()}:{time.getMinutes()}:{time.getSeconds()}</Text> 
             <Text style={styles.logListItem}>{_data.points}</Text> 
         </View>
     }
@@ -246,7 +250,7 @@ export default class PlayerScoreScreen extends React.Component {
             if(element.id === this.props.navigation.state.params.id){
                 newPlayer.score = _score;
                 newPlayer.log.unshift({
-                    timestamp: new Date(),
+                    timestamp: Date.now(),
                     points: _points
                 })
             } 

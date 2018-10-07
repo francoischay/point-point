@@ -30,12 +30,7 @@ export default class App extends React.Component {
           },
           name: 'Daniel',
           score: 0,
-          log: [
-            {
-              timestamp: new Date(),
-              points: 0
-            }
-          ]
+          log: []
         },
         {
           id: 1,
@@ -44,21 +39,8 @@ export default class App extends React.Component {
             item: Emojis[10]
           },
           name: 'Lucienne',
-          score: 200,
-          log: [
-            {
-              timestamp: new Date(),
-              points: 50
-            },
-            {
-              timestamp: new Date(),
-              points: 50
-            },
-            {
-              timestamp: new Date(),
-              points: 100
-            }
-          ]
+          score: 0,
+          log: []
         },
         {
           id: 2,
@@ -67,13 +49,8 @@ export default class App extends React.Component {
             item: Emojis[20]
           },
           name: 'Jacqueline',
-          score: 100,
-          log: [
-            {
-              timestamp: new Date(),
-              points: 100
-            }
-          ]
+          score: 0,
+          log: []
         }
       ],
       order: ['0', '1', '2']
@@ -83,7 +60,6 @@ export default class App extends React.Component {
 
     this.store.set("players", this.state.players)
     this.stopPlayersWatch = this.store.watch('players', (_data) => {
-      console.log("UPDATE PLAYERS", _data)
       this.setState({players: _data})
     });
 
