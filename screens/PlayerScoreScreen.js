@@ -7,7 +7,7 @@ import {Button,
     ScrollView,
     StyleSheet
 } from 'react-native';
-import { TextInput } from '../node_modules/react-native-gesture-handler';
+import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
 import PPHoveringButton from '../components/PPHoveringButton'
@@ -67,9 +67,11 @@ export default class PlayerScoreScreen extends React.Component {
         this.nextPlayer = gamePlayers[nextIndex];
 
         this.setState({
+            playerId: this.props.navigation.state.params.id,
             score: data.score,
-            scoreToDisplay: data.score,
+            scoreToDisplay: data.score
         })
+        this.log = data.log
 
         this.props.navigation.setParams({ 
             leftButton: this._getLeftHeaderButton(),
@@ -79,7 +81,17 @@ export default class PlayerScoreScreen extends React.Component {
         this.refs.scoreInput.focus();
     }
 
+    componentDidUpdate = () => {
+        console.log('UPDATE')
+        const player = this.props.screenProps.store.get("players")[this.state.playerId];
+
+        this.log = player.log
+    }
+
     render() {
+        const data = this.props.navigation.state.params;
+        console.log(data)
+
         return (
             <ScrollView style={{
                 backgroundColor: Colors.GREEN,
@@ -92,8 +104,8 @@ export default class PlayerScoreScreen extends React.Component {
                         styles.nameContainer
                     }>
                         <Text style={Base.HEADING_2}>
-                            {this.props.navigation.state.params.icon.item}
-                            {this.props.navigation.state.params.name}
+                            {data.icon.item}
+                            {data.name}
                         </Text>
                         <Text style={Base.HEADING_2}>
                             {this.state.scoreToDisplay}
@@ -124,12 +136,25 @@ export default class PlayerScoreScreen extends React.Component {
                         />
                     </View>
                 </View>
+                <FlatList
+                    style={styles.logList}
+                    data={this.log}
+                    renderItem = {({item}) => this._renderItem(item)}
+                />
             </ScrollView>
         );
     }
 
+    _renderItem = (_data) => {
+        return <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        }}>
+            <Text style={styles.logListItem}>{_data.points}</Text> 
+        </View>
+    }
+
     _getLeftHeaderButton = () => {
-        console.log(this.props.navigation)
         return (
             <TouchableOpacity 
                 onPress={ this._goBack } 
@@ -211,12 +236,12 @@ export default class PlayerScoreScreen extends React.Component {
         
         if(parseInt(step) === parseInt(this.nbSteps)){
             clearInterval(this.tickInterval);
-            this._setScore(newScore);
+            this._setScore(_diff, newScore);
             //this._gotoNextPlayer();
         } 
     }
 
-    _setScore = (_score) => {
+    _setScore = (_diff, _score) => {
         const input = this.refs.scoreInput
         const players = this.props.screenProps.store.get("players");
         let newPlayers = [];
@@ -226,10 +251,14 @@ export default class PlayerScoreScreen extends React.Component {
             let newPlayer = JSON.parse(JSON.stringify(element));
             if(element.id === this.props.navigation.state.params.id){
                 newPlayer.score = _score;
+                newPlayer.log.unshift({
+                    timestamp: new Date(),
+                    points: _diff
+                })
             } 
             newPlayers.push(newPlayer);
         }
-        
+        console.log(newPlayers)
         this.props.screenProps.store.set("players", newPlayers)
 
         this.setState({
@@ -281,4 +310,11 @@ const styles = EStyleSheet.create({
         resizeMode: 'contain',
         transform: [{ scaleX: -1 }],
     },
+    logList: {
+        paddingHorizontal: '2.5rem'
+    },
+    logListItem: {
+        fontSize: '1rem',
+        paddingVertical: '0.5rem'
+    }
 })
