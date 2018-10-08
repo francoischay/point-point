@@ -217,7 +217,7 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _onLogItemPress = (_data) => {
-        let options = ['Supprimer cette entrée', 'Annuler', ''];
+        let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
         let destructiveButtonIndex = 0;
         let cancelButtonIndex = 2;
         this.props.showActionSheetWithOptions(
