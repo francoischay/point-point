@@ -1,20 +1,20 @@
 import React from 'react';
-import {Button,
+import {
     Image,
     Text,
     View,
     TouchableOpacity,
-    ScrollView,
-    StyleSheet
+    ScrollView
 } from 'react-native';
-import { TextInput } from '../node_modules/react-native-gesture-handler';
+import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
-import PPHoveringButton from '../components/PPHoveringButton'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 const defaultBackImage = require('../assets/images/back-icon.png');
 
+@connectActionSheet
 export default class PlayerScoreScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
@@ -67,19 +67,27 @@ export default class PlayerScoreScreen extends React.Component {
         this.nextPlayer = gamePlayers[nextIndex];
 
         this.setState({
-            score: data.score,
-            scoreToDisplay: data.score,
+            playerId: this.props.navigation.state.params.id,
+            scoreToDisplay: data.score
         })
+        this.log = data.log
 
         this.props.navigation.setParams({ 
-            leftButton: this._getLeftHeaderButton(),
-            rightButton: this._getRightHeaderButton()
+            leftButton: this._renderLeftHeaderButton(),
+            rightButton: this._renderRightHeaderButton()
         });
 
         this.refs.scoreInput.focus();
     }
 
+    componentDidUpdate = () => {
+        const player = this.props.screenProps.store.get("players")[this.state.playerId];
+        this.log = player.log
+    }
+
     render() {
+        const data = this.props.navigation.state.params;
+
         return (
             <ScrollView style={{
                 backgroundColor: Colors.GREEN,
@@ -92,8 +100,8 @@ export default class PlayerScoreScreen extends React.Component {
                         styles.nameContainer
                     }>
                         <Text style={Base.HEADING_2}>
-                            {this.props.navigation.state.params.icon.item}
-                            {this.props.navigation.state.params.name}
+                            {data.icon.item}
+                            {data.name}
                         </Text>
                         <Text style={Base.HEADING_2}>
                             {this.state.scoreToDisplay}
@@ -124,12 +132,37 @@ export default class PlayerScoreScreen extends React.Component {
                         />
                     </View>
                 </View>
+                <FlatList
+                    style={styles.logList}
+                    data={this.log}
+                    renderItem = {({item}) => this._renderLogItem(item)}
+                />
             </ScrollView>
         );
     }
 
-    _getLeftHeaderButton = () => {
-        console.log(this.props.navigation)
+    _renderLogItem = (_data) => {
+        let time = new Date();
+        time.setTime(_data.timestamp)
+        
+        const hours = ("0" + time.getHours()).slice(-2)
+        const minutes = ("0" + time.getMinutes()).slice(-2)
+        const seconds = ("0" + time.getSeconds()).slice(-2)
+        const timeToDisplay = hours+":"+minutes+":"+seconds;
+
+        return <TouchableOpacity 
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+            }}
+            onPress={this._onLogItemPress.bind(this, _data)}
+        >
+            <Text style={styles.logListItem}>{ timeToDisplay }</Text> 
+            <Text style={styles.logListItem}>{ _data.points }</Text> 
+        </TouchableOpacity>
+    }
+
+    _renderLeftHeaderButton = () => {
         return (
             <TouchableOpacity 
                 onPress={ this._goBack } 
@@ -147,7 +180,7 @@ export default class PlayerScoreScreen extends React.Component {
             </TouchableOpacity>)
     }
 
-    _getRightHeaderButton = () => {
+    _renderRightHeaderButton = () => {
         return (
         <TouchableOpacity 
             onPress={ this._gotoNextPlayer } 
@@ -174,34 +207,53 @@ export default class PlayerScoreScreen extends React.Component {
     }
 
     _onPressAdd = () => {
-        const newScore = parseInt(this.state.score) + parseInt(this.refs.scoreInput.props.value);
-        this._changeScore(newScore);
+        const points = parseInt(this.refs.scoreInput.props.value);
+        this._changeScore(points);
     }
 
     _onPressRemove = () => {
-        const newScore = parseInt(this.state.score) - parseInt(this.refs.scoreInput.props.value);
-        this._changeScore(newScore);
+        const points = -parseInt(this.refs.scoreInput.props.value);
+        this._changeScore(points);
     }
 
-    _changeScore = (_newScore) => {
-        const diff = _newScore - this.state.score;
+    _onLogItemPress = (_data) => {
+        let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
+        let destructiveButtonIndex = 0;
+        let cancelButtonIndex = 2;
+        this.props.showActionSheetWithOptions(
+        {
+            options,
+            destructiveButtonIndex,
+            cancelButtonIndex,
+            title: 'Supprimer cette entrée ?',
+            message: 'Le score sera recaculé'
+        },
+        buttonIndex => {
+            if (buttonIndex === 0){
+                const index = this.log.findIndex(x => x.timestamp==_data.timestamp);
+                this._removeLogEntry(index);
+            }
+        }
+        );
+    }
 
+    _changeScore = (_points, _doLog = true) => {
         this.setState({
             counterStep: 0
         })
-        this.tickInterval = setInterval(() => {this._updateScoreDisplay(diff)}, this.delay / this.nbSteps)
+        this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points, _doLog)}, this.delay / this.nbSteps)
     }
 
-    _updateScoreDisplay = (_diff) => {
+    _updateScoreDisplay = (_points, _doLog) => {
         const step = this.state.counterStep++;
-        const newScore = this.state.score + parseInt(_diff / this.nbSteps * step);
+        const newScore = this._getTotalFromLog() + parseInt(_points / this.nbSteps * step);
 
         let newAmount;
-        if(_diff > 0){
-            newAmount = this.state.amount - parseInt(_diff / this.nbSteps * step);
+        if(_points > 0){
+            newAmount = this.state.amount - parseInt(_points / this.nbSteps * step);
         }
         else{
-            newAmount = parseInt(this.state.amount) + parseInt(_diff / this.nbSteps * step);
+            newAmount = parseInt(this.state.amount) + parseInt(_points / this.nbSteps * step);
         }
         
         this.setState({
@@ -211,12 +263,12 @@ export default class PlayerScoreScreen extends React.Component {
         
         if(parseInt(step) === parseInt(this.nbSteps)){
             clearInterval(this.tickInterval);
-            this._setScore(newScore);
+            this._saveScore(_points, newScore, _doLog);
             //this._gotoNextPlayer();
         } 
     }
 
-    _setScore = (_score) => {
+    _saveScore = (_points, _score, _doLog = true) => {
         const input = this.refs.scoreInput
         const players = this.props.screenProps.store.get("players");
         let newPlayers = [];
@@ -226,6 +278,12 @@ export default class PlayerScoreScreen extends React.Component {
             let newPlayer = JSON.parse(JSON.stringify(element));
             if(element.id === this.props.navigation.state.params.id){
                 newPlayer.score = _score;
+                if(_doLog){
+                    newPlayer.log.unshift({
+                        timestamp: Date.now(),
+                        points: _points
+                    })
+                }
             } 
             newPlayers.push(newPlayer);
         }
@@ -237,6 +295,32 @@ export default class PlayerScoreScreen extends React.Component {
             'amount': '0'
         })
         input.clear();
+    }
+
+    _removeLogEntry = (_index) => {
+        const pointsToRemove = this.log[_index].points * -1;
+        this.log.splice(_index, 1)
+
+        const store = this.props.screenProps.store;
+        const players = store.get("players");
+        let newPlayers = players.slice(); //copy
+        const player = newPlayers[this.state.playerId];
+        player.log = this.log;
+        player.score = player.score + pointsToRemove;
+        store.set("players", newPlayers)
+        
+        this.setState({
+            score: player.score,
+            scoreToDisplay: player.score,
+        })
+    }
+
+    _getTotalFromLog = () => {
+        let total = 0;
+        for (let i = 0; i < this.log.length; i++) {
+            total += this.log[i].points
+        }
+        return total;
     }
 }
 
@@ -281,4 +365,11 @@ const styles = EStyleSheet.create({
         resizeMode: 'contain',
         transform: [{ scaleX: -1 }],
     },
+    logList: {
+        paddingHorizontal: '2.5rem'
+    },
+    logListItem: {
+        fontSize: '1rem',
+        paddingVertical: '0.75rem'
+    }
 })
