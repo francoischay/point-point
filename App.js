@@ -16,7 +16,7 @@ export default class App extends React.Component {
 
   constructor(){
     super();
-    console.log(Dimensions.get('window').width)
+    
     EStyleSheet.build({
       $rem: Dimensions.get('window').width > 375 ? 18 : 12
     });
@@ -60,32 +60,92 @@ export default class App extends React.Component {
     this.store = new Podda();
 
     this.store.set("players", this.state.players)
-    this.stopPlayersWatch = this.store.watch('players', (_data) => {
-      this.setState({players: _data})
-    });
+
+    this.stopScreenWatch = this.store.watch('currentScreen', (_screenToSave) => {
+      AsyncStorage.setItem("currentScreen", _screenToSave)
+    }); 
+
+    this.stopPlayersWatch = this.store.watch('players', (_playersToSave) => {
+      const playersToSaveString = JSON.stringify(_playersToSave);
+      AsyncStorage.setItem("currentPlayers", playersToSaveString)
+      this.setState({players: _playersToSave})
+    }); 
 
     this.store.set("order", this.state.order);
+    this.stopOrderWatch = this.store.watch('order', (_orderToSave) => {
+      const orderToSaveString = JSON.stringify(_orderToSave);
+      AsyncStorage.setItem("order", orderToSaveString)
+    }); 
+    
+    this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersNameToSave) => {
+      const playersNameToSaveString = _playersNameToSave.toString();
+      AsyncStorage.setItem("previousNames", playersNameToSaveString)
+      this.setState({"previousNames": _playersNameToSave})
+    })
 
     this.retrievePlayers().then((_players)=>{
-      this.store.set("previousNames", _players)
+      const players = (_players.length > 0) ? _players : []; 
+      this.store.set("players", players)
     })
-    
-    this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersToSave) => {
-      const playersToSaveString = _playersToSave.toString();
-      AsyncStorage.setItem("previousNames", playersToSaveString)
-      this.setState({"previousNames": _playersToSave})
+
+    this.retrieveOrder().then((_order)=>{
+      this.store.set("order", _order)
     })
+
+    this.retrievePreviousNames().then((_previousNames)=>{
+      this.store.set("previousNames", _previousNames)
+    })
+
+    this.retrieveCurrentScreen().then((_currentScreen)=>{
+      this.store.set("currentScreen", _currentScreen)
+    })
+
   }
 
   retrievePlayers = async () => {
     try {
-      const retrievedPlayers = await AsyncStorage.getItem('previousNames');
-      retrievedPlayers= retrievedPlayers.split(",");
+      const retrievedPlayers = await AsyncStorage.getItem('currentPlayers');
       
-      return retrievedPlayers;
+      return JSON.parse(retrievedPlayers);
     } 
     catch (_error) {
       console.log("No existing players");
+    }
+    return;
+  }
+
+  retrieveOrder = async () => {
+    try {
+      const retrievedOrder = await AsyncStorage.getItem('order');
+      
+      return JSON.parse(retrievedOrder);
+    } 
+    catch (_error) {
+      console.log("No existing order");
+    }
+    return;
+  }
+
+  retrievePreviousNames = async () => {
+    try {
+      const retrievedPreviousNames = await AsyncStorage.getItem('previousNames');
+      retrievedPreviousNames= retrievedPreviousNames.split(",");
+      
+      return retrievedPreviousNames;
+    } 
+    catch (_error) {
+      console.log("No existing players names");
+    }
+    return;
+  }
+
+  retrieveCurrentScreen = async () => {
+    try {
+      const retrievedScreen = await AsyncStorage.getItem('currentScreen');
+      return retrievedScreen;
+    } 
+    catch (_error) {
+      console.log("No previous Screen");
     }
     return;
   }

@@ -22,6 +22,8 @@ export default class PlayersScreen extends React.Component {
     this.props.navigation.setParams({ 
       rightButton: this._getRightHeaderButton()
     });
+
+    this.props.screenProps.store.set("currentScreen", "Players")
   }
 
   render() {

@@ -22,6 +22,8 @@ export default class PlayersScreen extends React.Component {
     this.props.navigation.setParams({
       stopGame: this._stopGame.bind(this)
     });
+
+    this.props.screenProps.store.set("currentScreen", "Game")
   }
 
   render() {

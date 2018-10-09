@@ -25,12 +25,6 @@ export default Navigator = createStackNavigator(
     },
   },
   {
-    navigationOptions: {
-      initialRouteName: 'Game'
-/*      headerStyle: {
-        backgroundColor: '#0D2B3F',
-      },
-      headerTintColor: '#fff',*/
-    }
+    initialRouteName: 'Players'
   }
 );
