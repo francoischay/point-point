@@ -80,6 +80,14 @@ export default class PlayersScreen extends React.Component {
 
   _stopGame = () => {
     console.log("stop !")
+
+    const players = this.props.screenProps.store.get("players");
+    for (let i = 0; i < players.length; i++) {
+      players[i].score = 0;
+      players[i].log = []
+    }
+    this.props.screenProps.store.set("players", players);
+
     this.props.navigation.replace("Players")
   }
 
