@@ -78,6 +78,8 @@ export default class PlayerScoreScreen extends React.Component {
         });
 
         this.refs.scoreInput.focus();
+
+        this.props.screenProps.store.set("currentScreen", "Game")
     }
 
     componentDidUpdate = () => {

@@ -66,8 +66,8 @@ export default class ScoresModal extends React.Component {
     })
 
     results[0].position = 0;
-    results[1].position = 1;
-    results[2].position = 2;
+    if(results[1]) results[1].position = 1;
+    if(results[2]) results[2].position = 2;
 
     return <FlatList
         contentContainerStyle ={styles.contentContainer}

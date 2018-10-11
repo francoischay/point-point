@@ -1,11 +1,11 @@
 import React from 'react';
 import { AsyncStorage, Dimensions, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import Navigator from './navigation/Navigator';
 import Podda from 'podda';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Emojis from './constants/Emojis';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import Navigator from './navigation/Navigator'
 
 console.disableYellowBox = true;
 
@@ -16,7 +16,9 @@ export default class App extends React.Component {
 
   constructor(){
     super();
-    console.log(Dimensions.get('window').width)
+
+    //AsyncStorage.clear()
+    
     EStyleSheet.build({
       $rem: Dimensions.get('window').width > 375 ? 18 : 12
     });
@@ -60,29 +62,50 @@ export default class App extends React.Component {
     this.store = new Podda();
 
     this.store.set("players", this.state.players)
-    this.stopPlayersWatch = this.store.watch('players', (_data) => {
-      this.setState({players: _data})
-    });
+
+    this.stopScreenWatch = this.store.watch('currentScreen', (_screenToSave) => {
+      AsyncStorage.setItem("currentScreen", _screenToSave)
+    }); 
+
+    this.stopPlayersWatch = this.store.watch('players', (_playersToSave) => {
+      const playersToSaveString = JSON.stringify(_playersToSave);
+      AsyncStorage.setItem("currentPlayers", playersToSaveString)
+      this.setState({players: _playersToSave})
+    }); 
 
     this.store.set("order", this.state.order);
+    this.stopOrderWatch = this.store.watch('order', (_orderToSave) => {
+      const orderToSaveString = JSON.stringify(_orderToSave);
+      AsyncStorage.setItem("order", orderToSaveString)
+    }); 
+    
+    this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersNameToSave) => {
+      const playersNameToSaveString = (_playersNameToSave === undefined)? "" : _playersNameToSave.toString();
+      AsyncStorage.setItem("previousNames", playersNameToSaveString)
+      this.setState({"previousNames": _playersNameToSave})
+    })
 
     this.retrievePlayers().then((_players)=>{
-      this.store.set("previousNames", _players)
+      const players = (_players === null) ? [] : _players;
+      this.store.set("players", players)
     })
-    
-    this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersToSave) => {
-      const playersToSaveString = _playersToSave.toString();
-      AsyncStorage.setItem("previousNames", playersToSaveString)
-      this.setState({"previousNames": _playersToSave})
+
+    this.retrieveOrder().then((_order)=>{
+      const order = (_order === null) ? [] : _order;
+      this.store.set("order", order)
     })
+
+    this.retrievePreviousNames().then((_previousNames)=>{
+      this.store.set("previousNames", _previousNames)
+    })
+
   }
 
   retrievePlayers = async () => {
     try {
-      const retrievedPlayers = await AsyncStorage.getItem('previousNames');
-      retrievedPlayers= retrievedPlayers.split(",");
+      const retrievedPlayers = await AsyncStorage.getItem('currentPlayers');
       
-      return retrievedPlayers;
+      return JSON.parse(retrievedPlayers);
     } 
     catch (_error) {
       console.log("No existing players");
@@ -90,8 +113,32 @@ export default class App extends React.Component {
     return;
   }
 
+  retrieveOrder = async () => {
+    try {
+      const retrievedOrder = await AsyncStorage.getItem('order');
+      
+      return JSON.parse(retrievedOrder);
+    } 
+    catch (_error) {
+      console.log("No existing order");
+    }
+    return;
+  }
+
+  retrievePreviousNames = async () => {
+    try {
+      const retrievedPreviousNames = await AsyncStorage.getItem('previousNames');
+      retrievedPreviousNames= retrievedPreviousNames.split(",");
+      
+      return retrievedPreviousNames;
+    } 
+    catch (_error) {
+      console.log("No existing players names");
+    }
+    return;
+  }
+
   render() {
-    //AsyncStorage.clear();
 
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
