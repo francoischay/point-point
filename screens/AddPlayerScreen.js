@@ -136,7 +136,7 @@ export default class AddPlayer extends React.Component {
       log: []
     };
     store.set('players', newPlayers);
-
+    
     let newOrder = store.get("order");
     newOrder.push((newPlayers.length - 1)+"")
     store.set('order', newOrder)

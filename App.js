@@ -1,11 +1,11 @@
 import React from 'react';
 import { AsyncStorage, Dimensions, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import Navigator from './navigation/Navigator';
 import Podda from 'podda';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Emojis from './constants/Emojis';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import Navigator from './navigation/Navigator'
 
 console.disableYellowBox = true;
 
@@ -16,6 +16,8 @@ export default class App extends React.Component {
 
   constructor(){
     super();
+
+    //AsyncStorage.clear()
     
     EStyleSheet.build({
       $rem: Dimensions.get('window').width > 375 ? 18 : 12
@@ -78,26 +80,23 @@ export default class App extends React.Component {
     }); 
     
     this.stopPreviousNameWatch = this.store.watch('previousNames', (_playersNameToSave) => {
-      const playersNameToSaveString = _playersNameToSave.toString();
+      const playersNameToSaveString = (_playersNameToSave === undefined)? "" : _playersNameToSave.toString();
       AsyncStorage.setItem("previousNames", playersNameToSaveString)
       this.setState({"previousNames": _playersNameToSave})
     })
 
     this.retrievePlayers().then((_players)=>{
-      const players = (_players.length > 0) ? _players : []; 
+      const players = (_players === null) ? [] : _players;
       this.store.set("players", players)
     })
 
     this.retrieveOrder().then((_order)=>{
-      this.store.set("order", _order)
+      const order = (_order === null) ? [] : _order;
+      this.store.set("order", order)
     })
 
     this.retrievePreviousNames().then((_previousNames)=>{
       this.store.set("previousNames", _previousNames)
-    })
-
-    this.retrieveCurrentScreen().then((_currentScreen)=>{
-      this.store.set("currentScreen", _currentScreen)
     })
 
   }
@@ -139,19 +138,7 @@ export default class App extends React.Component {
     return;
   }
 
-  retrieveCurrentScreen = async () => {
-    try {
-      const retrievedScreen = await AsyncStorage.getItem('currentScreen');
-      return retrievedScreen;
-    } 
-    catch (_error) {
-      console.log("No previous Screen");
-    }
-    return;
-  }
-
   render() {
-    //AsyncStorage.clear();
 
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (

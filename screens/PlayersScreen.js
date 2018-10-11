@@ -22,8 +22,6 @@ export default class PlayersScreen extends React.Component {
     this.props.navigation.setParams({ 
       rightButton: this._getRightHeaderButton()
     });
-
-    this.props.screenProps.store.set("currentScreen", "Players")
   }
 
   render() {
@@ -87,16 +85,27 @@ export default class PlayersScreen extends React.Component {
   }
 
   _renderFooter = () => {
+    const label = (this._isGameOn()) ? "Reprendre la partie" : "C'est parti !"
     return (<View style={{
       bottom: 18,
       position: 'absolute',
       width: '100%'
     }}>
       <PPHoveringButton
-        title="C'est parti !"
+        title={label}
         onPress={this._startGame}
       />
     </View>)
+  }
+
+  _isGameOn = () => {
+    const players = this.props.screenProps.store.get("players");
+    for (let i = 0; i < players.length; i++) {
+      const element = players[i];
+      if(element.log.length > 0) return true;
+    }
+
+    return false;
   }
 
   _onReleaseRow = () => {
