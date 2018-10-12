@@ -1,21 +1,22 @@
 import React from 'react';
 import {
   FlatList,
-  View
+  View,
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import PlayerWithScore from '../components/PlayerWithScore';
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import ScoresModal from './ScoreModal';
-import { Colors } from '../styles/Base';
+import { Base, Colors } from '../styles/Base';
 
 export default class PlayersScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
-
+  static navigationOptions = () => {
     return {
-      title: "Score",
+      title: "Scores",
       header: null
-    }
+    };
   };
 
   componentDidMount() {
@@ -55,6 +56,7 @@ export default class PlayersScreen extends React.Component {
       contentContainerStyle ={styles.contentContainer}
       data = { gamePlayers }
       renderItem = {({item}) => this._renderItem(item)}
+      ListHeaderComponent = { this._renderHeader }
     />
   }
 
@@ -65,6 +67,20 @@ export default class PlayersScreen extends React.Component {
     />
   }
 
+  _renderHeader = () => {
+    return (<View
+      style={styles.headerContainer}
+    >
+      <Text
+        style={ [Base.HEADING_2, {
+          color: 'white'
+        }]}
+      >
+         Scores
+      </Text>
+    </View>)
+  }
+
   _renderFooter = () => {
     return (<View style={{
       bottom: 18,
@@ -73,7 +89,7 @@ export default class PlayersScreen extends React.Component {
     }}>
       <PPHoveringButton
         onPress={ this._showScores }
-        title={ "Faire un point points" }
+        title={ "Faire un point POINTS" }
         style={{backgroundColor: 'white'}}
         color={Colors.GREEN}
       />
@@ -103,23 +119,35 @@ export default class PlayersScreen extends React.Component {
 }
 
 const styles = EStyleSheet.create({
+  headerContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: '3rem',
+    paddingBottom: '1.5rem',
+    shadowColor: 'rgba(0,0,0,0.1)',
+    shadowOpacity: 0.2,
+    shadowOffset: {height: 3, width: 0},
+    shadowRadius: 10,
+  },
+  headerButtonContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  headerButtonText: {
+      color: 'white',
+      fontSize: '1.25rem',
+      marginRight: '1.5rem'
+  },
   gameList: {
     flex: 1
   },
   pageContainer: { 
     backgroundColor: Colors.GREEN,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    flex: 1
   },
   contentContainer: {
     paddingHorizontal: '1.5rem',
     paddingBottom: '10rem',
-    '@media ios': {
-      paddingTop: '64 + 1.5rem',
-    },
-    '@media android': {
-      paddingTop: '56 + 1.5rem',
-    }
+    marginTop: '1rem',
   }
 });

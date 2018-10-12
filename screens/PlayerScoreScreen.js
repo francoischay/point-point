@@ -105,9 +105,13 @@ export default class PlayerScoreScreen extends React.Component {
                             {data.icon.item}
                             {data.name}
                         </Text>
-                        <Text style={Base.HEADING_2}>
-                            {this.state.scoreToDisplay}
-                        </Text>
+                        <TouchableOpacity
+                            onPress={this._onScorePress}
+                        >
+                            <Text style={Base.HEADING_2}>
+                                {this.state.scoreToDisplay}
+                            </Text>
+                        </TouchableOpacity>
                     </View>
                     <TextInput 
                         style={styles.input}
@@ -237,6 +241,10 @@ export default class PlayerScoreScreen extends React.Component {
             }
         }
         );
+    }
+
+    _onScorePress = () => {
+        this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
     }
 
     _changeScore = (_points, _doLog = true) => {
