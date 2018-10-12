@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Animated,
-  Button,
   Dimensions,
   Easing,
   FlatList,
@@ -25,22 +24,40 @@ export default class ScoresModal extends React.Component {
       visible: false,
       bgAnim: new Animated.Value(0),
       listAnim: new Animated.Value(windowHeight),
+      startGameButtonHeight: 0,
+      backToGameButtonHeight: 0
     }
   }
 
   render() {
     let { bgAnim, listAnim } = this.state;
     const isVisible = this.state.visible ? {top: 0} : {top: Dimensions.get('window').height}  
+    const modalHeight = Dimensions.get('window').height - this.state.startGameButtonHeight - this.state.backToGameButtonHeight - EStyleSheet.value('$rem') * 5;
 
     return (
       <View style = {[styles.modalContainer, isVisible]}>
         <Animated.View style= {[styles.background, {opacity: bgAnim}]} />
         <View style={{marginTop: 24}}>
-          <PPButton
-            title="Commencer une nouvelle partie"
-            onPress={ this.props.onPress }
-          />
-          <Animated.View style= {[styles.modal, {marginTop: listAnim}]}>
+          <View
+            onLayout={(_event) => {
+              this.setState({
+                startGameButtonHeight: _event.nativeEvent.layout.height
+              })
+            }}
+          >
+            <PPButton
+              ref="NewPartyButton"
+              title="Commencer une nouvelle partie"
+              onPress={ this.props.onPress }
+            />
+          </View>
+          <Animated.View
+            ref="Modal"
+            style= {[styles.modal, {
+              marginTop: listAnim,
+              height: modalHeight
+            }]}
+          >
             { this._renderList() }
             <PPButton
               title="Partager"
@@ -48,12 +65,20 @@ export default class ScoresModal extends React.Component {
             />
           </Animated.View>
         </View>
-        <PPHoveringButton
-          title="Retour au jeu"
-          onPress={()=>{this.hide()}}
-          style={{backgroundColor: 'white'}}
-          color={Colors.GREEN}
-        />
+        <View
+          onLayout={(_event) => {
+            this.setState({
+              backToGameButtonHeight: _event.nativeEvent.layout.height
+            })
+          }}
+        >
+          <PPHoveringButton
+            title="Retour au jeu"
+            onPress={()=>{this.hide()}}
+            style={{backgroundColor: 'white'}}
+            color={Colors.GREEN}
+          />
+        </View>
       </View>
     );
   }
@@ -109,7 +134,7 @@ export default class ScoresModal extends React.Component {
       Animated.timing(
         this.state.listAnim,
         {
-          toValue: Dimensions.get('window').height * 0.1,
+          toValue: EStyleSheet.value('$rem'),
           duration: 500,
           easing: Easing.elastic()
         }
@@ -163,7 +188,7 @@ const styles = EStyleSheet.create({
     backgroundColor: 'white',
     marginHorizontal: '1.5rem',
     borderRadius: '1rem',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
 
   contentContainer: {

@@ -66,12 +66,18 @@ export default class PlayersScreen extends React.Component {
   }
 
   _renderFooter = () => {
-    return <PPHoveringButton
-      onPress={ this._showScores }
-      title={ "Faire un point points" }
-      style={{backgroundColor: 'white'}}
-      color={Colors.GREEN}
-    />
+    return (<View style={{
+      bottom: 18,
+      position: 'absolute',
+      width: '100%'
+    }}>
+      <PPHoveringButton
+        onPress={ this._showScores }
+        title={ "Faire un point points" }
+        style={{backgroundColor: 'white'}}
+        color={Colors.GREEN}
+      />
+    </View>)
   }
 
   _showScores = () => {
@@ -104,10 +110,11 @@ const styles = EStyleSheet.create({
     backgroundColor: Colors.GREEN,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   contentContainer: {
-    padding: '1.5rem',
+    paddingHorizontal: '1.5rem',
+    paddingBottom: '10rem',
     '@media ios': {
       paddingTop: '64 + 1.5rem',
     },

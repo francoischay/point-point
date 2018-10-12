@@ -148,11 +148,13 @@ const styles = EStyleSheet.create({
   },
   playersList: {
     flex: 1,
+    marginBottom: '3rem'
   },
   contentContainer: {
     width: '100%',
     paddingHorizontal: '1.5rem',
-    marginTop: '1rem'
+    marginTop: '1rem',
+    paddingBottom: '10rem'
   },
   headerButtonContainer: {
     alignItems: 'center',
