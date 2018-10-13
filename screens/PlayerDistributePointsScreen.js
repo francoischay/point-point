@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Base, Colors } from '../styles/Base';
-import { FlatList, TextInput } from 'react-native-gesture-handler';
+import { FlatList, TextInput, Switch } from 'react-native-gesture-handler';
 
 
 export default class PlayerDistributePointsScreen extends React.Component {
@@ -27,7 +27,8 @@ export default class PlayerDistributePointsScreen extends React.Component {
           totalToAdd: 0,
           futureTotal: this.props.navigation.state.params.score,
           score: this.props.navigation.state.params.score,
-          points: []
+          points: [],
+          doSubstract: false
         }
     }
 
@@ -38,6 +39,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
         return (
             <View style={styles.pageContainer}>
                 { this._renderHeader() }
+                { this._renderSwitch() }
                 { this._renderList() }
             </View>   
         )
@@ -89,6 +91,23 @@ export default class PlayerDistributePointsScreen extends React.Component {
       )
     }
 
+    _renderSwitch = () => {
+      return (
+        <View style={[ {
+          flexDirection: 'row',
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          padding: 1.5 * EStyleSheet.value('$rem')
+        }]}>
+          <Text style={Base.TEXT}>Retirer les points aux autres</Text>
+          <Switch 
+            value={this.state.doSubstract}
+            onValueChange={ this._onSwitchChange }
+          />
+        </View>
+      )
+    }
+
     _renderList = () => {
       return (
         <FlatList
@@ -99,23 +118,31 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
     
     _renderItem = (_data, _index) => {
+      const minusOpacity = this.state.doSubstract ? {opacity: 1} : {opacity:0}
       const item = <View style={[Base.ROW, {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingVertical: EStyleSheet.value('$rem') / 2
+            alignContent: 'stretch',
+            paddingVertical: EStyleSheet.value('$rem') * 0.75
           }]}
         >
-          <Text style={Base.TEXT}>
+          <Text style={[Base.TEXT, {paddingTop: EStyleSheet.value('$rem') * 0.75}]}>
             {_data.icon} {_data.name}
           </Text>
-          <TextInput
-            placeholder='0'
-            style={[Base.TEXT_INPUT, {
-              width: 100,
-              textAlign: 'right'
-            }]}
-            onChangeText={ (_value) => this._onChange(_value, _data, _index) }
-          />
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'right',
+            alignContent: 'stretch'
+          }}>
+            <Text style={[Base.TEXT, minusOpacity, {paddingTop: EStyleSheet.value('$rem') * 0.75}]}>-</Text>
+            <TextInput
+              placeholder='0'
+              style={[Base.TEXT_INPUT, {
+                textAlign: 'right'
+              }]}
+              onChangeText={ (_value) => this._onChange(_value, _data, _index) }
+            />
+          </View>
         </View>
 
       return item;
@@ -125,6 +152,13 @@ export default class PlayerDistributePointsScreen extends React.Component {
       const points = this.state.points
       points[_index].points = parseInt(_value);
       this.setState({points: points})
+    }
+
+    _onSwitchChange = (_value) => {
+      console.log(_value);
+      this.setState({
+        doSubstract: _value
+      })
     }
 }
 
