@@ -5,12 +5,15 @@ import {
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Base, Colors } from '../styles/Base';
-import { FlatList, TextInput, Switch } from 'react-native-gesture-handler';
+import { FlatList, TextInput, Switch, ScrollView } from 'react-native-gesture-handler';
+import HeaderWithButton from '../components/HeaderWithButton';
+import PPTextInput from '../components/PPTextInput';
 
 
 export default class PlayerDistributePointsScreen extends React.Component {
     static navigationOptions = () => {
         return {
+            header: null,
             headerStyle: {
                 backgroundColor: 'white',
                 elevation: 0,
@@ -33,16 +36,16 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
 
     render() {
-        const data = this.props.navigation.state.params;
-        const store = this.props.screenProps.store;
-
-        return (
-            <View style={styles.pageContainer}>
-                { this._renderHeader() }
-                { this._renderSwitch() }
-                { this._renderList() }
-            </View>   
-        )
+      return (
+        <View style={styles.pageContainer}>
+          { this._renderHeader() }
+          <ScrollView>
+            { this._renderListHeader() }
+            { this._renderSwitch() }
+            { this._renderList() }
+          </ScrollView>
+        </View>   
+      )
     }
 
     componentDidMount = () =>{
@@ -61,6 +64,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
       let points = []
       gamePlayers.forEach((item) => {
         points.push({
+          id: item.id,
           icon: item.icon.item,
           name: item.name,
           points: 0
@@ -73,10 +77,20 @@ export default class PlayerDistributePointsScreen extends React.Component {
 
     _renderHeader = () => {
       const data = this.props.navigation.state.params;
-      let futureTotal = data.score;
-      this.state.points.forEach((item) => {
-        futureTotal += item.points
-      })
+
+      return (
+        <HeaderWithButton 
+          title={ data.icon.item +" "+ data.name }
+          actionLabel='Sauver'
+          goBackLabel='Retour'
+          navigation={this.props.navigation}
+          action= { this._onSavePress }
+        />
+      )
+    }
+
+    _renderListHeader = () => {
+      const data = this.props.navigation.state.params;
       
       return (<View
           style={styles.headerContainer}
@@ -85,7 +99,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
             { data.icon.item } { data.name }
           </Text>
           <Text style={Base.HEADING_2}>
-            { futureTotal }
+            { this.state.futureTotal }
           </Text>
         </View>
       )
@@ -131,12 +145,17 @@ export default class PlayerDistributePointsScreen extends React.Component {
           </Text>
           <View style={{
             flexDirection: 'row',
-            justifyContent: 'right',
             alignContent: 'stretch'
           }}>
-            <Text style={[Base.TEXT, minusOpacity, {paddingTop: EStyleSheet.value('$rem') * 0.75}]}>-</Text>
-            <TextInput
+            <Text style={[Base.TEXT, minusOpacity, {
+                paddingTop: EStyleSheet.value('$rem') * 0.75
+              }
+            ]}>
+              -
+            </Text>
+            <PPTextInput
               placeholder='0'
+              value={_data.points.toString()}
               style={[Base.TEXT_INPUT, {
                 textAlign: 'right'
               }]}
@@ -151,14 +170,67 @@ export default class PlayerDistributePointsScreen extends React.Component {
     _onChange = (_value, _data, _index) => {
       const points = this.state.points
       points[_index].points = parseInt(_value);
-      this.setState({points: points})
+
+      let futureTotal = this.state.score;
+      this.state.points.forEach((item) => {
+        futureTotal += item.points
+      })
+
+      this.setState({
+        points: points,
+        futureTotal: futureTotal
+      })
     }
 
     _onSwitchChange = (_value) => {
-      console.log(_value);
       this.setState({
         doSubstract: _value
       })
+    }
+
+    _onSavePress = () => {
+      const players = this.props.screenProps.store.get("players");
+      let newPlayers = [];
+
+      for (let i = 0; i < players.length; i++) {
+        const element = players[i];
+        let newPlayer = JSON.parse(JSON.stringify(element));
+        if(element.id === this.props.navigation.state.params.id){
+          newPlayer.score = this.state.futureTotal;
+          newPlayer.log.unshift({
+            timestamp: Date.now(),
+            points: this.state.futureTotal - this.state.score
+          })
+        }
+        else{
+          if(this.state.doSubstract){
+            const playerPointsToChange = this._findPointsByPlayerId(newPlayer.id);
+            newPlayer.score -= playerPointsToChange;
+  
+            newPlayer.log.unshift({
+              timestamp: Date.now(),
+              points: -this._findPointsByPlayerId(newPlayer.id)
+            })
+          }
+        }
+        //newPlayer.score = 0;
+        //newPlayer.log = []
+        newPlayers.push(newPlayer);
+      }
+    
+      console.log(newPlayers)
+
+      this.props.screenProps.store.set("players", newPlayers)
+
+      this.props.navigation.goBack();
+    }
+
+    _findPointsByPlayerId = (_id) => {
+      const player = this.state.points.find((_score) => {
+        return _score.id === _id
+      })
+      console.log(player.points)
+      return player.points;
     }
 }
 
