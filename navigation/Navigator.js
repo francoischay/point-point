@@ -5,6 +5,7 @@ import GameScreen from '../screens/GameScreen';
 import AddPlayerScreen from '../screens/AddPlayerScreen';
 import EditPlayerScreen from '../screens/EditPlayerScreen';
 import PlayerScoreScreen from '../screens/PlayerScoreScreen';
+import PlayerDistributePointsScreen from '../screens/PlayerDistributePointsScreen';
 
 export default Navigator = createStackNavigator(
   {
@@ -23,6 +24,9 @@ export default Navigator = createStackNavigator(
     PlayerScore: {
       screen: PlayerScoreScreen
     },
+    PlayerDistributePoints: {
+      screen: PlayerDistributePointsScreen
+    }
   },
   {
     initialRouteName: 'Players'

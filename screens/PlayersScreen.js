@@ -19,6 +19,7 @@ export default class PlayersScreen extends React.Component {
   };
 
   componentDidMount() {
+    console.log("DID MOUNT")
     this.props.navigation.setParams({ 
       rightButton: this._getRightHeaderButton()
     });
