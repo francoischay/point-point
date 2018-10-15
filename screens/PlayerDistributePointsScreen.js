@@ -160,6 +160,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
                 textAlign: 'right'
               }]}
               onChangeText={ (_value) => this._onChange(_value, _data, _index) }
+              keyboardType='numeric'
             />
           </View>
         </View>

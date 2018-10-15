@@ -29,6 +29,6 @@ export default Navigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Game'
+    initialRouteName: 'Players'
   }
 );
