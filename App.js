@@ -33,6 +33,7 @@ export default class App extends React.Component {
           },
           name: 'Daniel',
           score: 0,
+          isEliminated: false,
           log: []
         },
         {
@@ -43,6 +44,7 @@ export default class App extends React.Component {
           },
           name: 'Lucienne',
           score: 0,
+          isEliminated: false,
           log: []
         },
         {
@@ -53,6 +55,7 @@ export default class App extends React.Component {
           },
           name: 'Jacqueline',
           score: 0,
+          isEliminated: false,
           log: []
         }
       ],

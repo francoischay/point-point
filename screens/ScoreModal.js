@@ -174,7 +174,8 @@ const styles = EStyleSheet.create({
     width: '100%',
     height: '100%',
     borderWidth: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    zIndex: 10
   },
 
   background: {

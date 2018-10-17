@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Dimensions,
     Image,
     Text,
     View,
@@ -9,8 +10,10 @@ import {
 import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
+import PPHoveringButton from '../components/PPHoveringButton'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
+import PPMore from '../components/PPMore';
 
 const defaultBackImage = require('../assets/images/back-icon.png');
 
@@ -42,12 +45,13 @@ export default class PlayerScoreScreen extends React.Component {
           amountToDisplay: '',
           playerId: this.props.navigation.state.params.id,
           isUpdatingScore: false,
-          log: this.props.navigation.state.params.log
+          log: this.props.navigation.state.params.log,
+          isEliminated: this.props.navigation.state.params.isEliminated,
+          showOptions: false
       }
     }
 
     componentDidMount() {
-      const data = this.props.navigation.state.params;
       const players = this.props.screenProps.store.get("players");
       const order = this.props.screenProps.store.get("order");
       const gamePlayers = []
@@ -81,6 +85,11 @@ export default class PlayerScoreScreen extends React.Component {
     render() {
       const data = this.props.screenProps.store.get("players")[this.state.playerId];
       const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
+      const statusStyle = this.state.isEliminated ? {opacity: 0} : {opacity: 1}
+      const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
+      const eliminateButtonLabel = this.state.isEliminated ? 'Réintégrer ce joueur' : 'Éliminer ce joueur'
+      const optionsStyles = this.state.showOptions ? {display: 'flex'} : {display: 'none'}
+      const showOptionsLabel = this.state.showOptions ? "Cacher les options" : "Montrer les options" 
 
       return (
         <ScrollView style={{
@@ -97,16 +106,15 @@ export default class PlayerScoreScreen extends React.Component {
                 {data.icon.item}
                 {data.name}
               </Text>
-              <TouchableOpacity
-                onPress={this._onScorePress}
-              >
-                <Text style={Base.HEADING_2}>
-                  {scoreToDisplay}
-                </Text>
-              </TouchableOpacity>
+              <Text style={Base.HEADING_2}>
+                {scoreToDisplay}
+              </Text>
             </View>
             <TextInput 
-              style={styles.input}
+              style={[
+                styles.input,
+                statusStyle
+              ]}
               ref='scoreInput'
               placeholder='0'
               onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
@@ -116,10 +124,14 @@ export default class PlayerScoreScreen extends React.Component {
               textAlign={'center'}
               underlineColorAndroid='transparent'
             />
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around'
-            }}>
+            <View style={[
+                {
+                  flexDirection: 'row',
+                  justifyContent: 'space-around'
+                }, 
+                statusStyle
+              ]
+            }>
               <PPButton 
                 title='Retirer'
                 onPress={this._onPressRemove}
@@ -130,13 +142,55 @@ export default class PlayerScoreScreen extends React.Component {
               />
             </View>
           </View>
-          <FlatList
-            style={styles.logList}
-            data={data.log}
-            renderItem = {({item}) => this._renderLogItem(item)}
+          <PPButton
+            title={showOptionsLabel}
+            onPress = {() => {
+              this.setState({
+                showOptions: !this.state.showOptions
+              })
+            }}
           />
+          <View style={optionsStyles}>
+            <PPHoveringButton
+              style= {{ backgroundColor: 'white' }}
+              color={ Colors.GREEN }
+              title={ "Terminer un tour" }
+              onPress= {this._onScorePress}
+            />
+            <PPHoveringButton
+              style= {{ backgroundColor: 'white' }}
+              color={ statusColor }
+              title={ eliminateButtonLabel }
+              onPress= {() => {
+                this.setState({
+                  isEliminated: !this.state.isEliminated
+                })
+              }}
+            />
+            <FlatList
+              style={styles.logList}
+              data={data.log}
+              ListHeaderComponent = { this._renderHeader }
+              renderItem = {({item}) => this._renderLogItem(item)}
+            />
+          </View>
         </ScrollView>
       );
+    }
+
+    _renderHeader = () => {
+      return (<View
+          style={styles.headerContainer}
+        >
+          <Text
+            style={ [Base.HEADING_2, {
+              color: 'white'
+            }]}
+          >
+            Historique
+          </Text>
+        </View>
+      )
     }
 
     _renderLogItem = (_data) => {
@@ -330,11 +384,25 @@ export default class PlayerScoreScreen extends React.Component {
 }
 
 const styles = EStyleSheet.create({
+    headerContainer:{
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingTop: '3rem',
+      paddingBottom: '1.5rem',
+      shadowColor: 'rgba(0,0,0,0.1)',
+      shadowOpacity: 0.2,
+      shadowOffset: {height: 3, width: 0},
+      shadowRadius: 10,
+    },
     card: {
-        backgroundColor: 'white',
-        margin: 24,
-        borderRadius: 12,
-        padding: 18
+      backgroundColor: 'white',
+      margin: '1.5rem',
+      borderRadius: '1rem',
+      padding: '1.5rem',
+      shadowColor: 'rgb(0,0,0)',
+      shadowOpacity: 0.2,
+      shadowOffset: {height: 7, width: 0},
+      shadowRadius: 7,
     },
     input: {
         fontSize: '5rem',
@@ -344,6 +412,7 @@ const styles = EStyleSheet.create({
     nameContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        height: '3rem'
     },
     headerButtonContainer: {
         alignItems: 'center',
@@ -371,7 +440,8 @@ const styles = EStyleSheet.create({
         transform: [{ scaleX: -1 }],
     },
     logList: {
-        paddingHorizontal: '2.5rem'
+        paddingHorizontal: '2.5rem',
+        paddingBottom: Dimensions.get('window').height / 2
     },
     logListItem: {
         fontSize: '1rem',

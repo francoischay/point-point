@@ -85,7 +85,8 @@ export default class PlayersScreen extends React.Component {
     return (<View style={{
       bottom: 18,
       position: 'absolute',
-      width: '100%'
+      width: '100%',
+      zIndex: 0
     }}>
       <PPHoveringButton
         onPress={ this._showScores }

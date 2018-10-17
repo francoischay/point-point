@@ -4,8 +4,10 @@ import { Animated,
   Dimensions, 
   StyleSheet, 
   Platform, 
-  Text} from 'react-native';
+  Text, 
+  View} from 'react-native';
 import { Base } from '../styles/Base';
+import PPDragHandle from './PPDragHandle';
 
 const window = Dimensions.get('window');
 
@@ -67,6 +69,12 @@ export default class Row extends React.Component {
         <Text style={Base.TEXT}>
           {data.icon.item} {data.name}
         </Text>
+        <View style={{
+          width: 20,
+          flexDirection: 'row'
+        }}>
+          <PPDragHandle />
+        </View>
       </Animated.View>
     );
   }
