@@ -3,6 +3,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 export const Colors = {
   BACKGROUND : '#FAFAFA',
   DARK_GREY: '#0D2B3F',
+  GREY: '#CCC',
   GREEN: '#22AA99'
 }
 
@@ -14,6 +15,7 @@ export const Base = EStyleSheet.create({
     },
     ROW: {
       flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'flex-start',
       backgroundColor: '#fff',
       borderWidth: 0,
