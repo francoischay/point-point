@@ -183,9 +183,7 @@ export default class PlayerScoreScreen extends React.Component {
           style={styles.headerContainer}
         >
           <Text
-            style={ [Base.HEADING_2, {
-              color: 'white'
-            }]}
+            style={ Base.HEADING_2 }
           >
             Historique
           </Text>
@@ -387,7 +385,6 @@ const styles = EStyleSheet.create({
     headerContainer:{
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingTop: '3rem',
       paddingBottom: '1.5rem',
       shadowColor: 'rgba(0,0,0,0.1)',
       shadowOpacity: 0.2,
@@ -405,46 +402,48 @@ const styles = EStyleSheet.create({
       shadowRadius: 7,
     },
     input: {
-        fontSize: '5rem',
-        fontWeight: 'bold',
-        marginVertical: '3rem'
+      fontSize: '5rem',
+      fontWeight: 'bold',
+      marginVertical: '3rem'
     },
     nameContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: '3rem'
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      height: '3rem'
     },
     headerButtonContainer: {
-        alignItems: 'center',
-        flexDirection: 'row',
+      alignItems: 'center',
+      flexDirection: 'row',
     },
     headerButtonText: {
-        color: '#007AFF',
-        fontSize: '1.25rem'
+      color: '#007AFF',
+      fontSize: '1.25rem'
     },
     icon: {
-        height: 21,
-        width: 12,
-        marginLeft: '1.5rem',
-        marginRight: 6,
-        marginVertical: 12,
-        resizeMode: 'contain'
+      height: 21,
+      width: 12,
+      marginLeft: '1.5rem',
+      marginRight: 6,
+      marginVertical: 12,
+      resizeMode: 'contain'
     },
     iconBack: {
-        height: 21,
-        width: 12,
-        marginLeft: 6,
-        marginRight: '1.5rem',
-        marginVertical: 12,
-        resizeMode: 'contain',
-        transform: [{ scaleX: -1 }],
+      height: 21,
+      width: 12,
+      marginLeft: 6,
+      marginRight: '1.5rem',
+      marginVertical: 12,
+      resizeMode: 'contain',
+      transform: [{ scaleX: -1 }],
     },
     logList: {
-        paddingHorizontal: '2.5rem',
-        paddingBottom: Dimensions.get('window').height / 2
+      backgroundColor: 'white',
+      borderRadius: 6,
+      margin: '1.5rem',
+      padding: '1.5rem',
     },
     logListItem: {
-        fontSize: '1rem',
-        paddingVertical: '0.75rem'
+      fontSize: '1rem',
+      paddingVertical: '0.75rem'
     }
 })

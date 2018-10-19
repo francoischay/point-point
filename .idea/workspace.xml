@@ -6,14 +6,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4a3e9e0f-346e-4194-846d-a532b3739a9a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/Player.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/PlayerScoreScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/PlayerScoreScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/Base.js" beforeDir="false" afterPath="$PROJECT_DIR$/styles/Base.js" afterDir="false" />
-    </list>
+    <list default="true" id="4a3e9e0f-346e-4194-846d-a532b3739a9a" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
