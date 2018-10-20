@@ -76,7 +76,7 @@ export default class ScoresModal extends React.Component {
             title="Retour au jeu"
             onPress={()=>{this.hide()}}
             style={{backgroundColor: 'white'}}
-            color={Colors.GREEN}
+            color={Colors.BLUE}
           />
         </View>
       </View>

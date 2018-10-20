@@ -4,7 +4,8 @@ export const Colors = {
   BACKGROUND : '#FAFAFA',
   DARK_GREY: '#0D2B3F',
   GREY: '#CCC',
-  GREEN: '#22AA99'
+  GREEN: '#22AA99',
+  BLUE: '#007AFF'
 }
 
 export const Base = EStyleSheet.create({

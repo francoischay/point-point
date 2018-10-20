@@ -92,7 +92,7 @@ export default class PlayersScreen extends React.Component {
         onPress={ this._showScores }
         title={ "Faire un point POINTS" }
         style={{backgroundColor: 'white'}}
-        color={Colors.GREEN}
+        color={Colors.BLUE}
       />
     </View>)
   }
