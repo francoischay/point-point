@@ -77,24 +77,6 @@ export default class EditPlayer extends React.Component {
     )
   }
 
-  _renderLeftHeaderButton = () => {
-      return (
-          <TouchableOpacity 
-              onPress={ this._goBack } 
-              style={ styles.headerButtonContainer }
-          >
-              <Image
-                  style={ styles.icon }
-                  source={ defaultBackImage }
-              />
-              <Text
-                  style={ styles.headerButtonText }
-              >
-                  Joueurs
-              </Text>
-          </TouchableOpacity>)
-  }
-
   _goBack = () => {
       this.props.navigation.goBack()
   }
