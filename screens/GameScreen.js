@@ -106,8 +106,10 @@ export default class PlayersScreen extends React.Component {
 
     const players = this.props.screenProps.store.get("players");
     for (let i = 0; i < players.length; i++) {
-      players[i].score = 0;
-      players[i].log = []
+      let player = players[i];
+      player.score = 0;
+      player.log = [];
+      player.isEliminated = false;
     }
     this.props.screenProps.store.set("players", players);
 

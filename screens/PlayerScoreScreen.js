@@ -74,13 +74,6 @@ export default class PlayerScoreScreen extends React.Component {
   }
   
   render() {
-    const store = this.props.screenProps.store
-    const data = store.get("players")[this.state.playerId];
-    const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
-    const statusStyle = this.state.isEliminated ? {opacity: 0} : {opacity: 1}
-    const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
-    const eliminateButtonLabel = this.state.isEliminated ? 'Réintégrer ce joueur' : 'Éliminer ce joueur'
-    const optionsStyles = this.state.showOptions ? {display: 'flex'} : {display: 'none'}
     const showOptionsLabel = this.state.showOptions ? "Cacher les options" : "Montrer les options" 
 
     return (
@@ -92,48 +85,8 @@ export default class PlayerScoreScreen extends React.Component {
         <View
           style={styles.card}
         >
-          <View style={
-            styles.nameContainer
-          }>
-            <Text style={Base.HEADING_2}>
-              {data.icon.item}
-              {data.name}
-            </Text>
-            <Text style={Base.HEADING_2}>
-              {scoreToDisplay}
-            </Text>
-          </View>
-          <TextInput 
-            style={[
-              styles.input,
-              statusStyle
-            ]}
-            ref='scoreInput'
-            placeholder='0'
-            onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
-            value={this.state.amountToDisplay}
-            keyboardType='numeric'
-            clearTextOnFocus={true}
-            textAlign={'center'}
-            underlineColorAndroid='transparent'
-          />
-          <View style={[
-              {
-                flexDirection: 'row',
-                justifyContent: 'space-around'
-              }, 
-              statusStyle
-            ]
-          }>
-            <PPButton 
-              title='Retirer'
-              onPress={this._onPressRemove}
-            />
-            <PPButton 
-              title='Ajouter'
-              onPress={this._onPressAdd}
-            />
-          </View>
+          { this._renderCardHeader() }
+          { this.state.isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
         </View>
         <PPButton
           title={showOptionsLabel}
@@ -144,37 +97,7 @@ export default class PlayerScoreScreen extends React.Component {
           }}
           color={'white'}
         />
-        <View style={optionsStyles}>
-          <PPHoveringButton
-            style= {{ 
-              backgroundColor: 'white',
-              marginBottom: 0
-            }}
-            color={ Colors.BLUE }
-            title={ "Terminer un tour" }
-            onPress= {this._onScorePress}
-          />
-          <PPHoveringButton
-            style= {{ 
-              backgroundColor: 'white',
-              marginBottom: 0
-            }}
-            color={ statusColor }
-            title={ eliminateButtonLabel }
-            onPress= {() => {
-              store.updatePlayer(this.state.playerId, "isEliminated", !this.state.isEliminated)
-              this.setState({
-                isEliminated: !this.state.isEliminated
-              })
-            }}
-          />
-          <FlatList
-            style={styles.logList}
-            data={data.log}
-            ListHeaderComponent = { this._renderLogListHeader }
-            renderItem = {({item}) => this._renderLogItem(item)}
-          />
-        </View>
+        { this._renderOptions() }
       </ScrollView>
     );
   }
@@ -226,6 +149,105 @@ export default class PlayerScoreScreen extends React.Component {
           source={ defaultBackImage }
         />
       </TouchableOpacity>
+    )
+  }
+
+  _renderCardHeader = () => {
+    const store = this.props.screenProps.store;
+    const data = store.get("players")[this.state.playerId];
+    const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
+
+    return (
+      <View style={
+        styles.nameContainer
+      }>
+        <Text style={Base.HEADING_2}>
+          {data.icon.item}
+          {data.name}
+        </Text>
+        <Text style={Base.HEADING_2}>
+          {scoreToDisplay}
+        </Text>
+      </View>
+    )
+  }
+
+  _renderCardContent = () => {
+    return (
+      <View>
+        <TextInput 
+          style={ styles.input }
+          ref='scoreInput'
+          placeholder='0'
+          onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
+          value={this.state.amountToDisplay}
+          keyboardType='numeric'
+          clearTextOnFocus={true}
+          textAlign={'center'}
+          underlineColorAndroid='transparent'
+        />
+        <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around'
+        }}>
+          <PPButton 
+            title='Retirer'
+            onPress={this._onPressRemove}
+          />
+          <PPButton 
+            title='Ajouter'
+            onPress={this._onPressAdd}
+          />
+        </View>
+      </View>
+    )
+  }
+
+  _renderCardContentWhenEliminated = () => {
+    return (
+      <View>
+        <PPButton
+          title="Réintégrer ce joueur"
+          onPress={ this._onEliminatePress }
+        />
+      </View>
+    )
+  }
+
+  _renderOptions = () => {
+    const store = this.props.screenProps.store;
+    const log = store.get("players")[this.state.playerId].log;
+    const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
+    const eliminateButtonLabel = this.state.isEliminated ? 'Réintégrer ce joueur' : 'Éliminer ce joueur'
+    const optionsStyles = (this.state.showOptions) ? {display: 'flex'} : {display: 'none'}
+
+    return (
+      <View style={optionsStyles}>
+        <PPHoveringButton
+          style= {{ 
+            backgroundColor: 'white',
+            marginBottom: 0
+          }}
+          color={ Colors.BLUE }
+          title={ "Terminer un tour" }
+          onPress= {this._onEndOfTourPress}
+        />
+        <PPHoveringButton
+          style= {{ 
+            backgroundColor: 'white',
+            marginBottom: 0
+          }}
+          color={ statusColor }
+          title={ eliminateButtonLabel }
+          onPress= { this._onEliminatePress }
+        />
+        <FlatList
+          style={styles.logList}
+          data={log}
+          ListHeaderComponent = { this._renderLogListHeader }
+          renderItem = {({item}) => this._renderLogItem(item)}
+        />
+      </View>
     )
   }
 
@@ -285,6 +307,20 @@ export default class PlayerScoreScreen extends React.Component {
     this._changeScore(points);
   }
 
+  _onEndOfTourPress = () => {
+    this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
+  }
+
+  _onEliminatePress = () => {
+    const store = this.props.screenProps.store;
+    const isEliminated = !this.state.isEliminated;
+    store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
+
+    this.setState({
+      isEliminated: isEliminated
+    })
+  }
+
   _onLogItemPress = (_data) => {
     let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
     let destructiveButtonIndex = 0;
@@ -303,10 +339,6 @@ export default class PlayerScoreScreen extends React.Component {
           this._removeLogEntry(index);
         }
       });
-  }
-
-  _onScorePress = () => {
-    this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
   }
 
   _changeScore = (_points, _doLog = true) => {

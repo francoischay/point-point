@@ -86,6 +86,8 @@ export default class ScoresModal extends React.Component {
   _renderList = () => {
     const players = this.props.store.get("players");
     const results = players.sort((_player1, _player2) => {
+        if (_player2.isEliminated) return -1;
+        if (_player1.isEliminated) return 1;
         if (_player1.score > _player2.score) return -1;
         if (_player1.score < _player2.score) return 1;
     })

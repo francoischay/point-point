@@ -14,6 +14,12 @@ export default class PlayerWithScore extends React.Component {
     const {data} = this.props;
     const medals = ['🥇','🥈','🥉'];
     const medal = medals[data.position]
+    const textStyle = [
+      Base.TEXT
+    ]
+    if(data.isEliminated){
+      textStyle.push({opacity: 0.5})
+    }
 
     return (
         <TouchableOpacity 
@@ -29,10 +35,10 @@ export default class PlayerWithScore extends React.Component {
               this.props.highlight == true &&
                 <Text style={ styles.medal }> { medal }</Text>
             }
-            <Text style={Base.TEXT}>
+            <Text style={textStyle}>
               {data.icon.item} {data.name}
             </Text>
-            <Text style={Base.TEXT}>
+            <Text style={textStyle}>
                 {data.score}
             </Text>
           </View>
