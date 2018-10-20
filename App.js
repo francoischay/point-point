@@ -79,10 +79,6 @@ export default class App extends React.Component {
 
     this.store.set("players", this.state.players)
 
-    this.stopScreenWatch = this.store.watch('currentScreen', (_screenToSave) => {
-      AsyncStorage.setItem("currentScreen", _screenToSave)
-    }); 
-
     this.stopPlayersWatch = this.store.watch('players', (_playersToSave) => {
       const playersToSaveString = JSON.stringify(_playersToSave);
       AsyncStorage.setItem("currentPlayers", playersToSaveString)
