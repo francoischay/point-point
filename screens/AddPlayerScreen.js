@@ -1,26 +1,21 @@
 import React from 'react';
 import {
   FlatList,
-  View,
-  TouchableOpacity,
-  Image,
-  Text
+  View
 } from 'react-native';
-import PPButton from '../components/PPButton';
-import PPHoveringButton from '../components/PPHoveringButton';
 import PPAvatarInput from '../components/PPAvatarInput';
 import PPTextInput from '../components/PPTextInput';
 import PreviousName from '../components/PreviousName';
 import { Base, Colors } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import HeaderWithButton from '../components/HeaderWithButton';
 
-const defaultBackImage = require('../assets/images/back-icon.png');
 
 export default class AddPlayer extends React.Component {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = () => {
     return {
       header: null
-    }
+    };
   }
 
   constructor(props) {
@@ -76,36 +71,14 @@ export default class AddPlayer extends React.Component {
   }
 
   _renderHeader = () => {
-    return (<View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      }}
-    >
-      { this._renderLeftHeaderButton() }
-      <PPHoveringButton
-        onPress={ this._onAddPress }
-        title="Ajouter"
+    return (
+      <HeaderWithButton 
+        actionLabel='Ajouter'
+        goBackLabel='Joueurs'
+        navigation={this.props.navigation}
+        action= { this._onAddPress }
       />
-    </View>)
-  }
-
-  _renderLeftHeaderButton = () => {
-      return (
-          <TouchableOpacity 
-              onPress={ this._goBack } 
-              style={ styles.headerButtonContainer }
-          >
-              <Image
-                  style={ styles.icon }
-                  source={ defaultBackImage }
-              />
-              <Text
-                  style={ styles.headerButtonText }
-              >
-                  Joueurs
-              </Text>
-          </TouchableOpacity>)
+    )
   }
 
   _goBack = () => {

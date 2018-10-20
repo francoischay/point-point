@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Button,
   View,
   TouchableOpacity,
   Image,
@@ -8,10 +7,10 @@ import {
 } from 'react-native';
 import PPAvatarInput from '../components/PPAvatarInput';
 import PPButton from '../components/PPButton';
-import PPHoveringButton from '../components/PPHoveringButton';
 import PPTextInput from '../components/PPTextInput';
 import { Base, Colors } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import HeaderWithButton from '../components/HeaderWithButton';
 
 const defaultBackImage = require('../assets/images/back-icon.png');
 
@@ -68,18 +67,14 @@ export default class EditPlayer extends React.Component {
   }
 
   _renderHeader = () => {
-    return (<View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      }}
-    >
-      { this._renderLeftHeaderButton() }
-      <PPHoveringButton
-        onPress={ this._onSavePress }
-        title="Sauver"
+    return (
+      <HeaderWithButton 
+        actionLabel='Sauver'
+        goBackLabel='Joueurs'
+        navigation={this.props.navigation}
+        action= { this._onSavePress }
       />
-    </View>)
+    )
   }
 
   _renderLeftHeaderButton = () => {
