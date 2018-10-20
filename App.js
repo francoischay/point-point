@@ -63,6 +63,19 @@ export default class App extends React.Component {
     };
 
     this.store = new Podda();
+    this.store.registerAPI('updatePlayer', (_store, _playerId, _key, _value) => {
+      const players = _store.get('players');
+      const index = players.findIndex(x => x.id==_playerId);
+      const newPlayer = players[index]
+
+      newPlayer[_key] = _value;
+      players[index] = newPlayer;
+      
+      _store.set('players', players);
+
+      return _store.get(players[index]);
+    });
+    
 
     this.store.set("players", this.state.players)
 

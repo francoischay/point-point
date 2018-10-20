@@ -75,7 +75,8 @@ export default class PlayerScoreScreen extends React.Component {
   }
   
   render() {
-    const data = this.props.screenProps.store.get("players")[this.state.playerId];
+    const store = this.props.screenProps.store
+    const data = store.get("players")[this.state.playerId];
     const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
     const statusStyle = this.state.isEliminated ? {opacity: 0} : {opacity: 1}
     const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
@@ -162,6 +163,7 @@ export default class PlayerScoreScreen extends React.Component {
             color={ statusColor }
             title={ eliminateButtonLabel }
             onPress= {() => {
+              store.updatePlayer(this.state.playerId, "isEliminated", !this.state.isEliminated)
               this.setState({
                 isEliminated: !this.state.isEliminated
               })

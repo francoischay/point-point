@@ -133,7 +133,8 @@ export default class AddPlayer extends React.Component {
       icon: this.refs.IconInput.state.currentEmoji,
       name: this.state.newPlayerName,
       score: 0,
-      log: []
+      log: [],
+      isEliminated: false
     };
     store.set('players', newPlayers);
     
