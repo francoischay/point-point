@@ -70,7 +70,7 @@ export default class PlayerScoreScreen extends React.Component {
       rightButton: this._renderRightHeaderButton()
     });
 
-    this.refs.scoreInput.focus();
+    //this.refs.scoreInput.focus();
     this.props.screenProps.store.set("currentScreen", "Game")
   }
   
