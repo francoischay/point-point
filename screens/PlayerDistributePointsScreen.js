@@ -1,7 +1,8 @@
 import React from 'react';
 import {
-    Text,
-    View
+  Dimensions,
+  Text,
+  View
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Base, Colors } from '../styles/Base';
@@ -126,6 +127,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
     _renderList = () => {
       return (
         <FlatList
+          style = { styles.list }
           data = { this.state.points }
           renderItem = {({item, index}) => this._renderItem(item, index)}
         />
@@ -237,6 +239,9 @@ const styles = EStyleSheet.create({
       backgroundColor: 'white',
       flex: 1
   },
+  list: {
+    paddingBottom: Dimensions.get('window').height / 2
+  },
   headerContainer:{
     paddingHorizontal: '1.5rem',
     flexDirection: 'row',
@@ -247,5 +252,5 @@ const styles = EStyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: {height: 3, width: 0},
     shadowRadius: 10,
-  },
+  }
 })
