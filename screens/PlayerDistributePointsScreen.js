@@ -221,7 +221,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
         //newPlayer.log = []
       }
 
-      this.props.navigation.goBack();
+      this.props.navigation.navigate('Game')
     }
 
     _findPointsByPlayerId = (_id) => {

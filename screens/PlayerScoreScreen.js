@@ -74,7 +74,6 @@ export default class PlayerScoreScreen extends React.Component {
     });
 
     this.show();
-    //this.refs.scoreInput.focus();
   }
   
   render() {
@@ -394,7 +393,7 @@ export default class PlayerScoreScreen extends React.Component {
     if(parseInt(step) === parseInt(this.nbSteps)){
       clearInterval(this.tickInterval);
       this._saveScore(_points, newScore);
-      //this._gotoNextPlayer();
+      this._gotoNextPlayer();
     } 
   }
 
@@ -445,11 +444,10 @@ export default class PlayerScoreScreen extends React.Component {
         duration: 500,
         easing: Easing.elastic()
       }
-    ).start();
+    ).start(() => {this.refs.scoreInput.focus();});
   }
 
   hide = (_callback) => {
-    console.log(_callback)
     Animated.timing(
       this.state.cardMarginLeft,
       {
