@@ -84,21 +84,9 @@ export default class ScoresModal extends React.Component {
   }
 
   _renderList = () => {
-    const players = this.props.store.get("players");
-    const results = players.sort((_player1, _player2) => {
-        if (_player2.isEliminated) return -1;
-        if (_player1.isEliminated) return 1;
-        if (_player1.score > _player2.score) return -1;
-        if (_player1.score < _player2.score) return 1;
-    })
-
-    results[0].position = 0;
-    if(results[1]) results[1].position = 1;
-    if(results[2]) results[2].position = 2;
-
     return <FlatList
         contentContainerStyle ={styles.contentContainer}
-        data = { results }
+        data = { this._getRankings() }
         renderItem = {({item}) => this._renderItem(item)}
     />
   }
@@ -111,13 +99,28 @@ export default class ScoresModal extends React.Component {
   }
 
   _onSharePress = () => {
+    const rankings = this._getRankings();
+    const messageElements = rankings.map(_item => _item.icon.item+" "+_item.name+" : "+_item.score)
+    const message = messageElements.join('\n');
+
     Share.share({
-      title: "Title",
-      subject: "Subject",
+      title: "Victoire",
+      subject: "Victoire",
       dialogTitle: "Dialog Title",
-      message: "Message",
-      url: "http://www.google.com"
+      message: message
     })
+  }
+
+  _getRankings = () => {
+    const players = this.props.store.get("players");
+    const rankings = players.sort((_player1, _player2) => {
+        if (_player2.isEliminated) return -1;
+        if (_player1.isEliminated) return 1;
+        if (_player1.score > _player2.score) return -1;
+        if (_player1.score < _player2.score) return 1;
+    })
+
+    return rankings;
   }
 
   show = () => {
