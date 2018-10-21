@@ -28,6 +28,7 @@ export default class PlayersScreen extends React.Component {
   render() {
     return (
       <View style = { styles.pageContainer }>
+        { this._renderHeader() }
         { this._renderList() }
         { this._renderFooter() }
         <ScoresModal 
@@ -52,11 +53,10 @@ export default class PlayersScreen extends React.Component {
     }
 
     return <FlatList
-      style = {styles.gameList}
+      style = {[styles.gameList, Base.SHADOW]}
       contentContainerStyle ={styles.contentContainer}
       data = { gamePlayers }
       renderItem = {({item}) => this._renderItem(item)}
-      ListHeaderComponent = { this._renderHeader }
     />
   }
 
@@ -125,8 +125,9 @@ const styles = EStyleSheet.create({
   headerContainer:{
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: '3rem',
-    paddingBottom: '1.5rem'
+    paddingTop: '4rem',
+    paddingBottom: '0.5rem',
+    paddingHorizontal: '1.5rem'
   },
   headerButtonContainer: {
     alignItems: 'center',
@@ -145,8 +146,10 @@ const styles = EStyleSheet.create({
     flex: 1
   },
   contentContainer: {
-    paddingHorizontal: '1.5rem',
-    paddingBottom: '10rem',
+    marginHorizontal: '1.5rem',
+    marginBottom: '10rem',
     marginTop: '1rem',
+    borderRadius: 12,
+    overflow: 'hidden'
   }
 });
