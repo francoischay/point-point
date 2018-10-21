@@ -293,16 +293,18 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _onPressAdd = () => {
-    if(this.state.isUpdatingScore) return;
+    const value = this.refs.scoreInput.props.value;
+    if(this.state.isUpdatingScore || isNaN(value)) return;
     
-    const points = parseInt(this.refs.scoreInput.props.value);
+    const points = parseInt(value);
     this._changeScore(points);
   }
 
   _onPressRemove = () => {
-    if(this.state.isUpdatingScore) return;
+    const value = this.refs.scoreInput.props.value;
+    if(this.state.isUpdatingScore || isNaN(value)) return;
     
-    const points = -parseInt(this.refs.scoreInput.props.value);
+    const points = -parseInt(value);
     this._changeScore(points);
   }
 
