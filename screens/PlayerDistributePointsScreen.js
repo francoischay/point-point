@@ -57,15 +57,20 @@ export default class PlayerDistributePointsScreen extends React.Component {
           }
       }
 
-      let points = []
-      gamePlayers.forEach((item) => {
-        points.push({
-          id: item.id,
-          icon: item.icon.item,
-          name: item.name,
-          points: 0
-        })
+      const points = gamePlayers.map((_player) => { return {
+        id: _player.id,
+        icon: _player.icon.item,
+        name: _player.name,
+        points: 0
+      }})
+
+      points.push({
+        id: -1,
+        icon: '',
+        name: 'Extra',
+        points: 0
       })
+
       this.setState({
         points: points
       })
