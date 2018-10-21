@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-    Dimensions,
     Image,
     Text,
     View,
@@ -83,7 +82,7 @@ export default class PlayerScoreScreen extends React.Component {
       }}>
         { this._renderHeader() }
         <View
-          style={styles.card}
+          style={[styles.card, Base.SHADOW]}
         >
           { this._renderCardHeader() }
           { this.state.isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
@@ -242,7 +241,7 @@ export default class PlayerScoreScreen extends React.Component {
           onPress= { this._onEliminatePress }
         />
         <FlatList
-          style={styles.logList}
+          style={[styles.logList, Base.SHADOW]}
           data={log}
           ListHeaderComponent = { this._renderLogListHeader }
           renderItem = {({item}) => this._renderLogItem(item)}
@@ -433,21 +432,13 @@ const styles = EStyleSheet.create({
   headerContainer:{
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: '1.5rem',
-    shadowColor: 'rgba(0,0,0,0.1)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 3, width: 0},
-    shadowRadius: 10,
+    paddingBottom: '1.5rem'
   },
   card: {
     backgroundColor: 'white',
     margin: '1.5rem',
     borderRadius: '1rem',
-    padding: '1.5rem',
-    shadowColor: 'rgb(0,0,0)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 7, width: 0},
-    shadowRadius: 7,
+    padding: '1.5rem'
   },
   input: {
     fontSize: '5rem',

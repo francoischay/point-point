@@ -14,13 +14,7 @@ import PPTextInput from '../components/PPTextInput';
 export default class PlayerDistributePointsScreen extends React.Component {
     static navigationOptions = () => {
         return {
-            header: null,
-            headerStyle: {
-                backgroundColor: 'white',
-                elevation: 0,
-                shadowOpacity: 0,
-                borderBottomWidth: 0,
-            }
+            header: null
         };
     };
 
@@ -247,10 +241,6 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: '3rem',
-    paddingBottom: '1.5rem',
-    shadowColor: 'rgba(0,0,0,0.1)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 3, width: 0},
-    shadowRadius: 10,
+    paddingBottom: '1.5rem'
   }
 })

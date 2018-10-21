@@ -55,5 +55,16 @@ export const Base = EStyleSheet.create({
       borderRadius: 6,
       paddingHorizontal: '1rem',
       paddingVertical: '0.75rem'
+    },
+    SHADOW: {
+      '@media ios': {
+        shadowColor: 'rgb(0,0,0)',
+        shadowOpacity: 0.2,
+        shadowOffset: {height: 7, width: 0},
+        shadowRadius: 7,
+      },
+      '@media android': {
+        elevation: 4,
+      }
     }
 })

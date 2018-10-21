@@ -11,7 +11,7 @@
 'use strict';
 
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { Colors } from '../styles/Base';
+import { Colors, Base } from '../styles/Base';
 
 const ColorPropType = require('ColorPropType');
 const Platform = require('Platform');
@@ -105,7 +105,7 @@ class PPHoveringButton extends React.Component<{
       testID,
       style
     } = this.props;
-    const buttonStyles = [styles.button];
+    const buttonStyles = [Base.SHADOW, styles.button];
     const textStyles = [styles.text];
     if (color) {
       textStyles.push({color: color});
@@ -148,15 +148,10 @@ class PPHoveringButton extends React.Component<{
 
 const styles = EStyleSheet.create({
   button: {
-    elevation: 4,
     paddingHorizontal: '1rem',
     backgroundColor: Colors.GREEN,
     borderRadius: 6,
-    margin: '1.5rem',
-    shadowColor: 'rgb(0,0,0)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 7, width: 0},
-    shadowRadius: 7,
+    margin: '1.5rem'
   },
   text: {
     color: '#FFF',

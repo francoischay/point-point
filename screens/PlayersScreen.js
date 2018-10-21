@@ -7,23 +7,13 @@ import SortableList from '../node_modules/react-native-sortable-list/src/Sortabl
 import { Colors, Base } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const defaultBackImage = require('../assets/images/back-icon.png');
-
 export default class PlayersScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Joueurs',
-      headerRight: navigation.getParam('rightButton'),
       header: null
     }
   };
-
-  componentDidMount() {
-    console.log("DID MOUNT")
-    this.props.navigation.setParams({ 
-      rightButton: this._getRightHeaderButton()
-    });
-  }
 
   render() {
     return (
@@ -141,11 +131,7 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: '3rem',
-    paddingBottom: '1.5rem',
-    shadowColor: 'rgba(0,0,0,0.1)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 3, width: 0},
-    shadowRadius: 10,
+    paddingBottom: '1.5rem'
   },
   playersList: {
     flex: 1,

@@ -126,11 +126,7 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: '3rem',
-    paddingBottom: '1.5rem',
-    shadowColor: 'rgba(0,0,0,0.1)',
-    shadowOpacity: 0.2,
-    shadowOffset: {height: 3, width: 0},
-    shadowRadius: 10,
+    paddingBottom: '1.5rem'
   },
   headerButtonContainer: {
     alignItems: 'center',
