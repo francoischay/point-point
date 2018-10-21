@@ -208,7 +208,7 @@ export default class PlayerScoreScreen extends React.Component {
       <View>
         <PPButton
           title="Réintégrer ce joueur"
-          onPress={ this._onEliminatePress }
+          onPress={ this._onReintegratePress }
         />
       </View>
     )
@@ -216,8 +216,6 @@ export default class PlayerScoreScreen extends React.Component {
 
   _renderOptions = () => {
     const log = this._getLogFromStore();
-    const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
-    const eliminateButtonLabel = this.state.isEliminated ? 'Réintégrer ce joueur' : 'Éliminer ce joueur'
     const optionsStyles = (this.state.showOptions) ? {display: 'flex'} : {display: 'none'}
     
     return (
@@ -228,16 +226,19 @@ export default class PlayerScoreScreen extends React.Component {
             marginBottom: 0
           }}
           color={ Colors.BLUE }
-          title={ "Terminer un tour" }
+          title="Terminer un tour"
           onPress= {this._onEndOfTourPress}
         />
         <PPHoveringButton
-          style= {{ 
-            backgroundColor: 'white',
-            marginBottom: 0
-          }}
-          color={ statusColor }
-          title={ eliminateButtonLabel }
+          style= {[
+            { 
+              backgroundColor: 'white',
+              marginBottom: 0
+            }, 
+            optionsStyles
+          ]}
+          color='red'
+          title='Éliminer ce joueur'
           onPress= { this._onEliminatePress }
         />
         <FlatList
@@ -314,10 +315,22 @@ export default class PlayerScoreScreen extends React.Component {
 
   _onEliminatePress = () => {
     const store = this.props.screenProps.store;
-    const isEliminated = !this.state.isEliminated;
+    const isEliminated = true;
     store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
 
     this.setState({
+      showOptions: false,
+      isEliminated: isEliminated
+    })
+  }
+
+  _onReintegratePress = () => {
+    const store = this.props.screenProps.store;
+    const isEliminated = false;
+    store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
+
+    this.setState({
+      showOptions: false,
       isEliminated: isEliminated
     })
   }
