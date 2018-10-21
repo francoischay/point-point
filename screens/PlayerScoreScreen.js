@@ -1,10 +1,13 @@
 import React from 'react';
 import {
-    Image,
-    Text,
-    View,
-    TouchableOpacity,
-    ScrollView
+  Animated,
+  Dimensions,
+  Easing,
+  Image,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
@@ -38,7 +41,8 @@ export default class PlayerScoreScreen extends React.Component {
       isUpdatingScore: false,
       log: this.props.navigation.state.params.log,
       isEliminated: this.props.navigation.state.params.isEliminated,
-      showOptions: false
+      showOptions: false,
+      cardMarginLeft: new Animated.Value(Dimensions.get('window').width),
     }
 
     const players = this.props.screenProps.store.get("players");
@@ -69,6 +73,7 @@ export default class PlayerScoreScreen extends React.Component {
       rightButton: this._renderRightHeaderButton()
     });
 
+    this.show();
     //this.refs.scoreInput.focus();
   }
   
@@ -81,22 +86,27 @@ export default class PlayerScoreScreen extends React.Component {
         flex: 1
       }}>
         { this._renderHeader() }
-        <View
-          style={[styles.card, Base.SHADOW]}
-        >
-          { this._renderCardHeader() }
-          { this.state.isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
-        </View>
-        <PPButton
-          title={showOptionsLabel}
-          onPress = {() => {
-            this.setState({
-              showOptions: !this.state.showOptions
-            })
+        <Animated.View
+          style={{
+            marginLeft: this.state.cardMarginLeft,
+            width: Dimensions.get('window').width
           }}
-          color={'white'}
-        />
-        { this._renderOptions() }
+        >
+          <View style={[styles.card, Base.SHADOW]}>
+            { this._renderCardHeader() }
+            { this.state.isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
+          </View>
+          <PPButton
+            title={showOptionsLabel}
+            onPress = {() => {
+              this.setState({
+                showOptions: !this.state.showOptions
+              })
+            }}
+            color={'white'}
+          />
+          { this._renderOptions() }
+        </Animated.View>
       </ScrollView>
     );
   }
@@ -289,7 +299,7 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _gotoNextPlayer = () => {
-    this.props.navigation.replace("PlayerScore", this.nextPlayer)
+    this.hide()
   }
 
   _onPressAdd = () => {
@@ -425,6 +435,29 @@ export default class PlayerScoreScreen extends React.Component {
     const store = this.props.screenProps.store;
     const log = store.get('players')[this.state.playerId].log
     return log;
+  }
+
+  show = () => {
+    Animated.timing(
+      this.state.cardMarginLeft,
+      {
+        toValue: 0,
+        duration: 500,
+        easing: Easing.elastic()
+      }
+    ).start();
+  }
+
+  hide = (_callback) => {
+    console.log(_callback)
+    Animated.timing(
+      this.state.cardMarginLeft,
+      {
+        toValue: -Dimensions.get('window').width,
+        duration: 250,
+        easing: Easing.back()
+      }
+    ).start(() => {this.props.navigation.replace("PlayerScore", this.nextPlayer)})
   }
 }
 
