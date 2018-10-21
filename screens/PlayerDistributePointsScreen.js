@@ -134,7 +134,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
     
     _renderItem = (_data, _index) => {
-      const minusOpacity = this.state.doSubstract ? {opacity: 1} : {opacity:0}
+      const minusOpacity = this.state.doSubstract && _data.id > -1 ? {opacity: 1} : {opacity:0}
       const item = <View style={[Base.ROW, {
             flexDirection: 'row',
             justifyContent: 'space-between',
