@@ -156,7 +156,7 @@ export default class PlayerScoreScreen extends React.Component {
     const store = this.props.screenProps.store;
     const data = store.get("players")[this.state.playerId];
     const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
-
+    
     return (
       <View style={
         styles.nameContainer
@@ -215,12 +215,11 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _renderOptions = () => {
-    const store = this.props.screenProps.store;
-    const log = store.get("players")[this.state.playerId].log;
+    const log = this._getLogFromStore();
     const statusColor = this.state.isEliminated ? Colors.GREEN : 'red'
     const eliminateButtonLabel = this.state.isEliminated ? 'Réintégrer ce joueur' : 'Éliminer ce joueur'
     const optionsStyles = (this.state.showOptions) ? {display: 'flex'} : {display: 'none'}
-
+    
     return (
       <View style={optionsStyles}>
         <PPHoveringButton
@@ -322,6 +321,7 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _onLogItemPress = (_data) => {
+    const log = this._getLogFromStore();
     let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
     let destructiveButtonIndex = 0;
     let cancelButtonIndex = 2;
@@ -335,23 +335,24 @@ export default class PlayerScoreScreen extends React.Component {
       },
       buttonIndex => {
         if (buttonIndex === 0){
-          const index = this.state.log.findIndex(x => x.timestamp==_data.timestamp);
+          const index = log.findIndex(x => x.timestamp==_data.timestamp);
           this._removeLogEntry(index);
         }
       });
   }
 
-  _changeScore = (_points, _doLog = true) => {
+  _changeScore = (_points) => {
     this.setState({
       isUpdatingScore: true,
       counterStep: 0
     })
-    this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points, _doLog)}, this.delay / this.nbSteps)
+    this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points)}, this.delay / this.nbSteps)
   }
 
-  _updateScoreDisplay = (_points, _doLog) => {
+  _updateScoreDisplay = (_points) => {
     const step = this.state.counterStep++;
-    const newScore = this._getTotalFromLog() + parseInt(_points / this.nbSteps * step);
+    const store = this.props.screenProps.store;
+    const newScore = store.get('players')[this.state.playerId].score + parseInt(_points / this.nbSteps * step);
 
     let newAmount;
     if(_points > 0){
@@ -368,35 +369,24 @@ export default class PlayerScoreScreen extends React.Component {
     
     if(parseInt(step) === parseInt(this.nbSteps)){
       clearInterval(this.tickInterval);
-      this._saveScore(_points, newScore, _doLog);
+      this._saveScore(_points, newScore);
       //this._gotoNextPlayer();
     } 
   }
 
-  _saveScore = (_points, _score, _doLog = true) => {
+  _saveScore = (_points, _score) => {
     const input = this.refs.scoreInput
-    const players = this.props.screenProps.store.get("players");
-    let newPlayers = [];
-
-    for (let i = 0; i < players.length; i++) {
-      const element = players[i];
-      let newPlayer = JSON.parse(JSON.stringify(element));
-      if(element.id === this.props.navigation.state.params.id){
-        newPlayer.score = _score;
-        if(_doLog){
-          newPlayer.log.unshift({
-            timestamp: Date.now(),
-            points: _points
-          })
-        }
-      } 
-      newPlayers.push(newPlayer);
-    }
+    const store = this.props.screenProps.store;
     
-    this.props.screenProps.store.set("players", newPlayers)
+    let newLog = this._getLogFromStore().slice();
+    newLog.unshift({
+      timestamp: Date.now(),
+      points: _points
+    })
+    const player = store.updatePlayer(this.state.playerId, 'log', newLog)
 
     this.setState({
-      score: _score, 
+      score: player.score, 
       amount: '0',
       isUpdatingScore: false
     })
@@ -404,16 +394,11 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _removeLogEntry = (_index) => {
-    const pointsToRemove = this.state.log[_index].points * -1;
-    this.state.log.splice(_index, 1)
-
     const store = this.props.screenProps.store;
-    const players = store.get("players");
-    let newPlayers = players.slice(); //copy
-    const player = newPlayers[this.state.playerId];
-    player.log = this.state.log;
-    player.score = player.score + pointsToRemove;
-    store.set("players", newPlayers)
+    const log = this._getLogFromStore();
+    log.splice(_index, 1)
+    
+    let player = store.updatePlayer(this.state.playerId, 'log', log)
     
     this.setState({
       score: player.score,
@@ -422,12 +407,10 @@ export default class PlayerScoreScreen extends React.Component {
     })
   }
 
-  _getTotalFromLog = () => {
-    let total = 0;
-    for (let i = 0; i < this.state.log.length; i++) {
-      total += this.state.log[i].points
-    }
-    return total;
+  _getLogFromStore = () => {
+    const store = this.props.screenProps.store;
+    const log = store.get('players')[this.state.playerId].log
+    return log;
   }
 }
 

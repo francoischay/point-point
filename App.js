@@ -69,13 +69,23 @@ export default class App extends React.Component {
       const newPlayer = players[index]
 
       newPlayer[_key] = _value;
+
+      // Insure log and score are always in sync
+      if(_key === "log"){
+        const log = newPlayer.log;
+        let total = 0;
+        for (let i = 0; i < log.length; i++) {
+          total += log[i].points
+        }
+        newPlayer.score = total;
+      }
+
       players[index] = newPlayer;
-      
+
       _store.set('players', players);
 
-      return _store.get(players[index]);
+      return _store.get('players')[index];
     });
-    
 
     this.store.set("players", this.state.players)
 

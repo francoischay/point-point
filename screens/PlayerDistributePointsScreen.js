@@ -28,6 +28,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
 
         this.state = {
           totalToAdd: 0,
+          playerId: this.props.navigation.state.params.id,
           futureTotal: this.props.navigation.state.params.score,
           score: this.props.navigation.state.params.score,
           points: [],
@@ -190,38 +191,34 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
 
     _onSavePress = () => {
-      const players = this.props.screenProps.store.get("players");
-      let newPlayers = [];
+      const store = this.props.screenProps.store;
+      const players = store.get("players");
 
+      let newLog = players[this.state.playerId].log.slice();
+      newLog.unshift({
+        timestamp: Date.now(),
+        points: this.state.futureTotal - this.state.score
+      })
+      
+      store.updatePlayer(this.state.playerId, 'log', newLog)
+      
       for (let i = 0; i < players.length; i++) {
-        const element = players[i];
-        let newPlayer = JSON.parse(JSON.stringify(element));
-        if(element.id === this.props.navigation.state.params.id){
-          newPlayer.score = this.state.futureTotal;
-          newPlayer.log.unshift({
+        let newPlayer = JSON.parse(JSON.stringify(players[i]));
+        
+        if(newPlayer.id !== this.state.playerId && this.state.doSubstract){
+          const playerPointsToChange = this._findPointsByPlayerId(newPlayer.id);
+          newPlayer.score -= playerPointsToChange;
+
+          let newLog = newPlayer.log.slice();
+          newLog.unshift({
             timestamp: Date.now(),
-            points: this.state.futureTotal - this.state.score
+            points: -this._findPointsByPlayerId(newPlayer.id)
           })
-        }
-        else{
-          if(this.state.doSubstract){
-            const playerPointsToChange = this._findPointsByPlayerId(newPlayer.id);
-            newPlayer.score -= playerPointsToChange;
-  
-            newPlayer.log.unshift({
-              timestamp: Date.now(),
-              points: -this._findPointsByPlayerId(newPlayer.id)
-            })
-          }
+          store.updatePlayer(newPlayer.id, 'log', newLog)
         }
         //newPlayer.score = 0;
         //newPlayer.log = []
-        newPlayers.push(newPlayer);
       }
-    
-      console.log(newPlayers)
-
-      this.props.screenProps.store.set("players", newPlayers)
 
       this.props.navigation.goBack();
     }

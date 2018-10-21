@@ -89,18 +89,10 @@ export default class EditPlayer extends React.Component {
 
   _onSavePress = () => {
     if(this.state.playerName.length === 0) return;
+
     let store = this.props.screenProps.store;
-
-    let newPlayers = JSON.parse(JSON.stringify(this.props.screenProps.store.get("players")));  
-    newPlayers[this.state.id] = {
-      id: this.state.id,
-      icon: this.refs.IconInput.state.currentEmoji,
-      name: this.state.playerName,
-      score: 0,
-      log: []
-    };
-
-    store.set('players', newPlayers);
+    store.updatePlayer(this.state.id, 'icon', this.refs.IconInput.state.currentEmoji)
+    store.updatePlayer(this.state.id, 'name', this.state.playerName)
     
     this.props.navigation.goBack();
   }
