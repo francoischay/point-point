@@ -3,16 +3,17 @@ import {
   Animated,
   Dimensions,
   Easing,
+  FlatList,
   Image,
   Text,
   View,
   TouchableOpacity,
   ScrollView
 } from 'react-native';
-import { TextInput, FlatList } from '../node_modules/react-native-gesture-handler';
 import { Base, Colors } from '../styles/Base';
 import PPButton from '../components/PPButton'
 import PPHoveringButton from '../components/PPHoveringButton'
+import PlayerCard from '../components/PlayerCard'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { connectActionSheet } from '@expo/react-native-action-sheet';
 
@@ -77,6 +78,7 @@ export default class PlayerScoreScreen extends React.Component {
   }
   
   render() {
+    const store = this.props.screenProps.store;
     const showOptionsLabel = this.state.showOptions ? "Cacher les options" : "Montrer les options" 
 
     return (
@@ -91,10 +93,13 @@ export default class PlayerScoreScreen extends React.Component {
             width: Dimensions.get('window').width
           }}
         >
-          <View style={[styles.card, Base.SHADOW]}>
-            { this._renderCardHeader() }
-            { this.state.isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
-          </View>
+          <PlayerCard 
+            ref='PlayerCard'
+            store={ store }
+            data={ store.get("players")[this.state.playerId] }
+            getLogFromStore={ this._getLogFromStore }
+            callbackAfterUpdatingScore={ this._gotoNextPlayer }
+          />
           <PPButton
             title={showOptionsLabel}
             onPress = {() => {
@@ -157,68 +162,6 @@ export default class PlayerScoreScreen extends React.Component {
           source={ defaultBackImage }
         />
       </TouchableOpacity>
-    )
-  }
-
-  _renderCardHeader = () => {
-    const store = this.props.screenProps.store;
-    const data = store.get("players")[this.state.playerId];
-    const scoreToDisplay = this.state.isUpdatingScore ? this.state.scoreToDisplay : data.score;
-    
-    return (
-      <View style={
-        styles.nameContainer
-      }>
-        <Text style={Base.HEADING_2}>
-          {data.icon.item}
-          {data.name}
-        </Text>
-        <Text style={Base.HEADING_2}>
-          {scoreToDisplay}
-        </Text>
-      </View>
-    )
-  }
-
-  _renderCardContent = () => {
-    return (
-      <View>
-        <TextInput 
-          style={ styles.input }
-          ref='scoreInput'
-          placeholder='0'
-          onChangeText={(_amount) => this.setState({'amount' : _amount, 'amountToDisplay' : _amount})}
-          value={this.state.amountToDisplay}
-          keyboardType='numeric'
-          clearTextOnFocus={true}
-          textAlign={'center'}
-          underlineColorAndroid='transparent'
-        />
-        <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around'
-        }}>
-          <PPButton 
-            title='Retirer'
-            onPress={this._onPressRemove}
-          />
-          <PPButton 
-            title='Ajouter'
-            onPress={this._onPressAdd}
-          />
-        </View>
-      </View>
-    )
-  }
-
-  _renderCardContentWhenEliminated = () => {
-    return (
-      <View>
-        <PPButton
-          title="Réintégrer ce joueur"
-          onPress={ this._onReintegratePress }
-        />
-      </View>
     )
   }
 
@@ -301,22 +244,6 @@ export default class PlayerScoreScreen extends React.Component {
     this.hide()
   }
 
-  _onPressAdd = () => {
-    const value = this.refs.scoreInput.props.value;
-    if(this.state.isUpdatingScore || isNaN(value)) return;
-    
-    const points = parseInt(value);
-    this._changeScore(points);
-  }
-
-  _onPressRemove = () => {
-    const value = this.refs.scoreInput.props.value;
-    if(this.state.isUpdatingScore || isNaN(value)) return;
-    
-    const points = -parseInt(value);
-    this._changeScore(points);
-  }
-
   _onEndOfTourPress = () => {
     this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
   }
@@ -324,17 +251,6 @@ export default class PlayerScoreScreen extends React.Component {
   _onEliminatePress = () => {
     const store = this.props.screenProps.store;
     const isEliminated = true;
-    store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
-
-    this.setState({
-      showOptions: false,
-      isEliminated: isEliminated
-    })
-  }
-
-  _onReintegratePress = () => {
-    const store = this.props.screenProps.store;
-    const isEliminated = false;
     store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
 
     this.setState({
@@ -362,58 +278,6 @@ export default class PlayerScoreScreen extends React.Component {
           this._removeLogEntry(index);
         }
       });
-  }
-
-  _changeScore = (_points) => {
-    this.setState({
-      isUpdatingScore: true,
-      counterStep: 0
-    })
-    this.tickInterval = setInterval(() => {this._updateScoreDisplay(_points)}, this.delay / this.nbSteps)
-  }
-
-  _updateScoreDisplay = (_points) => {
-    const step = this.state.counterStep++;
-    const store = this.props.screenProps.store;
-    const newScore = store.get('players')[this.state.playerId].score + parseInt(_points / this.nbSteps * step);
-
-    let newAmount;
-    if(_points > 0){
-      newAmount = this.state.amount - parseInt(_points / this.nbSteps * step);
-    }
-    else{
-      newAmount = parseInt(this.state.amount) + parseInt(_points / this.nbSteps * step);
-    }
-    
-    this.setState({
-      scoreToDisplay: newScore,
-      amountToDisplay: newAmount.toString()
-    })
-    
-    if(parseInt(step) === parseInt(this.nbSteps)){
-      clearInterval(this.tickInterval);
-      this._saveScore(_points, newScore);
-      this._gotoNextPlayer();
-    } 
-  }
-
-  _saveScore = (_points, _score) => {
-    const input = this.refs.scoreInput
-    const store = this.props.screenProps.store;
-    
-    let newLog = this._getLogFromStore().slice();
-    newLog.unshift({
-      timestamp: Date.now(),
-      points: _points
-    })
-    const player = store.updatePlayer(this.state.playerId, 'log', newLog)
-
-    this.setState({
-      score: player.score, 
-      amount: '0',
-      isUpdatingScore: false
-    })
-    input.clear();
   }
 
   _removeLogEntry = (_index) => {
@@ -444,7 +308,9 @@ export default class PlayerScoreScreen extends React.Component {
         duration: 500,
         easing: Easing.elastic()
       }
-    ).start(() => {this.refs.scoreInput.focus();});
+    ).start(() => {
+      this.refs.PlayerCard.focusInput();
+    });
   }
 
   hide = (_callback) => {
@@ -455,7 +321,9 @@ export default class PlayerScoreScreen extends React.Component {
         duration: 250,
         easing: Easing.back()
       }
-    ).start(() => {this.props.navigation.replace("PlayerScore", this.nextPlayer)})
+    ).start(() => {
+      this.props.navigation.replace("PlayerScore", this.nextPlayer)
+    })
   }
 }
 
@@ -464,22 +332,6 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: '1.5rem'
-  },
-  card: {
-    backgroundColor: 'white',
-    margin: '1.5rem',
-    borderRadius: '1rem',
-    padding: '1.5rem'
-  },
-  input: {
-    fontSize: '5rem',
-    fontWeight: 'bold',
-    marginVertical: '3rem'
-  },
-  nameContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: '3rem'
   },
   headerButtonContainer: {
     alignItems: 'center',
