@@ -30,7 +30,6 @@ export default class PlayerScoreScreen extends React.Component {
     this.state = {
       playerId: this.props.navigation.state.params.id,
       showOptions: false,
-      scroll: true,
       cardMarginLeft: new Animated.Value(Dimensions.get('window').width),
       pan: new Animated.ValueXY()
     }
@@ -53,27 +52,29 @@ export default class PlayerScoreScreen extends React.Component {
       if(player.id === this.props.navigation.state.params.id){
         previousIndex = (gamePlayers[i - 1]) ? i-1 : gamePlayers.length-1;
         nextIndex = (gamePlayers[i + 1]) ? i+1 : 0;
-        console.log(gamePlayers)
-        console.log(i)
-        console.log(previousIndex)
       }
     }
 
     this.nextPlayer = gamePlayers[nextIndex];
     this.previousPlayer = gamePlayers[previousIndex]
-    console.log(this.previousPlayer)
     
     this._panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-      onPanResponderGrant: () => this.setState({scroll: false}),
+      onStartShouldSetPanResponder: (evt, gestureState) => {
+        console.log("onStartShouldSetPanResponder", gestureState.dx, gestureState.dy)
+        if(gestureState.dx = 0) return false
+        else return true
+      },
+      onStartShouldSetPanResponderCapture: () => false,
+      onMoveShouldSetPanResponder:  () => false,
+      onMoveShouldSetPanResponderCapture:  () => true,
       onPanResponderMove: Animated.event([null, {dx: this.state.pan.x, dy: 0}]),
-      onPanResponderRelease: () => {
-        this.setState({scroll: true})
-
-        const dx = this.state.pan.x._value;
+      onPanResponderTerminate: () => {
+        Animated.spring(this.state.pan, {
+          toValue: { x: 0, y: 0 },
+          friction: 5
+        }).start();
+      },
+      onPanResponderRelease: (_event, {dx}) => {
         if(dx < -Dimensions.get('window').width / 2){
           this._gotoNextPlayer()
         } 
@@ -108,7 +109,7 @@ export default class PlayerScoreScreen extends React.Component {
           backgroundColor: Colors.GREEN,
           flex: 1
         }}
-        scrollEnabled={this.state.scroll} 
+        keyboardShouldPersistTaps='never'
       >
         { this._renderHeader() }
         <Animated.View
