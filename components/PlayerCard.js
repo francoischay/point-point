@@ -171,7 +171,7 @@ export default class PlayerCard extends React.Component {
     const input = this.refs.scoreInput
     const store = this.props.store;
     
-    let newLog = this.props.getLogFromStore().slice();
+    let newLog = store.getPlayerLog(this.state.playerId).slice();
     newLog.unshift({
       timestamp: Date.now(),
       points: _points
@@ -190,7 +190,6 @@ export default class PlayerCard extends React.Component {
 PlayerCard.propTypes = {
   store: PropTypes.object.isRequired,
   data: PropTypes.object.isRequired,
-  getLogFromStore: PropTypes.func.isRequired,
   callbackAfterUpdatingScore: PropTypes.func.isRequired
 }
 

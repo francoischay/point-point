@@ -25,7 +25,7 @@ export default class PlayerOptions extends React.Component {
   }
 
   render() {
-    const log = this.props.getLogFromStore();
+    const log = this.props.store.getPlayerLog(this.state.playerId);
     const showOptionsLabel = this.state.showOptions ? "Cacher les options" : "Montrer les options" 
     const optionsStyles = this.state.showOptions ? {display: 'flex'} : {display: 'none'}
     
@@ -111,7 +111,8 @@ export default class PlayerOptions extends React.Component {
   }
 
   _onLogItemPress = (_data) => {
-    const log = this.props.getLogFromStore();
+    const store = this.props.store;
+    const log = store.getPlayerLog(this.state.playerId);
     let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
     let destructiveButtonIndex = 0;
     let cancelButtonIndex = 2;
@@ -133,7 +134,7 @@ export default class PlayerOptions extends React.Component {
 
   _removeLogEntry = (_index) => {
     const store = this.props.store;
-    const log = this.props.getLogFromStore();
+    const log = store.getPlayerLog(this.state.playerId);
     log.splice(_index, 1)
     
     let player = store.updatePlayer(this.state.playerId, 'log', log)
@@ -148,8 +149,7 @@ export default class PlayerOptions extends React.Component {
 
 PlayerOptions.propTypes = {
   store: PropTypes.object.isRequired,
-  playerId: PropTypes.number.isRequired,
-  getLogFromStore: PropTypes.func.isRequired
+  playerId: PropTypes.number.isRequired
 }
 
 const styles = EStyleSheet.create({

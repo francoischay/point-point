@@ -87,6 +87,10 @@ export default class App extends React.Component {
       return _store.get('players')[index];
     });
 
+    this.store.registerAPI('getPlayerLog', (_store, _playerId) => {
+      return _store.get('players')[_playerId].log
+    })
+
     this.store.set("players", this.state.players)
 
     this.stopPlayersWatch = this.store.watch('players', (_playersToSave) => {

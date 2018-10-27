@@ -77,13 +77,11 @@ export default class PlayerScoreScreen extends React.Component {
             ref='PlayerCard'
             store={ store }
             data={ store.get("players")[this.state.playerId] }
-            getLogFromStore={ this._getLogFromStore }
             callbackAfterUpdatingScore={ this._gotoNextPlayer }
           />
           <PlayerOptions 
             store={ store }
             playerId={ this.state.playerId }
-            getLogFromStore={ this._getLogFromStore }
             onEliminatePress={ this._onEliminatePress }
             onEndOfTourPress={ this._onEndOfTourPress }
           />
@@ -163,12 +161,6 @@ export default class PlayerScoreScreen extends React.Component {
       showOptions: false,
       isEliminated: isEliminated
     })
-  }
-
-  _getLogFromStore = () => {
-    const store = this.props.screenProps.store;
-    const log = store.get('players')[this.state.playerId].log
-    return log;
   }
 
   show = () => {
