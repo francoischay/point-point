@@ -7,7 +7,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  PanResponder
 } from 'react-native';
 import { Colors } from '../styles/Base';
 import PlayerCard from '../components/PlayerCard'
@@ -29,12 +30,15 @@ export default class PlayerScoreScreen extends React.Component {
     this.state = {
       playerId: this.props.navigation.state.params.id,
       showOptions: false,
+      scroll: true,
       cardMarginLeft: new Animated.Value(Dimensions.get('window').width),
+      pan: new Animated.ValueXY()
     }
 
     const players = this.props.screenProps.store.get("players");
     const order = this.props.screenProps.store.get("order");
     const gamePlayers = []
+    let previousIndex;
     let nextIndex;
 
     for (let i = 0; i < order.length; i++) {
@@ -47,31 +51,74 @@ export default class PlayerScoreScreen extends React.Component {
     for (let i = 0; i < gamePlayers.length; i++) {
       const player = gamePlayers[i];
       if(player.id === this.props.navigation.state.params.id){
+        previousIndex = (gamePlayers[i - 1]) ? i-1 : gamePlayers.length-1;
         nextIndex = (gamePlayers[i + 1]) ? i+1 : 0;
+        console.log(gamePlayers)
+        console.log(i)
+        console.log(previousIndex)
       }
     }
 
     this.nextPlayer = gamePlayers[nextIndex];
+    this.previousPlayer = gamePlayers[previousIndex]
+    console.log(this.previousPlayer)
+    
+    this._panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderGrant: () => this.setState({scroll: false}),
+      onPanResponderMove: Animated.event([null, {dx: this.state.pan.x, dy: 0}]),
+      onPanResponderRelease: () => {
+        this.setState({scroll: true})
+
+        const dx = this.state.pan.x._value;
+        if(dx < -Dimensions.get('window').width / 2){
+          this._gotoNextPlayer()
+        } 
+        else if (dx > Dimensions.get('window').width / 2){
+          this._gotoPreviousPlayer()
+        }
+        else{
+          Animated.spring(this.state.pan, {
+            toValue: { x: 0, y: 0 },
+            friction: 5
+          }).start();
+        }
+      }
+    })
   }
 
   componentDidMount() {
-    this.show();
+    if(this.props.navigation.state.params.slideFrom === "left"){
+      this.slideFromLeft();
+    }
+    else{
+      this.slideFromRight();
+    }
   }
   
   render() {
     const store = this.props.screenProps.store;
-
+    
     return (
-      <ScrollView style={{
-        backgroundColor: Colors.GREEN,
-        flex: 1
-      }}>
+      <ScrollView 
+        style={{
+          backgroundColor: Colors.GREEN,
+          flex: 1
+        }}
+        scrollEnabled={this.state.scroll} 
+      >
         { this._renderHeader() }
         <Animated.View
-          style={{
-            marginLeft: this.state.cardMarginLeft,
-            width: Dimensions.get('window').width
-          }}
+          {...this._panResponder.panHandlers}
+          style={[{
+              marginLeft: this.state.cardMarginLeft,
+              width: Dimensions.get('window').width,
+              transform: this.state.pan.getTranslateTransform()
+            }
+          ]}
         >
           <PlayerCard 
             ref='PlayerCard'
@@ -79,12 +126,12 @@ export default class PlayerScoreScreen extends React.Component {
             data={ store.get("players")[this.state.playerId] }
             callbackAfterUpdatingScore={ this._gotoNextPlayer }
           />
-          <PlayerOptions 
-            store={ store }
-            playerId={ this.state.playerId }
-            navigation={this.props.navigation}
-          />
         </Animated.View>
+        <PlayerOptions 
+          store={ store }
+          playerId={ this.state.playerId }
+          navigation={this.props.navigation}
+        />
       </ScrollView>
     );
   }
@@ -144,10 +191,33 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   _gotoNextPlayer = () => {
-    this.hide()
+    Animated.timing(
+      this.state.cardMarginLeft,
+      {
+        toValue: -Dimensions.get('window').width,
+        duration: 250,
+        easing: Easing.back()
+      }
+    ).start(() => {
+      this.props.navigation.replace("PlayerScore", this.nextPlayer)
+    })
   }
 
-  show = () => {
+  _gotoPreviousPlayer = () => {
+    Animated.timing(
+      this.state.cardMarginLeft,
+      {
+        toValue: Dimensions.get('window').width,
+        duration: 250,
+        easing: Easing.back()
+      }
+    ).start(() => {
+      const data = Object.assign(this.previousPlayer, {slideFrom: "left"})
+      this.props.navigation.replace("PlayerScore", data)
+    })
+  }
+
+  slideFromRight = () => {
     Animated.timing(
       this.state.cardMarginLeft,
       {
@@ -160,17 +230,25 @@ export default class PlayerScoreScreen extends React.Component {
     });
   }
 
-  hide = (_callback) => {
-    Animated.timing(
-      this.state.cardMarginLeft,
-      {
-        toValue: -Dimensions.get('window').width,
-        duration: 250,
-        easing: Easing.back()
-      }
-    ).start(() => {
-      this.props.navigation.replace("PlayerScore", this.nextPlayer)
-    })
+  slideFromLeft = () => {
+    Animated.sequence([
+      Animated.timing(
+        this.state.cardMarginLeft,
+        {
+          toValue: -Dimensions.get('window').width,
+          duration: 0
+        }
+      ),
+      Animated.timing(
+        this.state.cardMarginLeft,
+        {
+          toValue: 0,
+          duration: 500,
+          easing: Easing.elastic()
+        }
+      )
+    ])
+    .start()
   }
 }
 
