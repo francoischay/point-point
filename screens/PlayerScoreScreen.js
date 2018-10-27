@@ -30,18 +30,8 @@ export default class PlayerScoreScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.delay = 650;
-    this.nbSteps = 20;
-
     this.state = {
-      score: 0,
-      scoreToDisplay: this.props.navigation.state.params.score,
-      amount: '',
-      amountToDisplay: '',
       playerId: this.props.navigation.state.params.id,
-      isUpdatingScore: false,
-      log: this.props.navigation.state.params.log,
-      isEliminated: this.props.navigation.state.params.isEliminated,
       showOptions: false,
       cardMarginLeft: new Animated.Value(Dimensions.get('window').width),
     }
@@ -69,11 +59,6 @@ export default class PlayerScoreScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ 
-      leftButton: this._renderLeftHeaderButton(),
-      rightButton: this._renderRightHeaderButton()
-    });
-
     this.show();
   }
   
