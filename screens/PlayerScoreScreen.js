@@ -3,25 +3,21 @@ import {
   Animated,
   Dimensions,
   Easing,
-  FlatList,
   Image,
   Text,
   View,
   TouchableOpacity,
   ScrollView
 } from 'react-native';
-import { Base, Colors } from '../styles/Base';
-import PPButton from '../components/PPButton'
-import PPHoveringButton from '../components/PPHoveringButton'
+import { Colors } from '../styles/Base';
 import PlayerCard from '../components/PlayerCard'
+import PlayerOptions from '../components/PlayerOptions'
 import EStyleSheet from 'react-native-extended-stylesheet';
-import { connectActionSheet } from '@expo/react-native-action-sheet';
 
 const defaultBackImage = require('../assets/images/back-icon-white.png');
 
-@connectActionSheet
 export default class PlayerScoreScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = () => {
     return {
       header: null
     };
@@ -64,7 +60,6 @@ export default class PlayerScoreScreen extends React.Component {
   
   render() {
     const store = this.props.screenProps.store;
-    const showOptionsLabel = this.state.showOptions ? "Cacher les options" : "Montrer les options" 
 
     return (
       <ScrollView style={{
@@ -85,16 +80,13 @@ export default class PlayerScoreScreen extends React.Component {
             getLogFromStore={ this._getLogFromStore }
             callbackAfterUpdatingScore={ this._gotoNextPlayer }
           />
-          <PPButton
-            title={showOptionsLabel}
-            onPress = {() => {
-              this.setState({
-                showOptions: !this.state.showOptions
-              })
-            }}
-            color={'white'}
+          <PlayerOptions 
+            store={ store }
+            playerId={ this.state.playerId }
+            getLogFromStore={ this._getLogFromStore }
+            onEliminatePress={ this._onEliminatePress }
+            onEndOfTourPress={ this._onEndOfTourPress }
           />
-          { this._renderOptions() }
         </Animated.View>
       </ScrollView>
     );
@@ -150,77 +142,6 @@ export default class PlayerScoreScreen extends React.Component {
     )
   }
 
-  _renderOptions = () => {
-    const log = this._getLogFromStore();
-    const optionsStyles = (this.state.showOptions) ? {display: 'flex'} : {display: 'none'}
-    
-    return (
-      <View style={optionsStyles}>
-        <PPHoveringButton
-          style= {{ 
-            backgroundColor: 'white',
-            marginBottom: 0
-          }}
-          color={ Colors.BLUE }
-          title="Terminer un tour"
-          onPress= {this._onEndOfTourPress}
-        />
-        <PPHoveringButton
-          style= {[
-            { 
-              backgroundColor: 'white',
-              marginBottom: 0
-            }, 
-            optionsStyles
-          ]}
-          color='red'
-          title='Éliminer ce joueur'
-          onPress= { this._onEliminatePress }
-        />
-        <FlatList
-          style={[styles.logList, Base.SHADOW]}
-          data={log}
-          ListHeaderComponent = { this._renderLogListHeader }
-          renderItem = {({item}) => this._renderLogItem(item)}
-        />
-      </View>
-    )
-  }
-
-  _renderLogListHeader = () => {
-    return (<View
-        style={styles.headerContainer}
-      >
-        <Text
-          style={ Base.HEADING_2 }
-        >
-          Historique
-        </Text>
-      </View>
-    )
-  }
-
-  _renderLogItem = (_data) => {
-    let time = new Date();
-    time.setTime(_data.timestamp)
-    
-    const hours = ("0" + time.getHours()).slice(-2)
-    const minutes = ("0" + time.getMinutes()).slice(-2)
-    const seconds = ("0" + time.getSeconds()).slice(-2)
-    const timeToDisplay = hours+":"+minutes+":"+seconds;
-
-    return <TouchableOpacity 
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      }}
-      onPress={this._onLogItemPress.bind(this, _data)}
-    >
-      <Text style={styles.logListItem}>{ timeToDisplay }</Text> 
-      <Text style={styles.logListItem}>{ _data.points }</Text> 
-    </TouchableOpacity>
-  }
-
   _goBack = () => {
     this.props.navigation.goBack()
   }
@@ -241,41 +162,6 @@ export default class PlayerScoreScreen extends React.Component {
     this.setState({
       showOptions: false,
       isEliminated: isEliminated
-    })
-  }
-
-  _onLogItemPress = (_data) => {
-    const log = this._getLogFromStore();
-    let options = ['Supprimer cette entrée', 'Annuler', 'Annuler'];
-    let destructiveButtonIndex = 0;
-    let cancelButtonIndex = 2;
-
-    this.props.showActionSheetWithOptions({
-        options,
-        destructiveButtonIndex,
-        cancelButtonIndex,
-        title: 'Supprimer cette entrée ?',
-        message: 'Le score sera recaculé'
-      },
-      buttonIndex => {
-        if (buttonIndex === 0){
-          const index = log.findIndex(x => x.timestamp==_data.timestamp);
-          this._removeLogEntry(index);
-        }
-      });
-  }
-
-  _removeLogEntry = (_index) => {
-    const store = this.props.screenProps.store;
-    const log = this._getLogFromStore();
-    log.splice(_index, 1)
-    
-    let player = store.updatePlayer(this.state.playerId, 'log', log)
-    
-    this.setState({
-      score: player.score,
-      scoreToDisplay: player.score,
-      log: player.log
     })
   }
 
