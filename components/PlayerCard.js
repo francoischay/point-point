@@ -1,11 +1,8 @@
 import React from 'react';
 import {
-  Image,
   View, 
   Text,
-  TextInput,
-  TouchableOpacity 
-} from 'react-native';
+  TextInput} from 'react-native';
 import PropTypes from 'prop-types'
 import { Base } from '../styles/Base';
 import PPButton from '../components/PPButton';
@@ -31,7 +28,6 @@ export default class PlayerCard extends React.Component {
   }
 
   render() {
-    console.log("RENDER")
     const isEliminated = this.props.data.isEliminated;
 
     return (
@@ -143,7 +139,6 @@ export default class PlayerCard extends React.Component {
 
   _updateScoreDisplay = (_points) => {
     const step = this.state.counterStep++;
-    const store = this.props.store;
     const newScore = this.props.data.score + parseInt(_points / this.nbSteps * step);
 
     let newAmount;
@@ -162,7 +157,6 @@ export default class PlayerCard extends React.Component {
     if(parseInt(step) === parseInt(this.nbSteps)){
       clearInterval(this.tickInterval);
       this._saveScore(_points, newScore);
-      console.log(this.props.callbackAfterUpdatingScore)
       this.props.callbackAfterUpdatingScore();
     } 
   }

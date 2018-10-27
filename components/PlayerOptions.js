@@ -48,7 +48,7 @@ export default class PlayerOptions extends React.Component {
             }}
             color={ Colors.BLUE }
             title="Terminer un tour"
-            onPress= {this.props.onEndOfTourPress}
+            onPress= {this._onEndOfTourPress}
           />
           <PPHoveringButton
             style= {[
@@ -60,10 +60,7 @@ export default class PlayerOptions extends React.Component {
             ]}
             color='red'
             title='Éliminer ce joueur'
-            onPress= { () => {
-              this.setState({showOptions: false})
-              this.props.onEliminatePress(); 
-            }}
+            onPress= { this._onEliminatePress }
           />
           <FlatList
             style={[styles.logList, Base.SHADOW]}
@@ -145,11 +142,27 @@ export default class PlayerOptions extends React.Component {
       log: player.log
     })
   }
+
+  _onEliminatePress = () => {
+    const store = this.props.store;
+    const isEliminated = true;
+    store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
+
+    this.setState({
+      showOptions: false,
+      isEliminated: isEliminated
+    })
+  }
+
+  _onEndOfTourPress = () => {
+    this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
+  }
 }
 
 PlayerOptions.propTypes = {
   store: PropTypes.object.isRequired,
-  playerId: PropTypes.number.isRequired
+  playerId: PropTypes.number.isRequired,
+  navigation: PropTypes.object.isRequired
 }
 
 const styles = EStyleSheet.create({

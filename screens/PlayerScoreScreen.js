@@ -82,8 +82,7 @@ export default class PlayerScoreScreen extends React.Component {
           <PlayerOptions 
             store={ store }
             playerId={ this.state.playerId }
-            onEliminatePress={ this._onEliminatePress }
-            onEndOfTourPress={ this._onEndOfTourPress }
+            navigation={this.props.navigation}
           />
         </Animated.View>
       </ScrollView>
@@ -146,21 +145,6 @@ export default class PlayerScoreScreen extends React.Component {
 
   _gotoNextPlayer = () => {
     this.hide()
-  }
-
-  _onEndOfTourPress = () => {
-    this.props.navigation.navigate('PlayerDistributePoints', this.props.navigation.state.params)
-  }
-
-  _onEliminatePress = () => {
-    const store = this.props.screenProps.store;
-    const isEliminated = true;
-    store.updatePlayer(this.state.playerId, "isEliminated", isEliminated)
-
-    this.setState({
-      showOptions: false,
-      isEliminated: isEliminated
-    })
   }
 
   show = () => {
