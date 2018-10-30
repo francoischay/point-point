@@ -74,11 +74,12 @@ export default class PlayerScoreScreen extends React.Component {
           friction: 5
         }).start();
       },
-      onPanResponderRelease: (_event, {dx}) => {
-        if(dx < -Dimensions.get('window').width / 2){
+      onPanResponderRelease: (_event, {dx, vx}) => {
+        console.log("vx", vx)
+        if(dx < -Dimensions.get('window').width / 2 || vx < -0.75){
           this._gotoNextPlayer()
         } 
-        else if (dx > Dimensions.get('window').width / 2){
+        else if (dx > Dimensions.get('window').width / 2 || vx > 0.75){
           this._gotoPreviousPlayer()
         }
         else{
