@@ -31,6 +31,7 @@ export default class PlayerScoreScreen extends React.Component {
       playerId: this.props.navigation.state.params.id,
       showOptions: false,
       cardMarginLeft: new Animated.Value(Dimensions.get('window').width),
+      optionsOpacity: 1,
       pan: new Animated.ValueXY()
     }
 
@@ -60,22 +61,26 @@ export default class PlayerScoreScreen extends React.Component {
     
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => {
-        console.log("onStartShouldSetPanResponder", gestureState.dx, gestureState.dy)
         if(gestureState.dx = 0) return false
         else return true
       },
       onStartShouldSetPanResponderCapture: () => false,
       onMoveShouldSetPanResponder:  () => false,
       onMoveShouldSetPanResponderCapture:  () => true,
-      onPanResponderMove: Animated.event([null, {dx: this.state.pan.x, dy: 0}]),
+      onPanResponderMove: Animated.event([
+          null, 
+          {dx: this.state.pan.x, dy: 0}
+        ],
+        {listener: () => this._onSwipe()}
+      ),
       onPanResponderTerminate: () => {
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
           friction: 5
         }).start();
+        this.setState({optionsOpacity: 1})
       },
       onPanResponderRelease: (_event, {dx, vx}) => {
-        console.log("vx", vx)
         if(dx < -Dimensions.get('window').width / 2 || vx < -0.75){
           this._gotoNextPlayer()
         } 
@@ -87,8 +92,19 @@ export default class PlayerScoreScreen extends React.Component {
             toValue: { x: 0, y: 0 },
             friction: 5
           }).start();
+          this.setState({optionsOpacity: 1})
         }
       }
+    })
+  }
+
+  _onSwipe = () => {
+    const threshold = Dimensions.get('window').width / 2;
+    let opacityValue = 1 - Math.abs(this.state.pan.x._value)/threshold;
+    opacityValue = Math.max(opacityValue, 0.2)
+    
+    this.setState({
+      optionsOpacity: opacityValue
     })
   }
 
@@ -133,6 +149,9 @@ export default class PlayerScoreScreen extends React.Component {
           store={ store }
           playerId={ this.state.playerId }
           navigation={this.props.navigation}
+          style={{
+            opacity: this.state.optionsOpacity
+          }}
         />
       </ScrollView>
     );
@@ -173,15 +192,21 @@ export default class PlayerScoreScreen extends React.Component {
     return (
       <TouchableOpacity 
         onPress={ this._gotoNextPlayer } 
-        style={ styles.headerButtonContainer }
+        style={styles.headerButtonContainer}
       >
-        <Text
-          style={ styles.headerButtonText }
+        <Text 
+          style={[ 
+            styles.headerButtonText, 
+            {opacity: this.state.optionsOpacity}
+          ]}
         >
           { this.nextPlayer.name }
         </Text>
         <Image
-          style={ styles.iconBack }
+          style={[ 
+            styles.iconBack, 
+            {opacity: this.state.optionsOpacity}
+          ]}
           source={ defaultBackImage }
         />
       </TouchableOpacity>

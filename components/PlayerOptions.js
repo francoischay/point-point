@@ -30,7 +30,9 @@ export default class PlayerOptions extends React.Component {
     const optionsStyles = this.state.showOptions ? {display: 'flex'} : {display: 'none'}
     
     return (
-      <View>
+      <View
+        style={this.props.style}
+      >
         <PPButton
           title={showOptionsLabel}
           onPress = {() => {
