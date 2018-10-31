@@ -52,12 +52,17 @@ export default class PlayersScreen extends React.Component {
         }
     }
 
-    return <FlatList
-      style = {[styles.gameList, Base.SHADOW]}
-      contentContainerStyle ={styles.contentContainer}
-      data = { gamePlayers }
-      renderItem = {({item}) => this._renderItem(item)}
-    />
+    return <View style={{
+      flex: 1,
+      zIndex: 0
+    }}>
+      <FlatList
+        style = {[styles.gameList, Base.SHADOW]}
+        contentContainerStyle ={styles.contentContainer}
+        data = { gamePlayers }
+        renderItem = {({item}) => this._renderItem(item)}
+      />
+    </View>
   }
 
   _renderItem = (_data) => {

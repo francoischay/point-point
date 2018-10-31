@@ -104,11 +104,7 @@ class PPButton extends React.Component<{
     const buttonStyles = [styles.button];
     const textStyles = [styles.text];
     if (color) {
-      if (Platform.OS === 'ios') {
-        textStyles.push({color: color});
-      } else {
-        buttonStyles.push({backgroundColor: color});
-      }
+      textStyles.push({color: color});
     }
     const accessibilityStates = [];
     if (disabled) {
