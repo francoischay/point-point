@@ -73,6 +73,7 @@ export default class PlayerScoreScreen extends React.Component {
         ],
         {listener: () => this._onSwipe()}
       ),
+      onResponderTerminationRequest: () => true,
       onPanResponderTerminate: () => {
         Animated.spring(this.state.pan, {
           toValue: { x: 0, y: 0 },
