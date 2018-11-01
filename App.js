@@ -24,42 +24,10 @@ export default class App extends React.Component {
     });
 
     this.state = { 
-      players: [
-        {
-          id: 0,
-          icon: {
-            index: 0,
-            item: Emojis[0]
-          },
-          name: 'Daniel',
-          score: 0,
-          isEliminated: false,
-          log: []
-        },
-        {
-          id: 1,
-          icon: {
-            index: 10,
-            item: Emojis[10]
-          },
-          name: 'Lucienne',
-          score: 0,
-          isEliminated: false,
-          log: []
-        },
-        {
-          id: 2,
-          icon: {
-            index: 20,
-            item: Emojis[20]
-          },
-          name: 'Jacqueline',
-          score: 0,
-          isEliminated: false,
-          log: []
-        }
-      ],
-      order: ['0', '1', '2']
+      players: [],
+      order: [],
+      previousNames: [],
+      rankByLessPoints: false
     };
 
     this.store = new Podda();
@@ -111,6 +79,12 @@ export default class App extends React.Component {
       this.setState({"previousNames": _playersNameToSave})
     })
 
+    this.stopRankingOrderWatch = this.store.watch('rankByLessPoints', (_rankByLessPoints) => {
+      console.log("WATCH", _rankByLessPoints)
+      AsyncStorage.setItem("rankByLessPoints", _rankByLessPoints.toString())
+      this.setState({"rankByLessPoints": _rankByLessPoints})
+    })
+
     this.retrievePlayers().then((_players)=>{
       const players = (_players === null) ? [] : _players;
       this.store.set("players", players)
@@ -125,6 +99,12 @@ export default class App extends React.Component {
       this.store.set("previousNames", _previousNames)
     })
 
+    this.retrieveRankingOrder().then((_rankByLessPoints:Boolean)=>{
+      console.log("RETRIEVE 1", _rankByLessPoints)
+      _rankByLessPoints = _rankByLessPoints === "true" ? true : false;
+      console.log("RETRIEVE 2", _rankByLessPoints)
+      this.store.set("rankByLessPoints", _rankByLessPoints)
+    })
   }
 
   retrievePlayers = async () => {
@@ -160,6 +140,17 @@ export default class App extends React.Component {
     } 
     catch (_error) {
       console.log("No existing players names");
+    }
+    return;
+  }
+
+  retrieveRankingOrder = async () => {
+    try {
+      const retrievedRankingOrder = await AsyncStorage.getItem('rankByLessPoints');
+      return retrievedRankingOrder;
+    } 
+    catch (_error) {
+      console.log("No ranking order");
     }
     return;
   }

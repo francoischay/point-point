@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,TouchableOpacity, Text, Image} from 'react-native';
+import {View,TouchableOpacity, Text, Switch} from 'react-native';
 import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
 import Player from '../components/Player';
@@ -14,6 +14,14 @@ export default class PlayersScreen extends React.Component {
       header: null
     }
   };
+
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      rankByLessPoints: this.props.screenProps.store.get("rankByLessPoints")
+    }
+  }
 
   render() {
     return (
@@ -50,7 +58,8 @@ export default class PlayersScreen extends React.Component {
       contentContainerStyle ={styles.contentContainer}
       data = { players }
       order = { order }
-      renderHeader = { this._renderHeader }
+      renderHeader = { this._renderPlayersHeader }
+      renderFooter = { this._renderParams }
       renderRow = { this._renderRow }
       onChangeOrder = { this._onChangeOrder }
       onReleaseRow = { this._onReleaseRow }
@@ -62,7 +71,7 @@ export default class PlayersScreen extends React.Component {
     return <Player data={ _data.data } active={_data.active} />
   }
 
-  _renderHeader = () => {
+  _renderPlayersHeader = () => {
     return (<View
       style={styles.headerContainer}
     >
@@ -76,6 +85,9 @@ export default class PlayersScreen extends React.Component {
   }
 
   _renderFooter = () => {
+    const players = this.props.screenProps.store.get("players");
+    if(players.length < 2) return
+
     const label = (this._isGameOn()) ? "Reprendre la partie" : "C'est parti !"
     return (<View style={{
       bottom: 18,
@@ -87,6 +99,26 @@ export default class PlayersScreen extends React.Component {
         onPress={this._startGame}
       />
     </View>)
+  }
+
+  _renderParams = () => {
+    const players = this.props.screenProps.store.get("players");
+    if(players.length < 2) return
+    
+    return (
+      <View style={[ {
+        flexDirection: 'row',
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        paddingVertical: 1.5 * EStyleSheet.value('$rem')
+      }]}>
+        <Text style={Base.SMALL_TEXT}>Le moins de points qui gagne</Text>
+        <Switch 
+          value={this.state.rankByLessPoints}
+          onValueChange={ this._onSwitchChange }
+        />
+      </View>
+    )
   }
 
   _isGameOn = () => {
@@ -123,6 +155,13 @@ export default class PlayersScreen extends React.Component {
   
   _onAddButtonPress = (_event) => {
     this.props.navigation.navigate("AddPlayer")
+  }
+
+  _onSwitchChange = (_value) => {
+    this.setState({
+      rankByLessPoints: _value
+    })
+    this.props.screenProps.store.set('rankByLessPoints', _value)
   }
 }
 

@@ -14,6 +14,11 @@ export const Base = EStyleSheet.create({
       color: Colors.DARK_GREY,
       fontWeight: '500'
     },
+    SMALL_TEXT: {
+      fontSize: '1.25rem',
+      color: Colors.DARK_GREY,
+      fontWeight: '400'
+    },
     ROW: {
       flexDirection: 'row',
       justifyContent: 'space-between',
