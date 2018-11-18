@@ -24,6 +24,7 @@ export default class PlayersScreen extends React.Component {
   }
 
   render() {
+
     return (
       <View style = {{ flex: 1,
         backgroundColor: Colors.BACKGROUND, 
@@ -180,7 +181,7 @@ const styles = EStyleSheet.create({
     width: '100%',
     paddingHorizontal: '1.5rem',
     marginTop: '1rem',
-    paddingBottom: '10rem'
+    paddingBottom: '10rem',
   },
   headerButtonContainer: {
     alignItems: 'center',

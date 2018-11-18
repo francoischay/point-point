@@ -33,7 +33,7 @@ export default class PlayerCard extends React.Component {
     return (
       <View style={[styles.card, Base.SHADOW]}>
         { this._renderCardHeader() }
-        { isEliminated ?  this._renderCardContentWhenEliminated() : this._renderCardContent() }
+        { isEliminated ? this._renderCardContentWhenEliminated() : this._renderCardContent() }
       </View>
     )
   }
@@ -106,7 +106,7 @@ export default class PlayerCard extends React.Component {
 
   _onPressAdd = () => {
     const value = this.refs.scoreInput.props.value;
-    if(this.state.isUpdatingScore || isNaN(value)) return;
+    if(this.state.isUpdatingScore || value.length === 0 || isNaN(value)) return;
     
     const points = parseInt(value);
     this._changeScore(points);
@@ -114,7 +114,7 @@ export default class PlayerCard extends React.Component {
 
   _onPressRemove = () => {
     const value = this.refs.scoreInput.props.value;
-    if(this.state.isUpdatingScore || isNaN(value)) return;
+    if(this.state.isUpdatingScore || value.length === 0 || isNaN(value)) return;
     
     const points = -parseInt(value);
     this._changeScore(points);

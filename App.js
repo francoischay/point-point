@@ -80,7 +80,6 @@ export default class App extends React.Component {
     })
 
     this.stopRankingOrderWatch = this.store.watch('rankByLessPoints', (_rankByLessPoints) => {
-      console.log("WATCH", _rankByLessPoints)
       AsyncStorage.setItem("rankByLessPoints", _rankByLessPoints.toString())
       this.setState({"rankByLessPoints": _rankByLessPoints})
     })
@@ -100,9 +99,7 @@ export default class App extends React.Component {
     })
 
     this.retrieveRankingOrder().then((_rankByLessPoints:Boolean)=>{
-      console.log("RETRIEVE 1", _rankByLessPoints)
       _rankByLessPoints = _rankByLessPoints === "true" ? true : false;
-      console.log("RETRIEVE 2", _rankByLessPoints)
       this.store.set("rankByLessPoints", _rankByLessPoints)
     })
   }
