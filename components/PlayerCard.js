@@ -138,6 +138,7 @@ export default class PlayerCard extends React.Component {
   }
 
   _updateScoreDisplay = (_points) => {
+    const store = this.props.store;
     const step = this.state.counterStep++;
     const newScore = this.props.data.score + parseInt(_points / this.nbSteps * step);
 
@@ -157,7 +158,7 @@ export default class PlayerCard extends React.Component {
     if(parseInt(step) === parseInt(this.nbSteps)){
       clearInterval(this.tickInterval);
       this._saveScore(_points, newScore);
-      this.props.callbackAfterUpdatingScore();
+      if(store.get('autoSwitchToNextPlayer')) this.props.callbackAfterUpdatingScore();
     } 
   }
 

@@ -19,7 +19,8 @@ export default class PlayersScreen extends React.Component {
     super(props);
     
     this.state = {
-      rankByLessPoints: this.props.screenProps.store.get("rankByLessPoints")
+      rankByLessPoints: this.props.screenProps.store.get("rankByLessPoints"),
+      autoSwitchToNextPlayer: this.props.screenProps.store.get("autoSwitchToNextPlayer")
     }
   }
 
@@ -107,17 +108,32 @@ export default class PlayersScreen extends React.Component {
     if(players.length < 2) return
     
     return (
-      <View style={[ {
-        flexDirection: 'row',
-        justifyContent: 'space-between', 
-        alignItems: 'center',
-        paddingVertical: 1.5 * EStyleSheet.value('$rem')
-      }]}>
-        <Text style={Base.SMALL_TEXT}>Le moins de points qui gagne</Text>
-        <Switch 
-          value={this.state.rankByLessPoints}
-          onValueChange={ this._onSwitchChange }
-        />
+      <View>
+        <View style={[ {
+          flexDirection: 'row',
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          paddingTop: 1.5 * EStyleSheet.value('$rem')
+        }]}>
+          <Text style={Base.SMALL_TEXT}>Le moins de points qui gagne</Text>
+          <Switch 
+            value={this.state.rankByLessPoints}
+            onValueChange={ this._onSwitchChange }
+          />
+        </View>
+
+        <View style={[ {
+          flexDirection: 'row',
+          justifyContent: 'space-between', 
+          alignItems: 'center',
+          paddingVertical: 1 * EStyleSheet.value('$rem')
+        }]}>
+          <Text style={Base.SMALL_TEXT}>Changer automatiquement de joueur</Text>
+          <Switch 
+            value={this.state.autoSwitchToNextPlayer}
+            onValueChange={ this._onAutoSwitchChange }
+          />
+        </View>
       </View>
     )
   }
@@ -163,6 +179,13 @@ export default class PlayersScreen extends React.Component {
       rankByLessPoints: _value
     })
     this.props.screenProps.store.set('rankByLessPoints', _value)
+  }
+
+  _onAutoSwitchChange = (_value) => {
+    this.setState({
+      autoSwitchToNextPlayer: _value
+    })
+    this.props.screenProps.store.set('autoSwitchToNextPlayer', _value)
   }
 }
 

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Point Point",
-    "description": "An app to count points",
-    "slug": "point-point",
+    "name": "Le point Points",
+    "description": "Une application pour compter facilement les points dans les jeux de société",
+    "slug": "le-point-points",
     "privacy": "public",
     "sdkVersion": "28.0.0",
     "platforms": [
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#22AA99"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "eu.francoischay.pointpoints"
+    },
+    "android": {
+      "package": "eu.francoischay.pointpoints"
     }
   }
 }

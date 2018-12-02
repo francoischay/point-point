@@ -84,6 +84,11 @@ export default class App extends React.Component {
       this.setState({"rankByLessPoints": _rankByLessPoints})
     })
 
+    this.stopRankingOrderWatch = this.store.watch('autoSwitchToNextPlayer', (_autoSwitchToNextPlayer) => {
+      AsyncStorage.setItem("autoSwitchToNextPlayer", _autoSwitchToNextPlayer.toString())
+      this.setState({"autoSwitchToNextPlayer": _autoSwitchToNextPlayer})
+    })
+
     this.retrievePlayers().then((_players)=>{
       const players = (_players === null) ? [] : _players;
       this.store.set("players", players)
@@ -101,6 +106,11 @@ export default class App extends React.Component {
     this.retrieveRankingOrder().then((_rankByLessPoints:Boolean)=>{
       _rankByLessPoints = _rankByLessPoints === "true" ? true : false;
       this.store.set("rankByLessPoints", _rankByLessPoints)
+    })
+
+    this.retrieveAutoSwitch().then((_autoSwitch:Boolean)=>{
+      _autoSwitch = _autoSwitch === "false" ? false : true;
+      this.store.set("autoSwitchToNextPlayer", _autoSwitch)
     })
   }
 
@@ -148,6 +158,17 @@ export default class App extends React.Component {
     } 
     catch (_error) {
       console.log("No ranking order");
+    }
+    return;
+  }
+
+  retrieveAutoSwitch = async () => {
+    try {
+      const retrievedAutoSwitch = await AsyncStorage.getItem('autoSwitchToNextPlayer');
+      return retrievedAutoSwitch;
+    } 
+    catch (_error) {
+      console.log("Not autoswitching");
     }
     return;
   }
