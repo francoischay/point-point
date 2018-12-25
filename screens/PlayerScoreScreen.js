@@ -127,7 +127,7 @@ export default class PlayerScoreScreen extends React.Component {
           backgroundColor: Colors.GREEN,
           flex: 1
         }}
-        keyboardShouldPersistTaps='never'
+        keyboardShouldPersistTaps='always'
       >
         { this._renderHeader() }
         <Animated.View
