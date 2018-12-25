@@ -131,7 +131,6 @@ export default class PlayerScoreScreen extends React.Component {
       >
         { this._renderHeader() }
         <Animated.View
-          {...this._panResponder.panHandlers}
           style={[{
               marginLeft: this.state.cardMarginLeft,
               width: Dimensions.get('window').width,
