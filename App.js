@@ -89,6 +89,11 @@ export default class App extends React.Component {
       this.setState({"autoSwitchToNextPlayer": _autoSwitchToNextPlayer})
     })
 
+    this.stopGoBackToListWatch = this.store.watch('goBackToList', (_goBackToList) => {
+      AsyncStorage.setItem("goBackToList", _goBackToList.toString())
+      this.setState({"goBackToList": _goBackToList})
+    })
+
     this.retrievePlayers().then((_players)=>{
       const players = (_players === null) ? [] : _players;
       this.store.set("players", players)
@@ -111,6 +116,11 @@ export default class App extends React.Component {
     this.retrieveAutoSwitch().then((_autoSwitch:Boolean)=>{
       _autoSwitch = _autoSwitch === "false" ? false : true;
       this.store.set("autoSwitchToNextPlayer", _autoSwitch)
+    })
+
+    this.retrieveGoBackToList().then((_goBackToList:Boolean)=>{
+      _goBackToList = _goBackToList === "false" ? false : true;
+      this.store.set("goBackToList", _goBackToList)
     })
   }
 
@@ -158,6 +168,17 @@ export default class App extends React.Component {
     } 
     catch (_error) {
       console.log("No ranking order");
+    }
+    return;
+  }
+
+  retrieveGoBackToList = async () => {
+    try {
+      const retrievedGoBackToList = await AsyncStorage.getItem('goBackToList');
+      return retrievedGoBackToList;
+    } 
+    catch (_error) {
+      console.log("Not go back to list setting");
     }
     return;
   }

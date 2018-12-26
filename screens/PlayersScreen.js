@@ -20,6 +20,7 @@ export default class PlayersScreen extends React.Component {
     
     this.state = {
       rankByLessPoints: this.props.screenProps.store.get("rankByLessPoints"),
+      goBackToList: this.props.screenProps.store.get("goBackToList"),
       autoSwitchToNextPlayer: this.props.screenProps.store.get("autoSwitchToNextPlayer")
     }
   }
@@ -126,14 +127,28 @@ export default class PlayersScreen extends React.Component {
           flexDirection: 'row',
           justifyContent: 'space-between', 
           alignItems: 'center',
-          paddingVertical: 1 * EStyleSheet.value('$rem')
+          paddingTop: 1 * EStyleSheet.value('$rem')
         }]}>
-          <Text style={Base.SMALL_TEXT}>Changer automatiquement de joueur</Text>
+          <Text style={Base.SMALL_TEXT}>Retour à la liste à chaque fois</Text>
           <Switch 
-            value={this.state.autoSwitchToNextPlayer}
-            onValueChange={ this._onAutoSwitchChange }
+            value={this.state.goBackToList}
+            onValueChange={ this._onGoBackToListSwitchChange }
           />
         </View>
+        {!this.state.goBackToList &&
+          <View style={[ {
+            flexDirection: 'row',
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            paddingVertical: 1 * EStyleSheet.value('$rem')
+          }]}>
+            <Text style={Base.SMALL_TEXT}>Changer automatiquement de joueur</Text>
+            <Switch 
+              value={this.state.autoSwitchToNextPlayer}
+              onValueChange={ this._onAutoSwitchChange }
+            />
+          </View>
+        }
       </View>
     )
   }
@@ -186,6 +201,13 @@ export default class PlayersScreen extends React.Component {
       autoSwitchToNextPlayer: _value
     })
     this.props.screenProps.store.set('autoSwitchToNextPlayer', _value)
+  }
+
+  _onGoBackToListSwitchChange = (_value) => {
+    this.setState({
+      goBackToList: _value
+    })
+    this.props.screenProps.store.set('goBackToList', _value)
   }
 }
 

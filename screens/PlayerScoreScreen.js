@@ -120,6 +120,7 @@ export default class PlayerScoreScreen extends React.Component {
   
   render() {
     const store = this.props.screenProps.store;
+    const callback = this.props.screenProps.store.get("goBackToList") ? this._goBack : this._gotoNextPlayer;
     
     return (
       <ScrollView 
@@ -127,7 +128,7 @@ export default class PlayerScoreScreen extends React.Component {
           backgroundColor: Colors.GREEN,
           flex: 1
         }}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps='never'
       >
         { this._renderHeader() }
         <Animated.View
@@ -142,7 +143,7 @@ export default class PlayerScoreScreen extends React.Component {
             ref='PlayerCard'
             store={ store }
             data={ store.get("players")[this.state.playerId] }
-            callbackAfterUpdatingScore={ this._gotoNextPlayer }
+            callbackAfterUpdatingScore={ callback }
           />
         </Animated.View>
         <PlayerOptions 
