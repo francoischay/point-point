@@ -56,7 +56,7 @@ export const Base = EStyleSheet.create({
     TEXT_INPUT: {
       fontSize: '1.5rem',
       borderWidth: 1,
-      borderColor: Colors.BACKGROUND,
+      borderColor: Colors.GREY,
       borderRadius: 6,
       paddingHorizontal: '1rem',
       paddingVertical: '0.75rem'

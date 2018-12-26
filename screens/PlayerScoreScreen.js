@@ -120,8 +120,10 @@ export default class PlayerScoreScreen extends React.Component {
   
   render() {
     const store = this.props.screenProps.store;
-    const callback = this.props.screenProps.store.get("goBackToList") ? this._goBack : this._gotoNextPlayer;
-    
+    console.log(this.props.screenProps.store.get("gameSettings"))
+    const callback = this.props.screenProps.store.get("gameSettings").goBackToList ? this._goBack : this._gotoNextPlayer;
+
+    console.log(callback)
     return (
       <ScrollView 
         style={{

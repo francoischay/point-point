@@ -158,7 +158,7 @@ export default class PlayerCard extends React.Component {
     if(parseInt(step) === parseInt(this.nbSteps)){
       clearInterval(this.tickInterval);
       this._saveScore(_points, newScore);
-      if(store.get('autoSwitchToNextPlayer')) this.props.callbackAfterUpdatingScore();
+      this.props.callbackAfterUpdatingScore();
     } 
   }
 

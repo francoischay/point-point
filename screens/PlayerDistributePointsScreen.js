@@ -37,7 +37,6 @@ export default class PlayerDistributePointsScreen extends React.Component {
           { this._renderHeader() }
           <ScrollView>
             { this._renderListHeader() }
-            { this._renderSwitch() }
             { this._renderList() }
           </ScrollView>
         </View>   
@@ -45,16 +44,18 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
 
     componentDidMount = () =>{
+      const store = this.props.screenProps.store;
       const data = this.props.navigation.state.params;
-      const players = this.props.screenProps.store.get("players");
-      const order = this.props.screenProps.store.get("order");
+      const players = store.get("players");
+      const order = store.get("order");
       const gamePlayers = []
+      const gameSettings = store.get('gameSettings')
   
       for (let i = 0; i < order.length; i++) {
-          for (let j = 0; j < players.length; j++) {
-              const player = players[j];
-              if(player.id == order[i] && player.id != data.id) gamePlayers.push(player)
-          }
+        for (let j = 0; j < players.length; j++) {
+          const player = players[j];
+          if(player.id == order[i] && player.id != data.id) gamePlayers.push(player)
+        }
       }
 
       const points = gamePlayers.map((_player) => { return {
@@ -64,15 +65,19 @@ export default class PlayerDistributePointsScreen extends React.Component {
         points: 0
       }})
 
-      points.push({
-        id: -1,
-        icon: '',
-        name: 'Extra',
-        points: 0
-      })
+      if(gameSettings.extraPointsForWinner > 0){
+        points.push({
+          id: -1,
+          icon: '',
+          name: 'Extra',
+          points: gameSettings.extraPointsForWinner
+        })
+      }
+
 
       this.setState({
-        points: points
+        points: points,
+        doSubstract: store.get('gameSettings').doSubstract
       })
     }
 

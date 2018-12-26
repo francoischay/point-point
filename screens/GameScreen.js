@@ -118,7 +118,7 @@ export default class PlayersScreen extends React.Component {
     }
     this.props.screenProps.store.set("players", players);
 
-    this.props.navigation.replace("Players")
+    this.props.navigation.popToTop()
   }
 
   _onScoreRowPress = (_data) => {

@@ -62,7 +62,6 @@ export default class PlayersScreen extends React.Component {
       data = { players }
       order = { order }
       renderHeader = { this._renderPlayersHeader }
-      renderFooter = { this._renderParams }
       renderRow = { this._renderRow }
       onChangeOrder = { this._onChangeOrder }
       onReleaseRow = { this._onReleaseRow }
@@ -107,6 +106,9 @@ export default class PlayersScreen extends React.Component {
   _renderParams = () => {
     const players = this.props.screenProps.store.get("players");
     if(players.length < 2) return
+
+    const settings = this.props.screenProps.store.get('gameSettings')
+    console.log(settings)
     
     return (
       <View>
@@ -118,7 +120,7 @@ export default class PlayersScreen extends React.Component {
         }]}>
           <Text style={Base.SMALL_TEXT}>Le moins de points qui gagne</Text>
           <Switch 
-            value={this.state.rankByLessPoints}
+            value={settings.rankByLessPoints}
             onValueChange={ this._onSwitchChange }
           />
         </View>
@@ -131,11 +133,11 @@ export default class PlayersScreen extends React.Component {
         }]}>
           <Text style={Base.SMALL_TEXT}>Retour à la liste à chaque fois</Text>
           <Switch 
-            value={this.state.goBackToList}
+            value={settings.goBackToList}
             onValueChange={ this._onGoBackToListSwitchChange }
           />
         </View>
-        {!this.state.goBackToList &&
+        {!settings.goBackToList &&
           <View style={[ {
             flexDirection: 'row',
             justifyContent: 'space-between', 
@@ -144,7 +146,7 @@ export default class PlayersScreen extends React.Component {
           }]}>
             <Text style={Base.SMALL_TEXT}>Changer automatiquement de joueur</Text>
             <Switch 
-              value={this.state.autoSwitchToNextPlayer}
+              value={settings.autoSwitchToNextPlayer}
               onValueChange={ this._onAutoSwitchChange }
             />
           </View>
@@ -182,7 +184,7 @@ export default class PlayersScreen extends React.Component {
   }
 
   _startGame = () => {
-    this.props.navigation.replace("Game")
+    this.props.navigation.navigate("Game")
   }
   
   _onAddButtonPress = (_event) => {

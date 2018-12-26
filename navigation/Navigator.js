@@ -1,5 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 
+import GameChoiceScreen from '../screens/GameChoiceScreen';
 import PlayersScreen from '../screens/PlayersScreen';
 import GameScreen from '../screens/GameScreen';
 import AddPlayerScreen from '../screens/AddPlayerScreen';
@@ -9,6 +10,9 @@ import PlayerDistributePointsScreen from '../screens/PlayerDistributePointsScree
 
 export default Navigator = createStackNavigator(
   {
+    GameChoice: {
+      screen: GameChoiceScreen
+    },
     Players: {
       screen: PlayersScreen
     },
@@ -29,6 +33,6 @@ export default Navigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Players'
+    initialRouteName: 'GameChoice'
   }
 );
