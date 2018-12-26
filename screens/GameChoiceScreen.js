@@ -30,6 +30,7 @@ export default class GameChoiceScreen extends React.Component {
             autoSwitchToNextPlayer: false,
             goBackToList: true,
             doSubstract: true,
+            onlyDistributePointsAtEndOfTour: true,
             extraPointsForWinner: 0
           } 
         },
@@ -41,6 +42,7 @@ export default class GameChoiceScreen extends React.Component {
             autoSwitchToNextPlayer: true,
             goBackToList: false,
             doSubstract: false,
+            onlyDistributePointsAtEndOfTour: false,
             extraPointsForWinner: 25
           } 
         },
@@ -52,6 +54,7 @@ export default class GameChoiceScreen extends React.Component {
             autoSwitchToNextPlayer: false,
             goBackToList: true,
             doSubstract: false,
+            onlyDistributePointsAtEndOfTour: false,
             extraPointsForWinner: 0
           } 
         },
@@ -63,6 +66,7 @@ export default class GameChoiceScreen extends React.Component {
             autoSwitchToNextPlayer: true,
             goBackToList: false,
             doSubstract: false,
+            onlyDistributePointsAtEndOfTour: false,
             extraPointsForWinner: 0
           } 
         }

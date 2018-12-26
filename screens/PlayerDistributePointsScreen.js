@@ -9,6 +9,7 @@ import { Base, Colors } from '../styles/Base';
 import { FlatList, TextInput, Switch, ScrollView } from 'react-native-gesture-handler';
 import HeaderWithButton from '../components/HeaderWithButton';
 import PPTextInput from '../components/PPTextInput';
+import PPButton from '../components/PPButton';
 
 
 export default class PlayerDistributePointsScreen extends React.Component {
@@ -35,7 +36,9 @@ export default class PlayerDistributePointsScreen extends React.Component {
       return (
         <View style={styles.pageContainer}>
           { this._renderHeader() }
-          <ScrollView>
+          <ScrollView
+            style={[styles.card, Base.SHADOW]}
+          >
             { this._renderListHeader() }
             { this._renderList() }
           </ScrollView>
@@ -140,7 +143,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
     
     _renderItem = (_data, _index) => {
       const minusOpacity = this.state.doSubstract && _data.id > -1 ? {opacity: 1} : {opacity:0}
-      const item = <View style={[Base.ROW, {
+      const item = <View style={[{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignContent: 'stretch',
@@ -233,24 +236,29 @@ export default class PlayerDistributePointsScreen extends React.Component {
       const player = this.state.points.find((_score) => {
         return _score.id === _id
       })
-      console.log(player.points)
+      
       return player.points;
     }
 }
 
 const styles = EStyleSheet.create({
+  card: {
+    backgroundColor: 'white',
+    margin: '1.5rem',
+    marginTop: 0,
+    borderRadius: '1rem',
+    padding: '1.5rem'
+  },
   pageContainer: {
-      backgroundColor: 'white',
+      backgroundColor: Colors.GREEN,
       flex: 1
   },
   list: {
     paddingBottom: Dimensions.get('window').height / 2
   },
   headerContainer:{
-    paddingHorizontal: '1.5rem',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: '3rem',
     paddingBottom: '1.5rem'
   }
 })

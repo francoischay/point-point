@@ -122,7 +122,12 @@ export default class PlayersScreen extends React.Component {
   }
 
   _onScoreRowPress = (_data) => {
-    this.props.navigation.navigate("PlayerScore", _data)
+    if(this.props.screenProps.store.get('gameSettings').onlyDistributePointsAtEndOfTour){
+      this.props.navigation.navigate('PlayerDistributePoints', _data)
+    }
+    else{
+      this.props.navigation.navigate("PlayerScore", _data)
+    }
   }
 }
 
