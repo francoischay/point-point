@@ -19,9 +19,9 @@ export default class PlayersScreen extends React.Component {
     super(props);
     
     this.state = {
-      rankByLessPoints: this.props.screenProps.store.get("rankByLessPoints"),
-      goBackToList: this.props.screenProps.store.get("goBackToList"),
-      autoSwitchToNextPlayer: this.props.screenProps.store.get("autoSwitchToNextPlayer")
+      rankByLessPoints: this.props.screenProps.store.get("gameSettings").rankByLessPoints,
+      goBackToList: this.props.screenProps.store.get("gameSettings").goBackToList,
+      autoSwitchToNextPlayer: this.props.screenProps.store.get("gameSettings").autoSwitchToNextPlayer
     }
   }
 

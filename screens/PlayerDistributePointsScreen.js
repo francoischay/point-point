@@ -22,10 +22,12 @@ export default class PlayerDistributePointsScreen extends React.Component {
     constructor(props) {
         super(props);
 
+        const store = this.props.screenProps.store;
+
         this.state = {
           totalToAdd: 0,
           playerId: this.props.navigation.state.params.id,
-          futureTotal: this.props.navigation.state.params.score,
+          futureTotal: store.get('gameSettings').extraPointsForWinner,
           score: this.props.navigation.state.params.score,
           points: [],
           doSubstract: false
@@ -40,6 +42,9 @@ export default class PlayerDistributePointsScreen extends React.Component {
             style={[styles.card, Base.SHADOW]}
           >
             { this._renderListHeader() }
+            <Text>
+              Rentrer les points qui restent aux différents joueurs.
+            </Text>
             { this._renderList() }
           </ScrollView>
         </View>   
@@ -67,16 +72,6 @@ export default class PlayerDistributePointsScreen extends React.Component {
         name: _player.name,
         points: 0
       }})
-
-      if(gameSettings.extraPointsForWinner > 0){
-        points.push({
-          id: -1,
-          icon: '',
-          name: 'Extra',
-          points: gameSettings.extraPointsForWinner
-        })
-      }
-
 
       this.setState({
         points: points,
@@ -179,10 +174,11 @@ export default class PlayerDistributePointsScreen extends React.Component {
     }
 
     _onChange = (_value, _data, _index) => {
+      const store = this.props.screenProps.store;
       const points = this.state.points
       points[_index].points = parseInt(_value);
 
-      let futureTotal = this.state.score;
+      let futureTotal = store.get('gameSettings').extraPointsForWinner;
       this.state.points.forEach((item) => {
         futureTotal += item.points
       })
