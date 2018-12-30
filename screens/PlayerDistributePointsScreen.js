@@ -27,7 +27,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
         this.state = {
           totalToAdd: 0,
           playerId: this.props.navigation.state.params.id,
-          futureTotal: store.get('gameSettings').extraPointsForWinner,
+          pointsForTheWinner: store.get('gameSettings').extraPointsForWinner,
           score: this.props.navigation.state.params.score,
           points: [],
           doSubstract: false
@@ -103,7 +103,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
             { data.icon.item } { data.name }
           </Text>
           <Text style={Base.HEADING_2}>
-            { this.state.futureTotal }
+            { this.state.pointsForTheWinner }
           </Text>
         </View>
       )
@@ -178,14 +178,14 @@ export default class PlayerDistributePointsScreen extends React.Component {
       const points = this.state.points
       points[_index].points = parseInt(_value);
 
-      let futureTotal = store.get('gameSettings').extraPointsForWinner;
+      let pointsForTheWinner = store.get('gameSettings').extraPointsForWinner;
       this.state.points.forEach((item) => {
-        futureTotal += item.points
+        pointsForTheWinner += item.points
       })
 
       this.setState({
         points: points,
-        futureTotal: futureTotal
+        pointsForTheWinner: pointsForTheWinner
       })
     }
 
@@ -198,11 +198,10 @@ export default class PlayerDistributePointsScreen extends React.Component {
     _onSavePress = () => {
       const store = this.props.screenProps.store;
       const players = store.get("players");
-
       let newLog = players[this.state.playerId].log.slice();
       newLog.unshift({
         timestamp: Date.now(),
-        points: this.state.futureTotal - this.state.score
+        points: this.state.pointsForTheWinner
       })
       
       store.updatePlayer(this.state.playerId, 'log', newLog)
