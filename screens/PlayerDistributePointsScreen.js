@@ -2,11 +2,13 @@ import React from 'react';
 import {
   Dimensions,
   Text,
-  View
+  View,
+  FlatList,
+  Switch,
+  ScrollView
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Base, Colors } from '../styles/Base';
-import { FlatList, TextInput, Switch, ScrollView } from 'react-native-gesture-handler';
 import HeaderWithButton from '../components/HeaderWithButton';
 import PPTextInput from '../components/PPTextInput';
 import PPButton from '../components/PPButton';
@@ -27,7 +29,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
         this.state = {
           totalToAdd: 0,
           playerId: this.props.navigation.state.params.id,
-          pointsForTheWinner: store.get('gameSettings').extraPointsForWinner,
+          pointsForTheWinner: store.get('gameSettings').extraPointsForWinner.value,
           score: this.props.navigation.state.params.score,
           points: [],
           doSubstract: false
@@ -75,7 +77,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
 
       this.setState({
         points: points,
-        doSubstract: store.get('gameSettings').doSubstract
+        doSubstract: store.get('gameSettings').doSubstract.value
       })
     }
 
@@ -178,7 +180,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
       const points = this.state.points
       points[_index].points = parseInt(_value);
 
-      let pointsForTheWinner = store.get('gameSettings').extraPointsForWinner;
+      let pointsForTheWinner = store.get('gameSettings').extraPointsForWinner.value;
       this.state.points.forEach((item) => {
         pointsForTheWinner += item.points
       })

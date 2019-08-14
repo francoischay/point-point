@@ -10,9 +10,8 @@ import { Base, Colors } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import PPButton from '../components/PPButton';
 import PPHoveringButton from '../components/PPHoveringButton';
-import { connectActionSheet } from '@expo/react-native-action-sheet';
+import ActionSheet from 'react-native-actionsheet';
 
-@connectActionSheet
 export default class PlayerOptions extends React.Component {
 
   constructor(props) {
@@ -116,7 +115,7 @@ export default class PlayerOptions extends React.Component {
     let destructiveButtonIndex = 0;
     let cancelButtonIndex = 2;
 
-    this.props.showActionSheetWithOptions({
+    /*this.props.showActionSheetWithOptions({
         options,
         destructiveButtonIndex,
         cancelButtonIndex,
@@ -128,7 +127,7 @@ export default class PlayerOptions extends React.Component {
           const index = log.findIndex(x => x.timestamp==_data.timestamp);
           this._removeLogEntry(index);
         }
-      });
+      });*/
   }
 
   _removeLogEntry = (_index) => {

@@ -7,11 +7,15 @@ import AddPlayerScreen from '../screens/AddPlayerScreen';
 import EditPlayerScreen from '../screens/EditPlayerScreen';
 import PlayerScoreScreen from '../screens/PlayerScoreScreen';
 import PlayerDistributePointsScreen from '../screens/PlayerDistributePointsScreen';
+import CustomSettingsScreen from '../screens/CustomSettingsScreen';
 
 export default Navigator = createStackNavigator(
   {
     GameChoice: {
       screen: GameChoiceScreen
+    },
+    CustomSettings: {
+      screen: CustomSettingsScreen
     },
     Players: {
       screen: PlayersScreen

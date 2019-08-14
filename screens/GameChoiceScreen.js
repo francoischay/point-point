@@ -26,49 +26,127 @@ export default class GameChoiceScreen extends React.Component {
           id: 0,
           title: 'Rummikub',
           settings : {
-            rankByLessPoints: false,
-            autoSwitchToNextPlayer: false,
-            goBackToList: true,
-            doSubstract: true,
-            onlyDistributePointsAtEndOfTour: true,
-            extraPointsForWinner: 0
+            rankByLessPoints:{
+              value: false
+            },
+            autoSwitchToNextPlayer: {
+              value: false
+            },
+            goBackToList: {
+              value: true
+            },
+            doSubstract: {
+              value: true
+            },
+            onlyDistributePointsAtEndOfTour: {
+              value: true
+            },
+            extraPointsForWinner: {
+              value: 0
+            }
           } 
         },
         { 
           id: 1,
           title: 'Triomino',
           settings : {
-            rankByLessPoints: false,
-            autoSwitchToNextPlayer: true,
-            goBackToList: false,
-            doSubstract: false,
-            onlyDistributePointsAtEndOfTour: false,
-            extraPointsForWinner: 25
-          } 
+            rankByLessPoints:{
+              value: false
+            },
+            autoSwitchToNextPlayer: {
+              value: true
+            },
+            goBackToList: {
+              value: false
+            },
+            doSubstract: {
+              value: false
+            },
+            onlyDistributePointsAtEndOfTour: {
+              value: false
+            },
+            extraPointsForWinner: {
+              value: 25
+            }
+          }
         },
         { 
           id: 2,
           title: 'Domino',
           settings : {
-            rankByLessPoints: true,
-            autoSwitchToNextPlayer: false,
-            goBackToList: true,
-            doSubstract: false,
-            onlyDistributePointsAtEndOfTour: false,
-            extraPointsForWinner: 0
-          } 
+            rankByLessPoints:{
+              value: true
+            },
+            autoSwitchToNextPlayer: {
+              value: false
+            },
+            goBackToList: {
+              value: true
+            },
+            doSubstract: {
+              value: false
+            },
+            onlyDistributePointsAtEndOfTour: {
+              value: false
+            },
+            extraPointsForWinner: {
+              value: 0
+            }
+          }
         },
         { 
           id: 3,
           title: 'Mölky',
           settings : {
-            rankByLessPoints: false,
-            autoSwitchToNextPlayer: true,
-            goBackToList: false,
-            doSubstract: false,
-            onlyDistributePointsAtEndOfTour: false,
-            extraPointsForWinner: 0
-          } 
+            rankByLessPoints:{
+              value: false
+            },
+            autoSwitchToNextPlayer: {
+              value: true
+            },
+            goBackToList: {
+              value: false
+            },
+            doSubstract: {
+              value: false
+            },
+            onlyDistributePointsAtEndOfTour: {
+              value: false
+            },
+            extraPointsForWinner: {
+              value: 0
+            }
+          }
+        },
+        { 
+          id: 4,
+          title: 'Paramétrer',
+          settings : {
+            rankByLessPoints:{
+              title: 'Le gagnant est celui avec le moins de point',
+              value: false
+            },
+            autoSwitchToNextPlayer: {
+              title: 'Après avoir ajouter des points, passer automatiquement au joueur suivant',
+              value: false
+            },
+            goBackToList: {
+              title: 'Après avoir ajouter des points, retourner à la liste des joueurs',
+              value: false
+            },
+            onlyDistributePointsAtEndOfTour: {
+              title: 'Le joueur gagnant un tour récupère les points des autres',
+              value: false
+            },
+            doSubstract: {
+              title: 'Quand le gagnant du tour récupère les points des perdants, les retirer également aux perdants',
+              value: false
+            },
+            extraPointsForWinner: {
+              title: 'Le joueur gagnant un tour a automatiquement un nombre de points attribués ',
+              value: 0
+            }
+          }
         }
       ],
       selectedGameId : 0
@@ -114,7 +192,7 @@ export default class GameChoiceScreen extends React.Component {
 
   _renderItem = (_data) => {
     const isSelected = (_data.id === this.state.selectedGameId) ? true : false;
-
+    console.log(Base.ROW)
     return <TouchableOpacity 
       onPress={ () =>  { this._onGameTypePress(_data) }}
       style={Base.ROW}
@@ -141,6 +219,8 @@ export default class GameChoiceScreen extends React.Component {
   }
 
   _renderFooter = () => {
+    const screen = this.state.selectedGameId === 4 ? "CustomSettings" : "Players";
+    
     return (<View style={{
       bottom: 18,
       position: 'absolute',
@@ -148,7 +228,7 @@ export default class GameChoiceScreen extends React.Component {
       zIndex: 0
     }}>
       <PPHoveringButton
-        onPress={ () => this.props.navigation.navigate("Players") }
+        onPress={ () => this.props.navigation.navigate(screen) }
         title={ "Choisir les joueurs" } 
       />
     </View>)

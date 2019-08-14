@@ -1,11 +1,12 @@
 import React from 'react';
 import { AsyncStorage, Dimensions, Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { AppLoading, Asset } from 'expo';
+import * as Font from 'expo-font';
+import * as Icon from '@expo/vector-icons';
 import Podda from 'podda';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Emojis from './constants/Emojis';
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import Navigator from './navigation/Navigator'
+import ActionSheet from 'react-native-actionsheet';
+import Navigator from './navigation/Navigator';
 
 console.disableYellowBox = true;
 
@@ -206,12 +207,12 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <ActionSheetProvider>
+        //<ActionSheetProvider>
           <View style={styles.container}>
             {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
             <Navigator screenProps={{ store: this.store }} />
           </View>
-        </ActionSheetProvider>
+        //</ActionSheetProvider>
       );
     }
   }

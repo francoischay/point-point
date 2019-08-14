@@ -1,4 +1,5 @@
 import EStyleSheet from 'react-native-extended-stylesheet';
+import { Dimensions } from 'react-native'
 
 export const Colors = {
   BACKGROUND : '#FAFAFA',
@@ -28,7 +29,7 @@ export const Base = EStyleSheet.create({
       borderColor: '#D4EEEB',
       flex: 1,
       padding: '1.5rem',
-      width: window.width - 30 * 2,
+      width: Dimensions.get('window').width - 30 * 2,
       marginTop: -1,
 
       shadowColor: 'rgba(0,0,0,0.1)',

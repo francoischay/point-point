@@ -12,7 +12,6 @@
 
 import EStyleSheet from 'react-native-extended-stylesheet';
 
-const ColorPropType = require('ColorPropType');
 const Platform = require('Platform');
 const React = require('React');
 const PropTypes = require('prop-types');
@@ -72,7 +71,7 @@ class PPButton extends React.Component<{
     /**
      * Color of the text (iOS), or background color of the button (Android)
      */
-    color: ColorPropType,
+    color: PropTypes.string,
     /**
      * If true, disable all interactions for this component.
      */
