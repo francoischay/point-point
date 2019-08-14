@@ -107,7 +107,8 @@ export default class AddPlayer extends React.Component {
       name: this.state.newPlayerName,
       score: 0,
       log: [],
-      isEliminated: false
+      isEliminated: false,
+      isSelected: true
     };
     store.set('players', newPlayers);
     

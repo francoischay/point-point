@@ -58,13 +58,12 @@ export default class PlayerDistributePointsScreen extends React.Component {
       const data = this.props.navigation.state.params;
       const players = store.get("players");
       const order = store.get("order");
-      const gamePlayers = []
-      const gameSettings = store.get('gameSettings')
+      const gamePlayers = [];
   
       for (let i = 0; i < order.length; i++) {
         for (let j = 0; j < players.length; j++) {
           const player = players[j];
-          if(player.id == order[i] && player.id != data.id) gamePlayers.push(player)
+          if(player.id == order[i] && player.id != data.id && player.isSelected) gamePlayers.push(player)
         }
       }
 

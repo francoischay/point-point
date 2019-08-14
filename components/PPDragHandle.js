@@ -1,24 +1,29 @@
 import React from 'react';
 import {
-    View
+  TouchableWithoutFeedback,
+  View
 } from 'react-native';
 import { Colors } from '../styles/Base';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
 export default class PPDragHandle extends React.Component {
   render() {
-    return <View style={ styles.handleContainer }>
-      <View style={ styles.dotContainer }>
-        <View style={ styles.dot }></View>
-        <View style={ styles.dot }></View>
-        <View style={ styles.dot }></View>
+    return <TouchableWithoutFeedback
+      onLongPress={ () => { this.props.onHandlePress();  }}
+    >
+      <View style={ styles.handleContainer }>
+        <View style={ styles.dotContainer }>
+          <View style={ styles.dot }></View>
+          <View style={ styles.dot }></View>
+          <View style={ styles.dot }></View>
+        </View>
+        <View style={ styles.dotContainer }>
+          <View style={ styles.dot }></View>
+          <View style={ styles.dot }></View>
+          <View style={ styles.dot }></View>
+        </View>
       </View>
-      <View style={ styles.dotContainer }>
-        <View style={ styles.dot }></View>
-        <View style={ styles.dot }></View>
-        <View style={ styles.dot }></View>
-      </View>
-    </View>;
+    </TouchableWithoutFeedback>;
   }
 }
 
@@ -28,7 +33,8 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     height: '100%',
-    marginHorizontal: '1rem' 
+    marginHorizontal: '1rem',
+    backgroundColor: 'white'
   },
   dotContainer: {
     flex: 1,

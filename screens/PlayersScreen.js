@@ -21,7 +21,8 @@ export default class PlayersScreen extends React.Component {
     this.state = {
       rankByLessPoints: this.props.screenProps.store.get("gameSettings").rankByLessPoints.value,
       goBackToList: this.props.screenProps.store.get("gameSettings").goBackToList.value,
-      autoSwitchToNextPlayer: this.props.screenProps.store.get("gameSettings").autoSwitchToNextPlayer.value
+      autoSwitchToNextPlayer: this.props.screenProps.store.get("gameSettings").autoSwitchToNextPlayer.value,
+      selectedPlayersIds: {}
     }
   }
 
@@ -61,16 +62,23 @@ export default class PlayersScreen extends React.Component {
       contentContainerStyle ={styles.contentContainer}
       data = { players }
       order = { order }
+      manuallyActivateRows = { true }
       renderHeader = { this._renderPlayersHeader }
       renderRow = { this._renderRow }
       onChangeOrder = { this._onChangeOrder }
       onReleaseRow = { this._onReleaseRow }
-      onPressRow = { this._onPressRow }
+      //onPressRow = { this._onPressRow }
     />
   }
 
   _renderRow = (_data) => {
-    return <Player data={ _data.data } active={_data.active} />
+    return <Player 
+      data={ _data.data } 
+      active={_data.active} 
+      onNamePress= { this._onNamePress }
+      onCheckboxPress= { this._onCheckboxPress }
+      onHandlePress= { this._onHandlePress }
+    />
   }
 
   _renderPlayersHeader = () => {
@@ -103,58 +111,6 @@ export default class PlayersScreen extends React.Component {
     </View>)
   }
 
-  _renderParams = () => {
-    const players = this.props.screenProps.store.get("players");
-    if(players.length < 2) return
-
-    const settings = this.props.screenProps.store.get('gameSettings')
-    console.log(settings)
-    
-    return (
-      <View>
-        <View style={[ {
-          flexDirection: 'row',
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          paddingTop: 1.5 * EStyleSheet.value('$rem')
-        }]}>
-          <Text style={Base.SMALL_TEXT}>Le moins de points qui gagne</Text>
-          <Switch 
-            value={settings.rankByLessPoints}
-            onValueChange={ this._onSwitchChange }
-          />
-        </View>
-
-        <View style={[ {
-          flexDirection: 'row',
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          paddingTop: 1 * EStyleSheet.value('$rem')
-        }]}>
-          <Text style={Base.SMALL_TEXT}>Retour à la liste à chaque fois</Text>
-          <Switch 
-            value={settings.goBackToList}
-            onValueChange={ this._onGoBackToListSwitchChange }
-          />
-        </View>
-        {!settings.goBackToList &&
-          <View style={[ {
-            flexDirection: 'row',
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            paddingVertical: 1 * EStyleSheet.value('$rem')
-          }]}>
-            <Text style={Base.SMALL_TEXT}>Changer automatiquement de joueur</Text>
-            <Switch 
-              value={settings.autoSwitchToNextPlayer}
-              onValueChange={ this._onAutoSwitchChange }
-            />
-          </View>
-        }
-      </View>
-    )
-  }
-
   _isGameOn = () => {
     const players = this.props.screenProps.store.get("players");
     for (let i = 0; i < players.length; i++) {
@@ -169,9 +125,18 @@ export default class PlayersScreen extends React.Component {
     this._updateOrderFromList();
   }
 
-  _onPressRow = (_playerId) => {
+  _onCheckboxPress = (_playerId) => {
+    const players = this.props.screenProps.store.get("players");
+    this.props.screenProps.store.updatePlayer(_playerId, 'isSelected', !players[_playerId].isSelected);
+  }
+
+  _onNamePress= (_playerId) => {
     const players = this.props.screenProps.store.get("players");
     this.props.navigation.navigate("EditPlayer", players[_playerId]);
+  }
+
+  _onHandlePress = (_playerId) => {
+    this.refs.SortableList._rows[_playerId]._toggleActive()
   }
 
   _onChangeOrder = (_order) => {
@@ -189,27 +154,6 @@ export default class PlayersScreen extends React.Component {
   
   _onAddButtonPress = (_event) => {
     this.props.navigation.navigate("AddPlayer")
-  }
-
-  _onSwitchChange = (_value) => {
-    this.setState({
-      rankByLessPoints: _value
-    })
-    this.props.screenProps.store.set('rankByLessPoints', _value)
-  }
-
-  _onAutoSwitchChange = (_value) => {
-    this.setState({
-      autoSwitchToNextPlayer: _value
-    })
-    this.props.screenProps.store.set('autoSwitchToNextPlayer', _value)
-  }
-
-  _onGoBackToListSwitchChange = (_value) => {
-    this.setState({
-      goBackToList: _value
-    })
-    this.props.screenProps.store.set('goBackToList', _value)
   }
 }
 

@@ -8,6 +8,7 @@ import {
 import PPHoveringButton from '../components/PPHoveringButton';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { Base, Colors } from '../styles/Base';
+import PPCheckbox from '../components/PPCheckbox';
 
 export default class GameChoiceScreen extends React.Component {
   static navigationOptions = () => {
@@ -192,15 +193,21 @@ export default class GameChoiceScreen extends React.Component {
 
   _renderItem = (_data) => {
     const isSelected = (_data.id === this.state.selectedGameId) ? true : false;
-    console.log(Base.ROW)
+    
     return <TouchableOpacity 
       onPress={ () =>  { this._onGameTypePress(_data) }}
       style={Base.ROW}
     >
       {isSelected ? (
-          <Text style={[Base.TEXT, {color: Colors.GREEN}]}>{ _data.title }</Text>
+          <View style={{ flexDirection: 'row'}}>
+            <PPCheckbox selected={true} />
+            <Text style={[Base.TEXT, {color: Colors.GREEN}]}>{ _data.title }</Text>
+          </View>
         ) : (
-          <Text style={Base.TEXT}>{ _data.title }</Text>
+          <View style={{ flexDirection: 'row'}}>
+            <PPCheckbox selected={false} />
+            <Text style={Base.TEXT}>{ _data.title }</Text>
+          </View>
         )
       }
     </TouchableOpacity>

@@ -4,10 +4,12 @@ import { Animated,
   Dimensions, 
   StyleSheet, 
   Platform, 
+  TouchableWithoutFeedback,
   Text, 
   View} from 'react-native';
-import { Base } from '../styles/Base';
+import { Base, Colors } from '../styles/Base';
 import PPDragHandle from './PPDragHandle';
+import PPCheckbox from './PPCheckbox';
 
 const window = Dimensions.get('window');
 
@@ -60,20 +62,33 @@ export default class Row extends React.Component {
 
   render() {
     const {data} = this.props;
-    
+    const textStyle = data.isSelected ? [Base.TEXT, {color: Colors.GREEN}] : Base.TEXT;
+
     return (
       <Animated.View style={[
         this._style,
         Base.ROW
       ]}>
-        <Text style={Base.TEXT}>
-          {data.icon.item} {data.name}
-        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <PPCheckbox 
+            selected={data.isSelected}
+            onCheckboxPress={() => this.props.onCheckboxPress(data.id)}
+          />
+          <TouchableWithoutFeedback
+            onPress={ () => this.props.onNamePress(data.id) }
+          >
+            <Text style={textStyle}>
+              {data.name} {data.icon.item}
+            </Text>
+          </TouchableWithoutFeedback>
+        </View>
         <View style={{
           width: 20,
           flexDirection: 'row'
         }}>
-          <PPDragHandle />
+          <PPDragHandle 
+            onHandlePress={() => this.props.onHandlePress(data.id)}
+          />
         </View>
       </Animated.View>
     );

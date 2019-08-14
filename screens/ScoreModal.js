@@ -113,8 +113,14 @@ export default class ScoresModal extends React.Component {
 
   _getRankings = () => {
     const players = this.props.store.get("players");
+    const gamePlayers = []
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      if(player.isSelected) gamePlayers.push(player)
+    }
+
     const reverse = this.props.store.get('gameSettings').rankByLessPoints.value ? -1 : 1;
-    const rankings = players.sort((_player1, _player2) => {
+    const rankings = gamePlayers.sort((_player1, _player2) => {
         if (_player2.isEliminated) return -1;
         if (_player1.isEliminated) return 1;
         if (_player1.score > _player2.score) return -1 * reverse;

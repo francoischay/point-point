@@ -48,7 +48,7 @@ export default class PlayersScreen extends React.Component {
     for (let i = 0; i < order.length; i++) {
         for (let j = 0; j < players.length; j++) {
             const player = players[j];
-            if(player.id == order[i]) gamePlayers.push(player)
+            if(player.id == order[i] && player.isSelected) gamePlayers.push(player)
         }
     }
 
