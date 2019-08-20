@@ -32,11 +32,13 @@ export default class PlayerDistributePointsScreen extends React.Component {
           pointsForTheWinner: store.get('gameSettings').extraPointsForWinner.value,
           score: this.props.navigation.state.params.score,
           points: [],
-          doSubstract: false
+          doSubstract: false,
+          refresh: false
         }
     }
 
     render() {
+      console.log("render")
       return (
         <View style={styles.pageContainer}>
           { this._renderHeader() }
@@ -67,12 +69,14 @@ export default class PlayerDistributePointsScreen extends React.Component {
         }
       }
 
-      const points = gamePlayers.map((_player) => { return {
-        id: _player.id,
-        icon: _player.icon.item,
-        name: _player.name,
-        points: 0
-      }})
+      const points = gamePlayers.map((_player) => {
+        return {
+          id: _player.id,
+          icon: _player.icon.item,
+          name: _player.name,
+          points: 0
+        }
+      })
 
       this.setState({
         points: points,
@@ -132,6 +136,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
         <FlatList
           style = { styles.list }
           data = { this.state.points }
+          extraData={this.state.refresh}
           renderItem = {({item, index}) => this._renderItem(item, index)}
         />
       )
@@ -186,7 +191,8 @@ export default class PlayerDistributePointsScreen extends React.Component {
 
       this.setState({
         points: points,
-        pointsForTheWinner: pointsForTheWinner
+        pointsForTheWinner: pointsForTheWinner,
+        refresh: !this.state.refresh
       })
     }
 
@@ -210,7 +216,7 @@ export default class PlayerDistributePointsScreen extends React.Component {
       for (let i = 0; i < players.length; i++) {
         let newPlayer = JSON.parse(JSON.stringify(players[i]));
         
-        if(newPlayer.id !== this.state.playerId && this.state.doSubstract){
+        if(newPlayer.id !== this.state.playerId && newPlayer.isSelected && this.state.doSubstract){
           const playerPointsToChange = this._findPointsByPlayerId(newPlayer.id);
           newPlayer.score -= playerPointsToChange;
 
